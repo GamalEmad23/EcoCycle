@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/helper/get_helper/get_helper.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -40,11 +42,11 @@ class OnbordingScreen extends StatelessWidget {
           GetHelper.getOffAll(LoginScreen());
         },
         showSkipButton: true,
-        skip: Text("buttons.skip".tr(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.green),),
-        next: Text("buttons.next".tr(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.green),),
-        done: Text("buttons.finish".tr(), style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.green)),
+        skip: CustomeText(text: "buttons.skip".tr() , fontSize: 20, fontWeight: FontWeight.bold,textColor: AppColors.green,),
+        next: CustomeText(text: "buttons.next".tr() , fontSize: 20, fontWeight: FontWeight.bold,textColor: AppColors.green,),
+        done: CustomeText(text: "buttons.finish".tr() , fontSize: 20, fontWeight: FontWeight.bold,textColor: AppColors.green,),
         dotsDecorator: DotsDecorator(
-          activeColor: Colors.green
+          activeColor: AppColors.green
       
         ),
       ),
