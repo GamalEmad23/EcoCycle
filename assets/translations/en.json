@@ -1,0 +1,18 @@
+{
+  "onboarding": {
+    "title1": "Welcome to EcoCycle",
+    "desc1": "Help protect the environment by recycling easily in a smart way.",
+
+    "title2": "Find the nearest center",
+    "desc2": "Use the map to locate nearby recycling centers and deliver your waste easily.",
+
+    "title3": "Earn points and rewards",
+    "desc3": "Record your recycling activities and earn points to redeem for eco-friendly rewards."
+  },
+
+  "buttons": {
+    "skip": "Skip",
+    "next": "Next",
+    "finish": "Finish"
+  }
+}
