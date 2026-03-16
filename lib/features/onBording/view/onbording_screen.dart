@@ -2,6 +2,8 @@ import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import '../widget/intro_widget.dart';
+
 class OnbordingScreen extends StatelessWidget {
   const OnbordingScreen({super.key});
 
@@ -11,108 +13,24 @@ class OnbordingScreen extends StatelessWidget {
 
       globalBackgroundColor: Colors.white,
       pages: [
-        PageViewModel(
-          titleWidget: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50),
-            child: Column(
-              crossAxisAlignment: .center,
-              children: [
-
-                SizedBox(height: 80),
-                Image.asset(
-                  'assets/introImage/Overlay.png',
-
-                ),
-                SizedBox(height: 50),
-                Text(
-                  " ًمرحباً بك في EcoCycle",
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  textAlign: TextAlign.center,
-                  "ساهم في حماية البيئة من خلال إعادة التدوير\n بسهولة وبطريقة مبتكرة.",
-                  style: TextStyle(
-                    fontSize: 22,
-                  ),
-                ),
-
-
-              ],
-            ),
+          IntroWidget(
+            image: 'assets/introImage/Overlay.png',
+            title: "مرحباً بك في EcoCycle",
+            description: "ساهم في حماية البيئة من خلال إعادة التدوير بسهولة وبطريقة مبتكرة.",
           ),
-          body: "",
-        ),
 
-        PageViewModel(
-          titleWidget: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50),
-            child: Column(
-              children: [
-                SizedBox(height: 80),
-
-                Image.asset(
-                  'assets/introImage/Background+Shadow.png',
-
-                ),
-                SizedBox(height: 50),
-                Text(
-                  "اعثر على أقرب مركز",
-                  style: TextStyle(
-                      fontSize: 27,
-                      fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "استخدم الخريطة لمعرفة أقرب مراكز إعادة التدوير وتسليم مخلفاتك بسهولة.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 22,
-                  ),
-                ),
-              ],
-            ),
+          IntroWidget(
+            image: 'assets/introImage/Background+Shadow.png',
+            title: "اعثر على أقرب مركز",
+            description: "استخدم الخريطة لمعرفة أقرب مراكز إعادة التدوير وتسليم مخلفاتك بسهولة.",
           ),
-          body: "",
-        ),
 
-        PageViewModel(
-          titleWidget: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50),
-            child: Column(
-
-              children: [
-                SizedBox(height: 80),
-
-                Image.asset(
-                  'assets/introImage/Main Illustration Placeholder.png',
-
-                ),
-                SizedBox(height: 50),
-                Text(
-                  "اكسِب نقاط ومكافآت",
-                  style: TextStyle(
-                      fontSize: 27,
-                      fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "قم بتسجيل عمليات إعادة التدوير واحصل على نقاط واستبدلها بخصومات ومكافآت بيئية",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 22,
-                  ),
-                ),
-              ],
-            ),
+          IntroWidget(
+            image: 'assets/introImage/Main Illustration Placeholder.png',
+            title: "اكسِب نقاط ومكافآت",
+            description: "قم بتسجيل عمليات إعادة التدوير واحصل على نقاط واستبدلها بخصومات ومكافآت بيئية",
           ),
-          body: "",
-        ),
+
 
 
       ],
