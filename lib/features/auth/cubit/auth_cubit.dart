@@ -17,13 +17,13 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> createUser(UserData userData) async {
     emit(AuthLoading());
     try {
-      await instance.createUserWithEmailAndPassword(
+      final credential = await instance.createUserWithEmailAndPassword(
         email: userData.email,
         password: userData.password,
       );
-      await fireInstase.collection('users').add({
-        "email":userData.email,
-        "name":userData.name,
+      await fireInstase.collection('users').doc(credential.user!.uid).set({
+        "email": userData.email,
+        "name": userData.name,
       });
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {

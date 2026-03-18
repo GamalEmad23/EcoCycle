@@ -5,6 +5,7 @@ import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_button.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
+import 'package:eco_cycle/features/auth/model/user_entity.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
 
-                     /// Nmae Text
+                     /// Name Text
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .04,
@@ -101,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
 
-                    /// Email TextFormField
+                    /// Name TextFormField
                     CustomeTextFormField(
                       controller: _name,
                       validator: (value) {
@@ -115,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                       inputType: TextInputType.text,
                       hint: "signup.name_hint",
-                      prefix: Icon(Icons.email_outlined),
+                      prefix: Icon(Icons.person_3_outlined),
                       suffix: null,
                       onFieldSubmitted: (gamal) {
                         FocusScope.of(context).nextFocus();
@@ -208,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       btnColor: AppColors.green,
                       onPressed: () {
                         if (_globalKey.currentState!.validate()) {
-                          context.read<AuthCubit>();
+                          context.read<AuthCubit>().createUser(UserData(email: _email.text, password: _password.text, name: _name.text));
                         }
                       },
                       btnText: CustomeText(
