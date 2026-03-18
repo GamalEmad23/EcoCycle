@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eco_cycle/core/helper/get_helper/get_helper.dart';
+import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/auth/view/login_screen.dart';
@@ -39,7 +39,7 @@ class OnbordingScreen extends StatelessWidget {
       
         ],
         onDone: () {
-          GetHelper.getOffAll(LoginScreen());
+          NavigateHelper.pushAndRemoveUntil(context, LoginScreen());
         },
         showSkipButton: true,
         skip: CustomeText(text: "buttons.skip".tr() , fontSize: 20, fontWeight: FontWeight.bold,textColor: AppColors.green,),

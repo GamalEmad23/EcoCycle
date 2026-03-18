@@ -14,5 +14,18 @@
     "skip": "Skip",
     "next": "Next",
     "finish": "Finish"
+  },
+
+  "login": {
+    "title": "Login",
+    "subtitle": "Sign in to continue and contribute to a better environment",
+    "email": "Email",
+    "password": "Password",
+    "forgot_password": "Forgot password?",
+    "login_button": "Login",
+    "or": "OR",
+    "google_login": "Continue with Google",
+    "no_account": "Don't have an account?",
+    "create_account": "Create Account"
   }
 }
