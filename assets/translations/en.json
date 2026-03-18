@@ -27,5 +27,51 @@
     "google_login": "Continue with Google",
     "no_account": "Don't have an account?",
     "create_account": "Create Account"
+  },
+
+    "login_validation": {
+    "email_required": "Please enter your email",
+    "email_invalid": "Please enter a valid email address",
+
+    "password_required": "Please enter your password",
+    "password_short": "Password must be at least 6 characters",
+
+    "invalid_credentials": "Invalid email or password",
+    "user_not_found": "No account found with this email",
+    "wrong_password": "Incorrect password"
+  },
+
+  "signup": {
+    "title": "Sign Up",
+    "subtitle": "Create your account and start your journey toward a cleaner environment",
+
+    "name_label": "Name",
+    "name_hint": "Enter your name",
+
+    "email_label": "Email",
+    "email_hint": "example@email.com",
+
+    "password_label": "Password",
+
+    "signup_button": "Sign Up",
+
+    "have_account": "Already have an account?",
+    "login_now": "Login"
+  },
+
+  "signup_validation": {
+    "name_required": "Please enter your name",
+    "name_short": "Name must be at least 2 characters",
+
+    "email_required": "Please enter your email",
+    "email_invalid": "Please enter a valid email address",
+    "email_already_used": "This email is already in use",
+
+    "password_required": "Please enter your password",
+    "password_short": "Password must be at least 6 characters",
+    "password_weak": "Password is too weak, try using letters and numbers",
+
+    "confirm_password_required": "Please confirm your password",
+    "passwords_not_match": "Passwords do not match"
   }
 }
