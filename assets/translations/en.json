@@ -92,5 +92,13 @@
 
     "success": "Check your email to reset your password 📩",
     "error": "Something went wrong, please try again"
+  },
+
+  "nav_bar":{
+     "home":"home",
+     "map":"map",
+     "add":"add",
+     "statistic":"statistic",
+     "profile":"profile"
   }
 }
