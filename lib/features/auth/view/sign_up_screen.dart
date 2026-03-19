@@ -220,13 +220,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               );
                               ///
-                              CustomeSnakBar.show(context: context, message: "verification_message".tr() , icon: Icons.email , backgroundColor: AppColors.orange);
-                              
-                              ///
-                              NavigateHelper.pushReplacement(
-                                context,
-                                LoginScreen(),
-                              );
                             }
                           },
                           btnText: state is AuthLoading
@@ -241,22 +234,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                       listener: (context, state) {
                         if (state is AuthFailure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
-                          );
+    
+                           CustomeSnakBar.show(context: context, message: state.message , icon: Icons.email , backgroundColor: AppColors.red);
+                        }
+
+                        if (state is AuthSuccess) {
+                           CustomeSnakBar.show(context: context, message: "signup_validation.confirm_password_required".tr() , icon: Icons.email , backgroundColor: AppColors.orange);
+                          NavigateHelper.pushReplacement(
+                                context,
+                                LoginScreen(),
+                              );
                         }
                       },
                     ),
                     SizedBox(height: h * .025),
 
-                    /// Don't have account
+                    ///  have account
                     Row(
                       mainAxisAlignment: .center,
                       children: [
                         CustomeText(text: "signup.have_account"),
                         Column(
                           children: [
-                            CustomeText(text: "signup.login_now"),
+                            GestureDetector(
+                              onTap: () {
+                                NavigateHelper.pushReplacement(context, LoginScreen());
+                              },
+                              child: CustomeText(text: "signup.login_now")),
                             Container(
                               height: 2,
                               width: w * .3,
