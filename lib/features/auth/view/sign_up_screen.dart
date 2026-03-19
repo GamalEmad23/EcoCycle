@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_final_fields, unused_field, body_might_complete_normally_nullable
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_button.dart';
+import 'package:eco_cycle/core/widgets/custome_snak_bar.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/model/user_entity.dart';
+import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
 
-                     /// Name Text
+                    /// Name Text
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .04,
@@ -110,7 +113,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return "signup_validation.name_required".tr();
                         }
 
-                        if (value.length <2) {
+                        if (value.length < 2) {
                           return "signup_validation.name_short".tr();
                         }
                       },
@@ -147,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return "signup_validation.email_invalid".tr();
                         }
                       },
-                      inputType: TextInputType.text,
+                      inputType: TextInputType.emailAddress,
                       hint: "example@mail.com",
                       prefix: Icon(Icons.email_outlined),
                       suffix: null,
@@ -173,10 +176,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     CustomeTextFormField(
                       controller: _password,
                       validator: (value) {
-                         if (value!.isEmpty) {
+                        if (value!.isEmpty) {
                           return "signup_validation.password_required".tr();
                         }
-                        if (value.length<6) {
+                        if (value.length < 6) {
                           return "signup_validation.password_short".tr();
                         }
                       },
@@ -202,27 +205,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: h * .025),
 
-                    
-
                     /// sign up Button
-                    CustomeButton(
-                      btnColor: AppColors.green,
-                      onPressed: () {
-                        if (_globalKey.currentState!.validate()) {
-                          context.read<AuthCubit>().createUser(UserData(email: _email.text, password: _password.text, name: _name.text));
+                    BlocConsumer<AuthCubit, AuthState>(
+                      builder: (context, state) {
+                        return CustomeButton(
+                          btnColor: AppColors.green,
+                          onPressed: () {
+                            if (_globalKey.currentState!.validate()) {
+                              context.read<AuthCubit>().createUser(
+                                UserData(
+                                  email: _email.text,
+                                  password: _password.text,
+                                  name: _name.text,
+                                ),
+                              );
+                              ///
+                              CustomeSnakBar.show(context: context, message: "verification_message".tr() , icon: Icons.email , backgroundColor: AppColors.orange);
+                              
+                              ///
+                              NavigateHelper.pushReplacement(
+                                context,
+                                LoginScreen(),
+                              );
+                            }
+                          },
+                          btnText: state is AuthLoading
+                              ? CircularProgressIndicator(
+                                  color: AppColors.white,
+                                )
+                              : CustomeText(
+                                  text: "signup.signup_button",
+                                  textColor: AppColors.white,
+                                ),
+                        );
+                      },
+                      listener: (context, state) {
+                        if (state is AuthFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message)),
+                          );
                         }
                       },
-                      btnText: CustomeText(
-                        text: "signup.signup_button",
-                        textColor: AppColors.white,
-                      ),
                     ),
                     SizedBox(height: h * .025),
 
-                    
-                     
                     /// Don't have account
-                    
                     Row(
                       mainAxisAlignment: .center,
                       children: [
@@ -230,14 +257,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Column(
                           children: [
                             CustomeText(text: "signup.login_now"),
-                            Container(height: 2,width: w*.3,color: AppColors.black,)
+                            Container(
+                              height: 2,
+                              width: w * .3,
+                              color: AppColors.black,
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     SizedBox(height: h * .04),
-
- 
                   ],
                 ),
               ),

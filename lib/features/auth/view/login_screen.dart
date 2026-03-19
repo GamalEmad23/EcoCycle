@@ -1,13 +1,17 @@
-// ignore_for_file: unused_local_variable, unused_field, prefer_final_fields
+// ignore_for_file: unused_local_variable, unused_field, prefer_final_fields, body_might_complete_normally_nullable
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_button.dart';
+import 'package:eco_cycle/core/widgets/custome_snak_bar.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
+import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/sign_up_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
+import 'package:eco_cycle/features/auth/view/widgets/forget_password_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -103,7 +107,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     /// Email TextFormField
                     CustomeTextFormField(
                       controller: _email,
-                      inputType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "login_validation.email_required".tr();
+                        }
+                        if (!(value.contains("@gmail.com"))) {
+                          return "login_validation.email_invalid".tr();
+                        }
+                      },
+                      inputType: TextInputType.emailAddress,
                       hint: "example@mail.com",
                       prefix: Icon(Icons.email_outlined),
                       suffix: null,
@@ -128,6 +140,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     /// Password lTextFormField
                     CustomeTextFormField(
                       controller: _password,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "login_validation.password_required".tr();
+                        }
+                        if (value.length < 6) {
+                          return "login_validation.password_short".tr();
+                        }
+                      },
                       inputType: TextInputType.text,
                       hint: "************",
                       prefix: Icon(Icons.lock_open_outlined),
@@ -156,19 +176,58 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: context.locale.languageCode == "ar"
                             ? AlignmentGeometry.centerLeft
                             : AlignmentGeometry.centerRight,
-                        child: CustomeText(text: "login.forgot_password"),
+                        child: GestureDetector(
+                          onTap: () {
+                            // context.read<AuthCubit>().resetPassword();
+                            NavigateHelper.pushReplacement(
+                              context,
+                              ForgetPasswordScreen(),
+                            );
+                          },
+                          child: CustomeText(text: "login.forgot_password"),
+                        ),
                       ),
                     ),
                     SizedBox(height: h * .025),
 
                     /// Login Button
-                    CustomeButton(
-                      btnColor: AppColors.green,
-                      onPressed: () {},
-                      btnText: CustomeText(
-                        text: "login.login_button",
-                        textColor: AppColors.white,
-                      ),
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is LoginFailure) {
+                          CustomeSnakBar.show(
+                            context: context,
+                            message: state.message,
+                          );
+                        }
+                        if (state is LoginSuccess) {
+                          CustomeSnakBar.show(
+                            context: context,
+                            message: "login.success_login".tr(),
+                            backgroundColor: AppColors.primary,
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return CustomeButton(
+                          btnColor: AppColors.green,
+                          onPressed: () {
+                            if (_globalKey.currentState!.validate()) {
+                              context.read<AuthCubit>().LoginUser(
+                                _email.text,
+                                _password.text,
+                              );
+                            }
+                          },
+                          btnText: (state is LoginLoading)
+                              ? CircularProgressIndicator(
+                                  color: AppColors.white,
+                                )
+                              : CustomeText(
+                                  text: "login.login_button",
+                                  textColor: AppColors.white,
+                                ),
+                        );
+                      },
                     ),
                     SizedBox(height: h * .025),
 
@@ -191,55 +250,81 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: h * .025),
 
-
                     /// Google button
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: w * .1),
-                        child: CustomeButton(
-                          btnColor: AppColors.backgroundLight,
-                          onPressed: () {},
-                          btnText: Row(
-                            mainAxisAlignment: .center,
-                            children: [
-                              CustomeText(
-                                text: "login.google_login",
-                                fontSize: 17,
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                         if (state is googleLoginFailure) {
+                          CustomeSnakBar.show(
+                            context: context,
+                            message: state.message,
+                          );
+                        }
+                        if (state is googleLoginSuccess) {
+                          CustomeSnakBar.show(
+                            context: context,
+                            message: "login.success_login".tr(),
+                            backgroundColor: AppColors.primary,
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: w * .1),
+                            child: CustomeButton(
+                              btnColor: AppColors.backgroundLight,
+                              onPressed: () {
+                                context.read<AuthCubit>().signInWithGoogle();
+                              },
+                              btnText:(state is googleLoginLoading)
+                              ?CircularProgressIndicator(color: AppColors.white,)
+                              :Row(
+                                mainAxisAlignment: .center,
+                                children: [
+                                  CustomeText(
+                                    text: "login.google_login",
+                                    fontSize: 17,
+                                  ),
+                                  SizedBox(width: w * .025),
+                                  Image.asset(
+                                    "assets/icons/google.png",
+                                    height: h * .03,
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: w * .025),
-                              Image.asset(
-                                "assets/icons/google.png",
-                                height: h * .03,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                     SizedBox(height: h * .025),
-                     
+
                     /// Don't have account
-                    
                     Row(
                       mainAxisAlignment: .center,
                       children: [
                         CustomeText(text: "login.no_account"),
                         GestureDetector(
                           onTap: () {
-                            NavigateHelper.pushReplacement(context, SignUpScreen());
+                            NavigateHelper.pushReplacement(
+                              context,
+                              SignUpScreen(),
+                            );
                           },
                           child: Column(
                             children: [
                               CustomeText(text: "login.create_account"),
-                              Container(height: 2,width: w*.3,color: AppColors.black,)
+                              Container(
+                                height: 2,
+                                width: w * .3,
+                                color: AppColors.black,
+                              ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                     SizedBox(height: h * .04),
-
- 
                   ],
                 ),
               ),

@@ -26,7 +26,9 @@
     "or": "OR",
     "google_login": "Continue with Google",
     "no_account": "Don't have an account?",
-    "create_account": "Create Account"
+    "create_account": "Create Account",
+
+    "success_login": "Login successful"
   },
 
     "login_validation": {
@@ -39,6 +41,7 @@
     "invalid_credentials": "Invalid email or password",
     "user_not_found": "No account found with this email",
     "wrong_password": "Incorrect password"
+
   },
 
   "signup": {
@@ -57,6 +60,7 @@
 
     "have_account": "Already have an account?",
     "login_now": "Login"
+
   },
 
   "signup_validation": {
@@ -73,5 +77,20 @@
 
     "confirm_password_required": "Please confirm your password",
     "passwords_not_match": "Passwords do not match"
+  },
+
+  "verification_message" : "Check you Spam messages in you gmail to verify your email",
+
+   "forgot_password": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email to reset your password",
+    "email_label": "Email",
+    "email_hint": "example@email.com",
+    "reset_button": "Send Reset Link",
+    "info_message": "A password reset link will be sent to your email.",
+    "back_to_login": "Back to Login",
+
+    "success": "Check your email to reset your password 📩",
+    "error": "Something went wrong, please try again"
   }
 }

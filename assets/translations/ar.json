@@ -26,7 +26,9 @@
     "or": "أو",
     "google_login": "تسجيل الدخول باستخدام Google",
     "no_account": "ليس لديك حساب؟",
-    "create_account": "إنشاء حساب"
+    "create_account": "إنشاء حساب",
+
+    "success_login": "تم تسجيل الدخول إلى حسابك بنجاح"
   },
 
     "login_validation": {
@@ -57,6 +59,7 @@
 
     "have_account": "لديك حساب بالفعل؟",
     "login_now": "سجل الدخول"
+
   },
 
   "signup_validation": {
@@ -73,5 +76,20 @@
 
     "confirm_password_required": "من فضلك أكد كلمة المرور",
     "passwords_not_match": "كلمتا المرور غير متطابقتين"
+  },
+
+  "verification_message": "يرجى التحقق من مجلد البريد العشوائي (Spam) في Gmail لإتمام تفعيل البريد الإلكتروني",
+
+  "forgot_password": {
+    "title": "نسيت كلمة المرور",
+    "subtitle": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+    "email_label": "البريد الإلكتروني",
+    "email_hint": "example@email.com",
+    "reset_button": "إرسال رابط إعادة التعيين",
+    "info_message": "سيتم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "back_to_login": "العودة إلى تسجيل الدخول",
+
+    "success": "تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور 📩",
+    "error": "حدث خطأ، حاول مرة أخرى"
   }
 }

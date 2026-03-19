@@ -23,3 +23,23 @@ final class LoginFailure extends AuthState {
   LoginFailure({required this.message});
   
 }
+
+final class ResetPasswordInitial extends AuthState {}
+final class ResetPasswordLoading extends AuthState {}
+final class ResetPasswordSuccess extends AuthState {}
+final class ResetPasswordFailure extends AuthState {
+  final String message;
+
+  ResetPasswordFailure({required this.message});
+  
+}
+
+final class googleLoginInitial extends AuthState {}
+final class googleLoginLoading extends AuthState {}
+final class googleLoginSuccess extends AuthState {}
+final class googleLoginFailure extends AuthState {
+  final String message;
+
+  googleLoginFailure({required this.message});
+  
+}
