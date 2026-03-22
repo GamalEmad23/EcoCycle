@@ -10,6 +10,7 @@ import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/sign_up_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:eco_cycle/features/auth/view/forget_password_screen.dart';
+import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -216,7 +217,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _email.text,
                                 _password.text,
                               );
+
+                              NavigateHelper.pushAndRemoveUntil(context, NavBar());
                             }
+                            
                           },
                           btnText: (state is LoginLoading)
                               ? CircularProgressIndicator(

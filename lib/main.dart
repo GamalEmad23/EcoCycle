@@ -35,7 +35,10 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         debugShowCheckedModeBanner: false,
-        home: (FirebaseAuth.instance.currentUser!.emailVerified && FirebaseAuth.instance.currentUser !=null)? NavBar() : SplashScreen(),
+        home: (FirebaseAuth.instance.currentUser != null &&
+       FirebaseAuth.instance.currentUser!.emailVerified)
+    ? NavBar()
+    : SplashScreen(),
       ),
     );
   }

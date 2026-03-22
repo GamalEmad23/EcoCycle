@@ -53,23 +53,23 @@ class _NavBarState extends State<NavBar> {
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined, size: 25),
-                  label: "home".tr(),
+                  label: "nav_bar.home".tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.map_outlined, size: 25),
-                  label: "map".tr(),
+                  label: "nav_bar.map".tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.add, size: 25),
-                  label: "add".tr(),
+                  label: "nav_bar.add".tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.bar_chart, size: 25),
-                  label: "statistics".tr(),
+                  label: "nav_bar.statistic".tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person_2_outlined, size: 25),
-                  label: "profile".tr(),
+                  label: "nav_bar.profile".tr(),
                 ),
               ],
             ),
