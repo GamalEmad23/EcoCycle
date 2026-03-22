@@ -100,5 +100,22 @@
      "add":"add",
      "statistic":"statistic",
      "profile":"profile"
+  },
+
+   "profile": {
+    "title": "Profile",
+    "name": "Gamal Emad",
+    "badge": "Gold Member"
+  },
+  "stats": {
+    "points": "Points",
+    "recycled": "Recycled",
+    "rank": "Rank"
+  },
+  "actions": {
+    "recycling_history": "Recycling History",
+    "settings": "Settings",
+    "about": "About EcoCycle",
+    "logout": "Log Out"
   }
 }
