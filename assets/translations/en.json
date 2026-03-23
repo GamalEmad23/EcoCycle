@@ -116,6 +116,10 @@
     "recycling_history": "Recycling History",
     "language": "Language",
     "about": "About EcoCycle",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "select_language": "Select Language",
+    "en":"English",
+    "ar":"Arabic"
+
   }
 }

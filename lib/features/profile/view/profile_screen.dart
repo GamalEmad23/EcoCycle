@@ -1,10 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, deprecated_member_use
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
+import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
+import 'package:eco_cycle/features/auth/view/login_screen.dart';
+import 'package:eco_cycle/features/profile/view/widgets/custom_long_profile_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/profile/view/widgets/custome_profile_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,6 +20,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String language = "en";
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
@@ -146,7 +153,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       h: h,
                       w: w,
                       icon: Icons.language,
-                      text: CustomeText(text: "actions.language"),
+                      text: CustomeText(text: "actions.language" , fontWeight: FontWeight.bold,),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => StatefulBuilder(
+                            builder: (context, setState) => AlertDialog(
+                              backgroundColor: AppColors.primaryDark,
+                              title: CustomeText(
+                                text: "actions.select_language",
+                                textColor: AppColors.white,
+                                fontWeight: FontWeight.bold, 
+                                fontSize: 22,
+                              ),
+                              content: Container(
+                                height: h * .2,
+                                child: Column(
+                                  children: [
+                                    /// English
+                                    customeLanguageRow(
+                                      language: language,
+                                      value: "en",
+                                      text: "actions.en",
+                                      onChanged: (value) {
+                                        setState(() {
+                                          language = value!;
+                                        });
+                                        context.setLocale(Locale("en"));
+                                      },
+                                    ),
+
+                                    /// Arabic
+                                    customeLanguageRow(
+                                      language: language,
+                                      value: "ar",
+                                      text: "actions.ar",
+                                      onChanged: (value) {
+                                        setState(() {
+                                          language = value!;
+                                        });
+                                        context.setLocale(Locale("ar"));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     customeLongProfileCard(
                       h: h,
@@ -154,6 +209,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.info_outline,
                       text: CustomeText(text: "actions.about"),
                     ),
+
+                    
                     customeLongProfileCard(
                       h: h,
                       w: w,
@@ -161,6 +218,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: CustomeText(text: "actions.logout"),
                       iconColor: AppColors.red,
                       backGroung: AppColors.lightRed,
+                      onTap: () {
+                        context.read<AuthCubit>().Signout();
+                        if (FirebaseAuth.instance.currentUser == null) {
+                          NavigateHelper.pushAndRemoveUntil(
+                            context,
+                            LoginScreen(),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -173,90 +239,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class customeLongProfileCard extends StatelessWidget {
-  customeLongProfileCard({
-    Key? key,
-    required this.h,
-    required this.w,
-    required this.icon,
-    this.iconColor,
+class customeLanguageRow extends StatelessWidget {
+  customeLanguageRow({
+    super.key,
+    required this.language,
+    required this.value,
     required this.text,
-    this.backGroung,
-    this.onTap,
-  }) : super(key: key);
+    this.onChanged,
+  });
 
-  final double h;
-  final double w;
-  final IconData icon;
-  final Color? iconColor;
-  final Widget text;
-  final Color? backGroung;
-  void Function()? onTap;
+  String language;
+  final String value;
+  final String text;
+  void Function(String?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: h * .005),
-      child: GestureDetector(
-        onTap: onTap,
-
-        ///
-        child: Container(
-          height: h * .09,
-          width: w * .89,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 1.5,
-                color: Colors.black38,
-                offset: Offset(2, .5),
-                spreadRadius: .2,
-              ),
-            ],
-            borderRadius: BorderRadius.circular(15),
-          ),
-
-          /// Container Content
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * .03),
-            child: Row(
-              mainAxisAlignment: .spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    /// Icon
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: backGroung ?? AppColors.textLight,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          icon,
-                          color: iconColor ?? AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: w * .025),
-
-                    ///Text
-                    text,
-                  ],
-                ),
-
-                // SizedBox(width: w*.025,),
-                Icon(
-                  (context.locale.languageCode == "en")
-                      ? Icons.arrow_forward_ios_sharp
-                      : Icons.arrow_back_outlined,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return Row(
+      children: [
+        Radio(value: value, groupValue: language, onChanged: onChanged , activeColor: AppColors.white,side: BorderSide(color: AppColors.white ), toggleable: true,),
+        CustomeText(text: text, textColor: AppColors.white,),
+      ],
     );
   }
 }

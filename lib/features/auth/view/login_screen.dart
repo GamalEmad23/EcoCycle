@@ -211,9 +211,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       builder: (context, state) {
                         return CustomeButton(
                           btnColor: AppColors.green,
-                          onPressed: () {
+                          onPressed: ()async {
                             if (_globalKey.currentState!.validate()) {
-                              context.read<AuthCubit>().LoginUser(
+                             await context.read<AuthCubit>().LoginUser(
                                 _email.text,
                                 _password.text,
                               );
@@ -277,11 +277,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: EdgeInsets.symmetric(horizontal: w * .1),
                             child: CustomeButton(
                               btnColor: AppColors.backgroundLight,
-                              onPressed: () {
-                                context.read<AuthCubit>().signInWithGoogle();
+                              onPressed: ()async {
+                               await context.read<AuthCubit>().signInWithGoogle();
+                                NavigateHelper.pushAndRemoveUntil(context, NavBar());
                               },
                               btnText:(state is googleLoginLoading)
-                              ?CircularProgressIndicator(color: AppColors.white,)
+                              ?CircularProgressIndicator(color: AppColors.green,)
                               :Row(
                                 mainAxisAlignment: .center,
                                 children: [

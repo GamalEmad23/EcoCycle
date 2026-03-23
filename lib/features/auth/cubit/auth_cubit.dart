@@ -16,7 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
   FirebaseAuth instance = FirebaseAuth.instance;
   FirebaseFirestore fireInstase = FirebaseFirestore.instance;
 
- /// Sign Up
+  /// Sign Up
   Future<void> createUser(UserData userData) async {
     emit(AuthLoading());
     try {
@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
         "name": userData.name,
       });
       await instance.currentUser!.sendEmailVerification();
-      
+
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(message: e.message ?? "Unknown Firebase error"));
@@ -37,22 +37,21 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure(message: e.toString()));
     }
   }
- 
- /// Login 
+
+  /// Login
   Future<void> LoginUser(String email, String password) async {
     emit(LoginLoading());
     try {
-     final credential = await instance.signInWithEmailAndPassword(
+      final credential = await instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       await credential.user?.reload;
       if (instance.currentUser!.emailVerified) {
-      emit(LoginSuccess());
-      }else{
+        emit(LoginSuccess());
+      } else {
         emit(LoginFailure(message: "verification_message".tr()));
       }
-
     } on FirebaseAuthException catch (e) {
       emit(LoginFailure(message: e.message ?? "Unknown Firebase error"));
     } catch (e) {
@@ -60,9 +59,8 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-
   /// ResetPassword
-  Future<void> resetPassword(String email) async{
+  Future<void> resetPassword(String email) async {
     emit(ResetPasswordLoading());
     try {
       await instance.sendPasswordResetEmail(email: email);
@@ -71,43 +69,56 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ResetPasswordFailure(message: e.toString()));
     }
   }
-
-
+  
+  /// Login with google
   Future<void> signInWithGoogle() async {
-  emit(googleLoginLoading());
-  try {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    emit(googleLoginLoading());
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
 
-final GoogleSignInAccount? googleUser =
-    await googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    if (googleUser == null) {
-      emit(googleLoginFailure(message: "تم إلغاء العملية"));
-      return;
+      if (googleUser == null) {
+        emit(googleLoginFailure(message: "تم إلغاء العملية"));
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await instance.signInWithCredential(credential);
+
+      await fireInstase.collection('users').doc(userCredential.user!.uid).set({
+        "email": userCredential.user!.email,
+        "name": userCredential.user!.displayName,
+        "image": userCredential.user!.photoURL,
+      }, SetOptions(merge: true));
+
+      emit(googleLoginSuccess());
+    } catch (e) {
+      emit(googleLoginFailure(message: e.toString()));
     }
-
-    final googleAuth = await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final userCredential =
-        await instance.signInWithCredential(credential);
-
-    // ✅ خزّن بيانات المستخدم
-    await fireInstase.collection('users')
-        .doc(userCredential.user!.uid)
-        .set({
-      "email": userCredential.user!.email,
-      "name": userCredential.user!.displayName,
-      "image": userCredential.user!.photoURL,
-    }, SetOptions(merge: true));
-
-    emit(googleLoginSuccess());
-  } catch (e) {
-    emit(googleLoginFailure(message: e.toString()));
   }
+
+  /// Log our
+  Future<void> Signout() async{
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    await fireInstase
+        .collection('users')
+        .doc(user.uid)
+        .delete();
+  }
+
+  await FirebaseAuth.instance.signOut();
+  await GoogleSignIn().signOut();
 }
+
+
+  
 }
