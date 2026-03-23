@@ -114,7 +114,7 @@
   },
   "actions": {
     "recycling_history": "Recycling History",
-    "settings": "Settings",
+    "language": "Language",
     "about": "About EcoCycle",
     "logout": "Log Out"
   }

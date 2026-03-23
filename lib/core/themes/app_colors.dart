@@ -30,6 +30,7 @@ class AppColors {
   // Accent
   static const Color orange = Color(0xFFF59E0B);
   static const Color red = Color(0xFFEF4444);
+  static const Color lightRed = Color(0xFFFECACA);
   static const Color lime = Color(0xFF84CC16);
   static const Color olive = Color(0xFF65A30D);
 }
