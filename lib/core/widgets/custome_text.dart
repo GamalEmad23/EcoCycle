@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class CustomeText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text , 
+    return Text(text.tr() , 
     style: TextStyle(
       color: textColor?? AppColors.textPrimary,
       fontSize: fontSize ?? 18,

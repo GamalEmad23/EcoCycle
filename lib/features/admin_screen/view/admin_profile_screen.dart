@@ -1,9 +1,9 @@
-import 'package:eco_cycle/core/helper/get_helper/get_helper.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/admin_screen/widget/section_widget.dart';
 import 'package:eco_cycle/features/admin_screen/widget/state_box.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/helper/navigate_helper/navigate_helper.dart';
 import '../../../core/themes/app_colors.dart';
 import 'orders_screen.dart';
 
@@ -141,7 +141,7 @@ class AdminProfileScreen extends StatelessWidget {
 
         onTap: (index) {
           if (index == 0) {
-            GetHelper.getTo(OrdersScreen());
+            NavigateHelper.push(context, OrdersScreen());
           }
         },
 

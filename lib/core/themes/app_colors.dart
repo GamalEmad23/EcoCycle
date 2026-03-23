@@ -21,6 +21,7 @@ class AppColors {
   static const Color border = Color(0xFFE5E7EB);
 
   // Text
+  static const Color black = Color(0xFF000000);
   static const Color textPrimary = Color(0xFF111827);
   static const Color textSecondary = Color(0xFF374151);
   static const Color textGrey = Color(0xFF6B7280);
@@ -29,6 +30,7 @@ class AppColors {
   // Accent
   static const Color orange = Color(0xFFF59E0B);
   static const Color red = Color(0xFFEF4444);
+  static const Color lightRed = Color(0xFFFECACA);
   static const Color lime = Color(0xFF84CC16);
   static const Color olive = Color(0xFF65A30D);
 }

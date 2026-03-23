@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:eco_cycle/core/helper/get_helper/get_helper.dart';
+import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/onBording/view/onbording_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 5), () {
-      GetHelper.getOffAll(OnbordingScreen());
+      NavigateHelper.pushReplacement(context, OnbordingScreen());
     });
     super.initState();
   }
@@ -36,7 +36,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: 300,
               ),
             ),
-            CustomeText(text: "EcoCycle" , fontSize: 50, fontWeight: FontWeight.bold,),
+            CustomeText(
+              text: "EcoCycle",
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+            ),
             Spacer(),
             FadeInUp(
               delay: Duration(seconds: 2),

@@ -14,5 +14,110 @@
     "skip": "تخطي",
     "next": "التالي",
     "finish": "ابدأ"
+  },
+
+  "login": {
+    "title": "تسجيل الدخول",
+    "subtitle": "قم بتسجيل الدخول للمتابعة والمساهمة في بيئة أفضل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgot_password": "نسيت كلمة المرور؟",
+    "login_button": "تسجيل الدخول",
+    "or": "أو",
+    "google_login": "تسجيل الدخول باستخدام Google",
+    "no_account": "ليس لديك حساب؟",
+    "create_account": "إنشاء حساب",
+
+    "success_login": "تم تسجيل الدخول إلى حسابك بنجاح"
+  },
+
+    "login_validation": {
+    "email_required": "من فضلك أدخل البريد الإلكتروني",
+    "email_invalid": "من فضلك أدخل بريد إلكتروني صحيح",
+
+    "password_required": "من فضلك أدخل كلمة المرور",
+    "password_short": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+
+    "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "user_not_found": "لا يوجد حساب بهذا البريد الإلكتروني",
+    "wrong_password": "كلمة المرور غير صحيحة"
+  },
+
+   "signup": {
+    "title": "إنشاء حساب",
+    "subtitle": "أنشئ حسابك وابدأ رحلتك نحو بيئة أنظف",
+
+    "name_label": "الاسم",
+    "name_hint": "ادخل اسمك",
+
+    "email_label": "البريد الإلكتروني",
+    "email_hint": "example@email.com",
+
+    "password_label": "كلمة المرور",
+
+    "signup_button": "إنشاء حساب",
+
+    "have_account": "لديك حساب بالفعل؟",
+    "login_now": "سجل الدخول"
+
+  },
+
+  "signup_validation": {
+    "name_required": "من فضلك أدخل الاسم",
+    "name_short": "الاسم يجب أن يكون حرفين على الأقل",
+
+    "email_required": "من فضلك أدخل البريد الإلكتروني",
+    "email_invalid": "من فضلك أدخل بريد إلكتروني صحيح",
+    "email_already_used": "هذا البريد الإلكتروني مستخدم بالفعل",
+
+    "password_required": "من فضلك أدخل كلمة المرور",
+    "password_short": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+    "password_weak": "كلمة المرور ضعيفة، حاول استخدام حروف وأرقام",
+
+    "confirm_password_required": "من فضلك أكد كلمة المرور",
+    "passwords_not_match": "كلمتا المرور غير متطابقتين"
+  },
+
+  "verification_message": "يرجى التحقق من مجلد البريد العشوائي (Spam) في Gmail لإتمام تفعيل البريد الإلكتروني",
+
+  "forgot_password": {
+    "title": "نسيت كلمة المرور",
+    "subtitle": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+    "email_label": "البريد الإلكتروني",
+    "email_hint": "example@email.com",
+    "reset_button": "إرسال رابط إعادة التعيين",
+    "info_message": "سيتم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "back_to_login": "العودة إلى تسجيل الدخول",
+
+    "success": "تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور 📩",
+    "error": "حدث خطأ، حاول مرة أخرى"
+  },
+
+  "nav_bar": {
+  "home": "الرئيسية",
+  "map": "الخريطة",
+  "add": "إضافة",
+  "statistic": "الإحصائيات",
+  "profile": "الملف الشخصي"
+},
+
+  "profile": {
+    "title": "الملف الشخصي",
+    "name": "جمال عماد",
+    "badge": "عضو ذهبي"
+  },
+  "stats": {
+    "points": "النقاط",
+    "recycled": "تم تدويره",
+    "rank": "الترتيب"
+  },
+  "actions": {
+    "recycling_history": "سجل التدوير",
+    "language": "اللغه",
+    "about": "حول إيكوسايكل",
+    "logout": "تسجيل الخروج",
+    "select_language": "اختار اللغه",
+    "en":"الانجليزيه",
+    "ar":"العربيه"
   }
 }

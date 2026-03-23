@@ -1,9 +1,8 @@
+import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/admin_screen/view/admin_profile_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/helper/get_helper/get_helper.dart';
 import '../widget/order_card.dart';
 
 class OrdersScreen extends StatelessWidget {
@@ -33,7 +32,7 @@ class OrdersScreen extends StatelessWidget {
 
                     InkWell(
                       onTap: (){
-                        GetHelper.getTo(AdminProfileScreen());
+                        NavigateHelper.push(context,AdminProfileScreen());
                       },
                         child:  Icon(Icons.arrow_forward_ios, size: 20)),
                   ],
@@ -70,7 +69,7 @@ class OrdersScreen extends StatelessWidget {
 
           onTap: (index) {
             if (index == 1) {
-              GetHelper.getTo(AdminProfileScreen());
+              NavigateHelper.push(context,AdminProfileScreen());
             }
           },
 

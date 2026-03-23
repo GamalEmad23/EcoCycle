@@ -1,6 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eco_cycle/features/admin_screen/view/admin_profile_screen.dart';
-import 'package:eco_cycle/features/admin_screen/view/orders_screen.dart';
 import 'package:eco_cycle/features/splash_screen/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -28,7 +26,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      home:AdminProfileScreen()
+      home:SplashScreen()
     );
   }
 }
