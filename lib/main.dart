@@ -1,19 +1,37 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
+import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
 import 'package:eco_cycle/features/splash_screen/view/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  ///TODO: Localization
   await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('ar')],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+      ],
       path: 'assets/translations',
-      child: MyApp()
-    ));
+      fallbackLocale: const Locale('en'),
+
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthCubit(),
+          ),
+        ],
+        child: MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,12 +39,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      home:SplashScreen()
+      home: (FirebaseAuth.instance.currentUser != null && FirebaseAuth.instance.currentUser!.emailVerified)? NavBar():SplashScreen()
     );
   }
 }

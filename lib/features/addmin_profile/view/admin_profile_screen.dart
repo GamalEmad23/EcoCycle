@@ -1,11 +1,11 @@
 import 'package:eco_cycle/core/widgets/custome_text.dart';
-import 'package:eco_cycle/features/admin_screen/widget/section_widget.dart';
-import 'package:eco_cycle/features/admin_screen/widget/state_box.dart';
+import 'package:eco_cycle/features/admin_orders/widget/section_widget.dart';
+import 'package:eco_cycle/features/admin_orders/widget/state_box.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/helper/navigate_helper/navigate_helper.dart';
 import '../../../core/themes/app_colors.dart';
-import 'orders_screen.dart';
+import '../../admin_orders/view/orders_screen.dart';
 
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});

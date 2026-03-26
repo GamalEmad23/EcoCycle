@@ -1,7 +1,7 @@
 import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
-import 'package:eco_cycle/features/admin_screen/view/admin_profile_screen.dart';
+import 'package:eco_cycle/features/addmin_profile/view/admin_profile_screen.dart';
 import 'package:flutter/material.dart';
 import '../widget/order_card.dart';
 

@@ -206,6 +206,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             message: "login.success_login".tr(),
                             backgroundColor: AppColors.primary,
                           );
+
+                              NavigateHelper.pushAndRemoveUntil(context, NavBar());
                         }
                       },
                       builder: (context, state) {
@@ -218,7 +220,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _password.text,
                               );
 
-                              NavigateHelper.pushAndRemoveUntil(context, NavBar());
                             }
                             
                           },
