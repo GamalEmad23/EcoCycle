@@ -1,10 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
-import 'package:eco_cycle/features/add/view/add_process_screen.dart';
 import 'package:eco_cycle/features/home/view/home_scree.dart';
-import 'package:eco_cycle/features/map/view/map_screen.dart';
-import 'package:eco_cycle/features/profile/view/profile_screen.dart';
-import 'package:eco_cycle/features/statistics/view/statistics_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
@@ -15,69 +10,80 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  List<Widget> pages= [
-    HomeScree(),
-    MapScreen(),
-    AddProcessScreen(),
-    StatisticsScreen(),
-    ProfileScreen(),
-  ];
   int index = 0;
+  
+  final List<Widget> pages = [
+    const HomeScree(),
+    const Scaffold(body: Center(child: Text("Map"))),
+    const Scaffold(body: Center(child: Text("Statistics"))),
+    const Scaffold(body: Center(child: Text("Profile"))),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(20),
-            child: BottomNavigationBar(
-              currentIndex: index,
-              type: BottomNavigationBarType.fixed,
-              elevation: 0,
-              backgroundColor: AppColors.lightGreen2,
-              selectedItemColor: AppColors.green,
-              unselectedItemColor: AppColors.textPrimary,
-              onTap: (value) {
-                setState(() {
-                  index = value;
-                });
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined, size: 25),
-                  label: "nav_bar.home".tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.map_outlined, size: 25),
-                  label: "nav_bar.map".tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.add, size: 25),
-                  label: "nav_bar.add".tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart, size: 25),
-                  label: "nav_bar.statistic".tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_2_outlined, size: 25),
-                  label: "nav_bar.profile".tr(),
-                ),
-              ],
-            ),
-          ),
+      extendBody: true,
+      body: pages[index],
+      floatingActionButton: Container(
+        height: 70,
+        width: 70,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: const Color(0xFF00E676),
+          elevation: 10,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add, size: 40, color: Colors.white),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        padding: EdgeInsets.zero,
+        height: 80,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 12,
+        color: Colors.white,
+        elevation: 30,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(0, Icons.home_rounded, "الرئيسية", isSelected: index == 0),
+            _buildNavItem(1, Icons.map_outlined, "الخريطة", isSelected: index == 1),
+            
+            const SizedBox(width: 80),
+            
+            _buildNavItem(2, Icons.bar_chart_outlined, "الإحصائيات", isSelected: index == 2),
+            _buildNavItem(3, Icons.person_outline_rounded, "الملف الشخصي", isSelected: index == 3),
+          ],
+        ),
+      ),
+    );
+  }
 
-      body: pages[index]
+  Widget _buildNavItem(int itemIndex, IconData icon, String label, {required bool isSelected}) {
+    return Expanded(
+      child: InkWell(
+        onTap: () => setState(() => index = itemIndex),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? const Color(0xFF00E676) : const Color(0xFF94A3B8),
+              size: 28,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? const Color(0xFF00E676) : const Color(0xFF94A3B8),
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

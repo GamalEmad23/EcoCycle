@@ -33,4 +33,11 @@ class AppColors {
   static const Color lightRed = Color(0xFFFECACA);
   static const Color lime = Color(0xFF84CC16);
   static const Color olive = Color(0xFF65A30D);
+
+  // Home Screen Specific
+  static const Color levelCardStart = Color(0xFF00D261);
+  static const Color levelCardEnd = Color(0xFF1B9E3E);
+  static const Color actionButtonGray = Color(0xFFF1F5F9);
+  static const Color tipCardBg = Color(0xFFE6F9EE);
+  static const Color iconBgLight = Color(0xFFE0F2FE);
 }

@@ -120,6 +120,24 @@
     "select_language": "Select Language",
     "en":"English",
     "ar":"Arabic"
-
+  },
+  "home": {
+    "welcome": "Welcome Jamal 👋",
+    "happy_day": "Happy environmental day!",
+    "current_level": "Current Level",
+    "golden_member": "Gold Member",
+    "excellent_category": "Excellent Category",
+    "points_unit": "points",
+    "points_left": "Only {points} points left to reach Diamond Level",
+    "find_center": "Find a Center",
+    "recycle_now": "Recycle Now",
+    "impact_summary": "Environmental Impact Summary",
+    "total_recycled": "Total Recycling",
+    "co2_saved": "CO2 Saved",
+    "kg_unit": "kg",
+    "nearby_centers": "Nearby Centers",
+    "view_all": "View All",
+    "daily_tip_title": "Daily Environmental Tip",
+    "daily_tip_content": "Did you know that recycling one aluminum can saves enough energy to run a television for three hours? Start today!"
   }
 }
