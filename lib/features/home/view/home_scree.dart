@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -58,7 +57,7 @@ class _HomeScreeState extends State<HomeScree> {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -81,6 +80,7 @@ class _HomeScreeState extends State<HomeScree> {
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                     fontFamily: "Cairo", 
+                  ),
                 ),
                 const Text(
                   "يوم بيئي سعيد!",
@@ -98,7 +98,7 @@ class _HomeScreeState extends State<HomeScree> {
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -130,7 +130,7 @@ class _HomeScreeState extends State<HomeScree> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00E676).withOpacity(0.3),
+            color: const Color(0xFF00E676).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -145,7 +145,7 @@ class _HomeScreeState extends State<HomeScree> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
@@ -200,7 +200,7 @@ class _HomeScreeState extends State<HomeScree> {
                 height: 12,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -214,7 +214,7 @@ class _HomeScreeState extends State<HomeScree> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 4,
                       ),
                     ],
@@ -278,7 +278,7 @@ class _HomeScreeState extends State<HomeScree> {
         boxShadow: [
           if (bgColor == Colors.white)
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -356,7 +356,7 @@ class _HomeScreeState extends State<HomeScree> {
         border: Border.all(color: const Color(0xFFF1F5F9)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

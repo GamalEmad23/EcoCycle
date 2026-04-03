@@ -1,5 +1,5 @@
-import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/features/home/view/home_scree.dart';
+import 'package:eco_cycle/features/recycling_request/view/recycling_request_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
@@ -17,6 +17,7 @@ class _NavBarState extends State<NavBar> {
     const Scaffold(body: Center(child: Text("Map"))),
     const Scaffold(body: Center(child: Text("Statistics"))),
     const Scaffold(body: Center(child: Text("Profile"))),
+    const RecyclingRequestScreen(),
   ];
 
   @override
@@ -28,7 +29,11 @@ class _NavBarState extends State<NavBar> {
         height: 70,
         width: 70,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              index = 4;
+            });
+          },
           backgroundColor: const Color(0xFF00E676),
           elevation: 10,
           shape: const CircleBorder(),
