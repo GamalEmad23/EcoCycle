@@ -70,7 +70,10 @@ class _RecyclingRequestView extends StatelessWidget {
           builder: (context, state) {
             final cubit = context.read<RecyclingRequestCubit>();
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 16.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -117,7 +120,7 @@ class _RecyclingRequestView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 4),
                   const Text(
                     'المركز',
                     style: TextStyle(
@@ -126,7 +129,7 @@ class _RecyclingRequestView extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
@@ -143,7 +146,9 @@ class _RecyclingRequestView extends StatelessWidget {
                         ),
                         isExpanded: true,
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: ['مركز تدوير الخليج', 'إيكو بوينت المروج'].map((String value) {
+                        items: ['مركز تدوير الخليج', 'إيكو بوينت المروج'].map((
+                          String value,
+                        ) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -185,20 +190,24 @@ class _RecyclingRequestView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: Colors.grey.shade300,
-                        ),
+                        border: Border.all(color: Colors.grey.shade300),
                       ),
                       child: Column(
                         children: [
                           Icon(
-                            cubit.image != null ? Icons.check_circle_outline : Icons.camera_enhance_outlined,
-                            color: cubit.image != null ? Colors.green : const Color(0xFF00E676),
+                            cubit.image != null
+                                ? Icons.check_circle_outline
+                                : Icons.camera_enhance_outlined,
+                            color: cubit.image != null
+                                ? Colors.green
+                                : const Color(0xFF00E676),
                             size: 40,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            cubit.image != null ? 'تم رفع الصورة بنجاح' : 'اضغط هنا لرفع الصورة',
+                            cubit.image != null
+                                ? 'تم رفع الصورة بنجاح'
+                                : 'اضغط هنا لرفع الصورة',
                             style: const TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w600,
@@ -215,7 +224,7 @@ class _RecyclingRequestView extends StatelessWidget {
                     isLoading: state is RecyclingRequestLoading,
                     onPressed: () => cubit.submitRequest(),
                   ),
-                  const SizedBox(height: 120), 
+                  const SizedBox(height: 120),
                 ],
               ),
             );
