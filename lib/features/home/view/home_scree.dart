@@ -1,5 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class HomeScree extends StatefulWidget {
@@ -74,21 +74,9 @@ class _HomeScreeState extends State<HomeScree> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Text(
-                  "مرحباً جمال 👋",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                    fontFamily: "Cairo", 
-                ),
-                const Text(
-                  "يوم بيئي سعيد!",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textGrey,
-                  ),
-                ),
+
+               const CustomeText(text: "home.welcome" , fontSize: 22, fontWeight: FontWeight.bold),
+               const CustomeText(text: "home.happy_day" , fontSize: 14,textColor: AppColors.textGrey,)
               ],
             ),
             const SizedBox(width: 14),
