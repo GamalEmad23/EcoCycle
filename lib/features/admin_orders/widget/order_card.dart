@@ -43,7 +43,7 @@ class OrderCard extends StatelessWidget {
                 padding:
                  EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.orange.withOpacity(0.1),
+                  color: AppColors.orange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child:  CustomeText(text:
