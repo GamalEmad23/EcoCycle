@@ -1,9 +1,9 @@
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eco_cycle/features/add/view/add_process_screen.dart';
 import 'package:eco_cycle/features/home/view/home_scree.dart';
 import 'package:eco_cycle/features/map/view/map_screen.dart';
 import 'package:eco_cycle/features/profile/view/profile_screen.dart';
+import 'package:eco_cycle/features/recycling_request/view/recycling_request_screen.dart';
 import 'package:eco_cycle/features/statistics/view/statistics_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,7 @@ class _NavBarState extends State<NavBar> {
   final List<Widget> pages = [
     const HomeScree(),
     const MapScreen(),
-    const AddProcessScreen(),
+    const RecyclingRequestScreen(),
     const StatisticsScreen(),
     const ProfileScreen(),
   ];
