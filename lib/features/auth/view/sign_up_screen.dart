@@ -25,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  bool obsec = false;
+  bool obsec = true;
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;

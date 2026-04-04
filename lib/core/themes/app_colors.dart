@@ -19,6 +19,7 @@ class AppColors {
   static const Color background = Color(0xFFF8FAF9);
   static const Color backgroundLight = Color(0xFFF3F4F6);
   static const Color border = Color(0xFFE5E7EB);
+  static const Color lightWight = Color(0xFFF3F6F9);
 
   // Text
   static const Color black = Color(0xFF000000);
@@ -33,6 +34,7 @@ class AppColors {
   static const Color lightRed = Color(0xFFFECACA);
   static const Color lime = Color(0xFF84CC16);
   static const Color olive = Color(0xFF65A30D);
+  static const Color lightGreen = Color(0xFF00E676);
 
   // Home Screen Specific
   static const Color levelCardStart = Color(0xFF00D261);
