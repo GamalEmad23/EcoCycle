@@ -24,15 +24,16 @@ class customeProfileCard extends StatelessWidget {
        width: w*.28,
        decoration: BoxDecoration(
          color: Colors.white,
-         boxShadow: [
-           BoxShadow(
-             blurRadius: 2,
-             color: Colors.black38,
-             offset: Offset(2, 3),
-             spreadRadius: 1
-           ),
-         ],
-         borderRadius: BorderRadius.circular(10),
+        //  boxShadow: [
+        //    BoxShadow(
+        //      blurRadius: 2,
+        //      color: Colors.black38,
+        //      offset: Offset(2, 3),
+        //      spreadRadius: 1
+        //    ),
+        //  ],
+        border: Border.all(color: AppColors.lightGrey , width: 3),
+         borderRadius: BorderRadius.circular(20),
        ),
        child: Column(
         mainAxisAlignment: .center,

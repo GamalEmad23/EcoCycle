@@ -35,14 +35,7 @@ class customeLongProfileCard extends StatelessWidget {
           width: w * .89,
           decoration: BoxDecoration(
             color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 1.5,
-                color: Colors.black38,
-                offset: Offset(2, .5),
-                spreadRadius: .2,
-              ),
-            ],
+            border: Border.all(color: AppColors.lightGrey , width: 3),
             borderRadius: BorderRadius.circular(15),
           ),
         
@@ -58,7 +51,7 @@ class customeLongProfileCard extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: backGroung ?? AppColors.textLight,
+                        color: backGroung ?? AppColors.lightGrey,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

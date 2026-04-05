@@ -140,6 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    
                     /// History
                     customeLongProfileCard(
                       h: h,
@@ -203,6 +204,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                     ),
+                    
+
+                    /// Info
                     customeLongProfileCard(
                       h: h,
                       w: w,
@@ -214,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     customeLongProfileCard(
                       h: h,
                       w: w,
-                      icon: Icons.logout,
+                      icon: context.locale.languageCode == "en" ? Icons.logout : Icons.login_outlined,
                       text: CustomeText(text: "actions.logout"),
                       iconColor: AppColors.red,
                       backGroung: AppColors.lightRed,
