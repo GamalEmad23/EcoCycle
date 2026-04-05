@@ -30,7 +30,7 @@ class _RecyclingRequestView extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'recycling'.tr(),
+          'add_process.recycling'.tr(),
           style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class _RecyclingRequestView extends StatelessWidget {
           if (state is RecyclingRequestSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('request_sent_success'.tr()),
+                content: Text('add_process.request_sent_success'.tr()),
                 backgroundColor: Colors.green,
               ),
             );
@@ -77,7 +77,7 @@ class _RecyclingRequestView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'select_material'.tr(),
+                  'add_process.select_material'.tr(),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -94,25 +94,25 @@ class _RecyclingRequestView extends StatelessWidget {
                   childAspectRatio: 1.8,
                   children: [
                     MaterialCardWidget(
-                      title: 'paper'.tr(),
+                      title: 'add_process.paper'.tr(),
                       icon: Icons.description_outlined,
                       isSelected: cubit.selectedMaterial == 'ورق',
                       onTap: () => cubit.selectMaterial('ورق'),
                     ),
                     MaterialCardWidget(
-                      title: 'plastic'.tr(),
+                      title: 'add_process.plastic'.tr(),
                       icon: Icons.eco_outlined,
                       isSelected: cubit.selectedMaterial == 'بلاستيك',
                       onTap: () => cubit.selectMaterial('بلاستيك'),
                     ),
                     MaterialCardWidget(
-                      title: 'electronics'.tr(),
+                      title: 'add_process.electronics'.tr(),
                       icon: Icons.devices_other_outlined,
                       isSelected: cubit.selectedMaterial == 'إلكترونيات',
                       onTap: () => cubit.selectMaterial('إلكترونيات'),
                     ),
                     MaterialCardWidget(
-                      title: 'metal'.tr(),
+                      title: 'add_process.metal'.tr(),
                       icon: Icons.precision_manufacturing_outlined,
                       isSelected: cubit.selectedMaterial == 'معدن',
                       onTap: () => cubit.selectMaterial('معدن'),
@@ -121,7 +121,7 @@ class _RecyclingRequestView extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'center'.tr(),
+                  'add_process.center'.tr(),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -140,7 +140,7 @@ class _RecyclingRequestView extends StatelessWidget {
                     child: DropdownButton<String>(
                       value: cubit.selectedCenter,
                       hint: Text(
-                        'choose_center'.tr(),
+                        'add_process.choose_center'.tr(),
                         style: const TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                       isExpanded: true,
@@ -159,7 +159,7 @@ class _RecyclingRequestView extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'estimated_weight'.tr(),
+                  'add_process.estimated_weight'.tr(),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -168,12 +168,12 @@ class _RecyclingRequestView extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 CustomInputField(
-                  hintText: 'enter_weight'.tr(),
+                  hintText: 'add_process.enter_weight'.tr(),
                   onChanged: (val) => cubit.updateWeight(val),
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'upload_image'.tr(),
+                  'add_process.upload_image'.tr(),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -205,8 +205,8 @@ class _RecyclingRequestView extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           cubit.image != null
-                              ? 'image_uploaded_success'.tr()
-                              : 'upload_here'.tr(),
+                              ? 'add_process.image_uploaded_success'.tr()
+                              : 'add_process.upload_here'.tr(),
                           style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w600,
@@ -219,7 +219,7 @@ class _RecyclingRequestView extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 CustomButton(
-                  text: 'confirm'.tr(),
+                  text: 'add_process.confirm'.tr(),
                   isLoading: state is RecyclingRequestLoading,
                   onPressed: () => cubit.submitRequest(),
                 ),

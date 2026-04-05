@@ -140,19 +140,21 @@
     "daily_tip_title": "نصيحة اليوم البيئية",
     "daily_tip_content": "هل تعلم أن إعادة تدوير علبة ألومنيوم واحدة توفر طاقة كافية لتشغيل جهاز تلفزيون لمدة ثلاث ساعات؟ ابدأ اليوم!"
   },
-  "recycling": "إعادة التدوير",
-  "select_material": "اختر نوع المواد",
-  "paper": "ورق",
-  "plastic": "بلاستيك",
-  "electronics": "إلكترونيات",
-  "metal": "معدن",
-  "center": "المركز",
-  "choose_center": "اختر المركز",
-  "estimated_weight": "الوزن التقديري",
-  "enter_weight": "أدخل الوزن (كجم)",
-  "upload_image": "تحميل صورة الإثبات",
-  "upload_here": "اضغط هنا لرفع الصورة",
-  "confirm": "تأكيد العملية",
-  "request_sent_success": "تم إرسال الطلب بنجاح!",
-  "image_uploaded_success": "تم رفع الصورة بنجاح"
+   "add_process":{
+     "recycling": "إعادة التدوير",
+     "select_material": "اختر نوع المواد",
+     "paper": "ورق",
+     "plastic": "بلاستيك",
+     "electronics": "إلكترونيات",
+     "metal": "معدن",
+     "center": "المركز",
+     "choose_center": "اختر المركز",
+     "estimated_weight": "الوزن التقديري",
+     "enter_weight": "أدخل الوزن (كجم)",
+     "upload_image": "تحميل صورة الإثبات",
+     "upload_here": "اضغط هنا لرفع الصورة",
+     "confirm": "تأكيد العملية",
+     "request_sent_success": "تم إرسال الطلب بنجاح!",
+     "image_uploaded_success": "تم رفع الصورة بنجاح"
+   }
 }
