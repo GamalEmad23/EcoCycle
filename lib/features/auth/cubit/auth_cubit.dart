@@ -3,6 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/auth/model/user_entity.dart';
+import 'package:eco_cycle/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -28,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
         "email": userData.email,
         "name": userData.name,
       });
+
       await instance.currentUser!.sendEmailVerification();
 
       emit(AuthSuccess());
@@ -46,9 +48,13 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
-      await credential.user?.reload;
+       await credential.user?.reload();
+       
       if (instance.currentUser!.emailVerified) {
-        emit(LoginSuccess());
+        final user = instance.currentUser;
+
+        final isAdmin = user?.email == "emadg6139@gmail.com";
+        emit(LoginSuccess(isAdmin: isAdmin));
       } else {
         emit(LoginFailure(message: "verification_message".tr()));
       }
@@ -69,7 +75,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ResetPasswordFailure(message: e.toString()));
     }
   }
-  
+
   /// Login with google
   Future<void> signInWithGoogle() async {
     emit(googleLoginLoading());
@@ -104,21 +110,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// Log our
-  Future<void> Signout() async{
-  final user = FirebaseAuth.instance.currentUser;
+  /// Log out
+  Future<void> Signout() async {
+    final user = FirebaseAuth.instance.currentUser;
 
-  if (user != null) {
-    await fireInstase
-        .collection('users')
-        .doc(user.uid)
-        .delete();
+    if (user != null) {
+      await fireInstase.collection('users').doc(user.uid).delete();
+    }
+
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
-
-  await FirebaseAuth.instance.signOut();
-  await GoogleSignIn().signOut();
-}
-
-
-  
 }

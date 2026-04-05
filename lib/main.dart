@@ -12,22 +12,15 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  
+
   runApp(
     EasyLocalization(
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ar'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
 
       child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => AuthCubit(),
-          ),
-        ],
+        providers: [BlocProvider(create: (context) => AuthCubit())],
         child: MyApp(),
       ),
     ),
@@ -44,9 +37,22 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      home: (FirebaseAuth.instance.currentUser != null && FirebaseAuth.instance.currentUser!.emailVerified)? NavBar():SplashScreen(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          }
+
+          final user = snapshot.data;
+
+          if (user != null && user.emailVerified) {
+            return NavBar(); 
+          }
+
+          return SplashScreen();
+        },
+      ),
     );
   }
 }
-
-

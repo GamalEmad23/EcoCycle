@@ -6,11 +6,13 @@ import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_button.dart';
 import 'package:eco_cycle/core/widgets/custome_snak_bar.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
+import 'package:eco_cycle/features/admin_orders/view/orders_screen.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/sign_up_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:eco_cycle/features/auth/view/forget_password_screen.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
+import 'package:eco_cycle/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -207,21 +209,29 @@ class _LoginScreenState extends State<LoginScreen> {
                             backgroundColor: AppColors.primary,
                           );
 
-                              NavigateHelper.pushAndRemoveUntil(context, NavBar());
+                          if (state.isAdmin) {
+                            NavigateHelper.pushAndRemoveUntil(
+                              context,
+                              OrdersScreen(),
+                            );
+                          } else {
+                            NavigateHelper.pushAndRemoveUntil(
+                              context,
+                              NavBar(),
+                            );
+                          }
                         }
                       },
                       builder: (context, state) {
                         return CustomeButton(
                           btnColor: AppColors.green,
-                          onPressed: ()async {
+                          onPressed: () async {
                             if (_globalKey.currentState!.validate()) {
-                             await context.read<AuthCubit>().LoginUser(
+                              await context.read<AuthCubit>().LoginUser(
                                 _email.text,
                                 _password.text,
                               );
-
                             }
-                            
                           },
                           btnText: (state is LoginLoading)
                               ? CircularProgressIndicator(
@@ -258,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     /// Google button
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
-                         if (state is googleLoginFailure) {
+                        if (state is googleLoginFailure) {
                           CustomeSnakBar.show(
                             context: context,
                             message: state.message,
@@ -278,26 +288,33 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: EdgeInsets.symmetric(horizontal: w * .1),
                             child: CustomeButton(
                               btnColor: AppColors.backgroundLight,
-                              onPressed: ()async {
-                               await context.read<AuthCubit>().signInWithGoogle();
-                                NavigateHelper.pushAndRemoveUntil(context, NavBar());
+                              onPressed: () async {
+                                await context
+                                    .read<AuthCubit>()
+                                    .signInWithGoogle();
+                                NavigateHelper.pushAndRemoveUntil(
+                                  context,
+                                  NavBar(),
+                                );
                               },
-                              btnText:(state is googleLoginLoading)
-                              ?CircularProgressIndicator(color: AppColors.green,)
-                              :Row(
-                                mainAxisAlignment: .center,
-                                children: [
-                                  CustomeText(
-                                    text: "login.google_login",
-                                    fontSize: 17,
-                                  ),
-                                  SizedBox(width: w * .025),
-                                  Image.asset(
-                                    "assets/icons/google.png",
-                                    height: h * .03,
-                                  ),
-                                ],
-                              ),
+                              btnText: (state is googleLoginLoading)
+                                  ? CircularProgressIndicator(
+                                      color: AppColors.green,
+                                    )
+                                  : Row(
+                                      mainAxisAlignment: .center,
+                                      children: [
+                                        CustomeText(
+                                          text: "login.google_login",
+                                          fontSize: 17,
+                                        ),
+                                        SizedBox(width: w * .025),
+                                        Image.asset(
+                                          "assets/icons/google.png",
+                                          height: h * .03,
+                                        ),
+                                      ],
+                                    ),
                             ),
                           ),
                         );

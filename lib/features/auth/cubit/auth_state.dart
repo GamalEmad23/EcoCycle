@@ -16,7 +16,12 @@ final class AuthFailure extends AuthState {
 
 final class LoginInitial extends AuthState {}
 final class LoginLoading extends AuthState {}
-final class LoginSuccess extends AuthState {}
+final class LoginSuccess extends AuthState {
+  final bool isAdmin;
+
+  LoginSuccess({required this.isAdmin});
+
+}
 final class LoginFailure extends AuthState {
   final String message;
 
@@ -47,7 +52,8 @@ final class googleLoginFailure extends AuthState {
 
 final class signOutInitial extends AuthState {}
 final class signOutLoading extends AuthState {}
-final class signOutSuccess extends AuthState {}
+final class signOutSuccess extends AuthState {
+}
 final class signOutFailure extends AuthState {
   final String message;
 
