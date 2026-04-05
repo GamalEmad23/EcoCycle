@@ -12,7 +12,6 @@ import 'package:eco_cycle/features/auth/view/sign_up_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:eco_cycle/features/auth/view/forget_password_screen.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
-import 'package:eco_cycle/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -80,6 +80,7 @@
   },
 
   "verification_message" : "Check you Spam messages in you gmail to verify your email",
+  "admin_login_message" : "You are not Admin",
 
    "forgot_password": {
     "title": "Forgot Password",

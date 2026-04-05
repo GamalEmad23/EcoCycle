@@ -3,7 +3,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/auth/model/user_entity.dart';
-import 'package:eco_cycle/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -48,15 +47,17 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
-       await credential.user?.reload();
-       
+      await credential.user?.reload();
+
       if (instance.currentUser!.emailVerified) {
         final user = instance.currentUser;
 
-        final isAdmin = user?.email == "emadg6139@gmail.com";
+        final isAdmin =
+            user?.email == "emadg6139@gmail.com" ||
+            user?.email == "ahmedsorour628@gmail.com";
         emit(LoginSuccess(isAdmin: isAdmin));
       } else {
-        emit(LoginFailure(message: "verification_message".tr()));
+        emit(LoginFailure(message: "admin_login_message".tr()));
       }
     } on FirebaseAuthException catch (e) {
       emit(LoginFailure(message: e.message ?? "Unknown Firebase error"));

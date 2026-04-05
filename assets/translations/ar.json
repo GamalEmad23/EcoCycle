@@ -79,6 +79,7 @@
   },
 
   "verification_message": "يرجى التحقق من مجلد البريد العشوائي (Spam) في Gmail لإتمام تفعيل البريد الإلكتروني",
+  "admin_login_message" : "صاحب هذا الايميل ليس ادمن",
 
   "forgot_password": {
     "title": "نسيت كلمة المرور",
