@@ -4,6 +4,7 @@ import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:eco_cycle/features/profile/view/widgets/custom_long_profile_card.dart';
+import 'package:eco_cycle/features/profile/view/widgets/custome_lang_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -140,7 +141,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    
                     /// History
                     customeLongProfileCard(
                       h: h,
@@ -154,47 +154,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       h: h,
                       w: w,
                       icon: Icons.language,
-                      text: CustomeText(text: "actions.language" , fontWeight: FontWeight.bold,),
+                      text: CustomeText(
+                        text: "actions.language",
+                        fontWeight: FontWeight.bold,
+                      ),
                       onTap: () {
                         showDialog(
                           context: context,
                           builder: (context) => StatefulBuilder(
-                            builder: (context, setState) => AlertDialog(
-                              backgroundColor: AppColors.primaryDark,
-                              title: CustomeText(
-                                text: "actions.select_language",
-                                textColor: AppColors.white,
-                                fontWeight: FontWeight.bold, 
-                                fontSize: 22,
+                            builder: (context, setState) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              content: Container(
-                                height: h * .2,
+                              backgroundColor: Colors.grey.shade100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
+                                    /// Title
+                                    Text(
+                                      "Select Language",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 20),
+
                                     /// English
-                                    customeLanguageRow(
-                                      language: language,
-                                      value: "en",
-                                      text: "actions.en",
-                                      onChanged: (value) {
-                                        setState(() {
-                                          language = value!;
-                                        });
+                                    CustomeLangCard(
+                                      title: "English",
+                                      icon: Icons.language,
+                                      selected: language == "en",
+                                      onTap: () {
+                                        setState(() => language = "en");
                                         context.setLocale(Locale("en"));
                                       },
                                     ),
 
+                                    SizedBox(height: 12),
+
                                     /// Arabic
-                                    customeLanguageRow(
-                                      language: language,
-                                      value: "ar",
-                                      text: "actions.ar",
-                                      onChanged: (value) {
-                                        setState(() {
-                                          language = value!;
-                                        });
+                                    CustomeLangCard(
+                                      title: "العربية",
+                                      icon: Icons.language,
+                                      selected: language == "ar",
+                                      onTap: () {
+                                        setState(() => language = "ar");
                                         context.setLocale(Locale("ar"));
                                       },
+                                    ),
+
+                                    SizedBox(height: 20),
+
+                                    /// Button
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color(0xFF8FD3A8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text("Done"),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -204,7 +234,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                     ),
-                    
 
                     /// Info
                     customeLongProfileCard(
@@ -214,11 +243,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: CustomeText(text: "actions.about"),
                     ),
 
-                    
                     customeLongProfileCard(
                       h: h,
                       w: w,
-                      icon: context.locale.languageCode == "en" ? Icons.logout : Icons.login_outlined,
+                      icon: context.locale.languageCode == "en"
+                          ? Icons.logout
+                          : Icons.login_outlined,
                       text: CustomeText(text: "actions.logout"),
                       iconColor: AppColors.red,
                       backGroung: AppColors.lightRed,
@@ -261,8 +291,15 @@ class customeLanguageRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Radio(value: value, groupValue: language, onChanged: onChanged , activeColor: AppColors.white,side: BorderSide(color: AppColors.white ), toggleable: true,),
-        CustomeText(text: text, textColor: AppColors.white,),
+        Radio(
+          value: value,
+          groupValue: language,
+          onChanged: onChanged,
+          activeColor: AppColors.white,
+          side: BorderSide(color: AppColors.white),
+          toggleable: true,
+        ),
+        CustomeText(text: text, textColor: AppColors.white),
       ],
     );
   }
