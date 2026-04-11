@@ -141,21 +141,31 @@
     "daily_tip_title": "Daily Environmental Tip",
     "daily_tip_content": "Did you know that recycling one aluminum can saves enough energy to run a television for three hours? Start today!"
   },
-  "add_process":{
-    "recycling": "Recycling",
-    "select_material": "Select Material Type",
-    "paper": "Paper",
-    "plastic": "Plastic",
-    "electronics": "Electronics",
-    "metal": "Metal",
-    "center": "Center",
-    "choose_center": "Choose Center",
-    "estimated_weight": "Estimated Weight",
-    "enter_weight": "Enter Weight (kg)",
-    "upload_image": "Upload Proof Image",
-    "upload_here": "Click here to upload",
-    "confirm": "Confirm Operation",
-    "request_sent_success": "Request sent successfully!",
-    "image_uploaded_success": "Image uploaded successfully"
+
+  "statistics":{
+    "total_recycled": "Total Recycled",
+  "kg": "kg",
+  "operations_count": "Operations Count",
+  "co2_saved": "CO2 Saved",
+
+  "this_month": "This month",
+
+  "Monthly_progress": "Monthly progress",
+  "Last_months": "Last 6 months",
+  "jan": "Jan",
+  "feb": "Feb",
+  "mar": "Mar",
+  "apr": "Apr",
+  "may": "May",
+  "jun": "Jun",
+  "latest_activity": "Latest Activity",
+  "view_all": "View All",
+
+  "paper_waste": "Paper Waste",
+  "plastic_bottles": "Plastic Bottles",
+  "metal_cans": "Metal Cans"
+
+
   }
+
 }
