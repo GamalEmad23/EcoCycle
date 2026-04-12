@@ -139,22 +139,32 @@
     "view_all": "عرض الكل",
     "daily_tip_title": "نصيحة اليوم البيئية",
     "daily_tip_content": "هل تعلم أن إعادة تدوير علبة ألومنيوم واحدة توفر طاقة كافية لتشغيل جهاز تلفزيون لمدة ثلاث ساعات؟ ابدأ اليوم!"
-  },
-   "add_process":{
-     "recycling": "إعادة التدوير",
-     "select_material": "اختر نوع المواد",
-     "paper": "ورق",
-     "plastic": "بلاستيك",
-     "electronics": "إلكترونيات",
-     "metal": "معدن",
-     "center": "المركز",
-     "choose_center": "اختر المركز",
-     "estimated_weight": "الوزن التقديري",
-     "enter_weight": "أدخل الوزن (كجم)",
-     "upload_image": "تحميل صورة الإثبات",
-     "upload_here": "اضغط هنا لرفع الصورة",
-     "confirm": "تأكيد العملية",
-     "request_sent_success": "تم إرسال الطلب بنجاح!",
-     "image_uploaded_success": "تم رفع الصورة بنجاح"
-   }
+  } ,
+  
+  "statistics": {
+    "total_recycled": "إجمالي المعاد تدويره",
+    "kg": "كجم",
+    "operations_count": "عدد العمليات",
+    "co2_saved": "توفير CO2",
+
+    "this_month": "هذا الشهر",
+
+    "Monthly_progress": "التقدم الشهري",
+    "Last_months": "آخر 6 أشهر",
+
+    "jan": "يناير",
+    "feb": "فبراير",
+    "mar": "مارس",
+    "apr": "أبريل",
+    "may": "مايو",
+    "jun": "يونيو",
+
+    "latest_activity": "النشاط الأخير",
+    "view_all": "عرض الكل",
+
+    "paper_waste": "مخلفات ورقية",
+    "plastic_bottles": "زجاجات بلاستيكية",
+    "metal_cans": "علب معدنية"
+  }
+
 }
