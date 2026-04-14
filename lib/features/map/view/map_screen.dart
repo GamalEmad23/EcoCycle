@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -10,179 +11,109 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  final MapController _mapController = MapController();
+
+  LatLng? currentLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
+  Future<void> getLocation() async {
+  try {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      setState(() {
+        currentLocation = LatLng(30.0444, 31.2357);
+      });
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+      timeLimit: const Duration(seconds: 5),
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      currentLocation = LatLng(position.latitude, position.longitude);
+    });
+
+    _mapController.move(currentLocation!, 15);
+
+  } catch (e) {
+    setState(() {
+      currentLocation = LatLng(30.0444, 31.2357); // fallback
+    });
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          FlutterMap(
-            options: MapOptions(
-              initialCenter: LatLng(24.7136, 46.6753),
-              initialZoom: 13,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: LatLng(24.7136, 46.6753),
-                    width: 50,
-                    height: 50,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.recycling, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          Positioned(
-            top: 10,
-            left: 10,
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              mini: true,
-              onPressed: () {},
-              child: Icon(Icons.tune),
-            ),
-          ),
-          Positioned(
-            top: 15,
-            left: 140,
-            child: Text(
-              "خريطه المراكز",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-            ),
-          ),
-          Positioned(
-            top: 10,
-            left: 350,
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              mini: true,
-              onPressed: () {},
-              child: Icon(Icons.search),
-            ),
-          ),
-          Positioned(
-            left: 15,
-            top: 250,
-            child: Column(
+      body: currentLocation == null
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
               children: [
-                FloatingActionButton(
-                  backgroundColor: Colors.white,
-
-                  mini: true,
-                  onPressed: () {},
-                  child: Icon(Icons.add),
-                ),
-                FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  mini: true,
-                  onPressed: () {},
-                  child: Icon(Icons.remove),
-                ),
-                FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  mini: true,
-                  onPressed: () {},
-                  child: Icon(Icons.location_on),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 15,
-            right: 15,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-              ),
-              child: Row(
-                children: [
-                  // صورة
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey[200],
-                    ),
+                FlutterMap(
+                  mapController: _mapController,
+                  options: MapOptions(
+                    initialCenter: currentLocation!,
+                    initialZoom: 15,
                   ),
-                  Spacer(),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          "https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+                      userAgentPackageName: 'com.ecocycle.app',
+                    ),
 
-                  // النصوص
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          "إيكوهوب داون تاون",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text("بلاستيك، ورق، معدن"),
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  " المسافه",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("1.2 كم"),
-                              ],
-                            ),
-                            SizedBox(width: 20),
-                            Column(
-                              children: [
-                                Text(
-                                  "ساعات العمل",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("08:00 ص"),
-                                Text("09:00 م"),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "الحصول علي الاتجاهات",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Icon(Icons.navigation_outlined),
-                            ],
+                    ///  Marker موقعك
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: currentLocation!,
+                          width: 60,
+                          height: 60,
+                          child: const Icon(
+                            Icons.location_pin,
+                            color: Colors.blue,
+                            size: 40,
                           ),
                         ),
                       ],
                     ),
+                  ],
+                ),
+
+                ///  زر يرجعك لموقعك
+                Positioned(
+                  bottom: 120,
+                  right: 20,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      _mapController.move(currentLocation!, 15);
+                    },
+                    child: const Icon(Icons.my_location),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
