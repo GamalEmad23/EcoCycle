@@ -11,11 +11,13 @@ class IntroWidget extends PageViewModel {
       padding: const EdgeInsets.symmetric(vertical: 50),
       child: Column(
         children: [
-          const SizedBox(height: 80),
+          const SizedBox(height: 20),
 
-          Image.asset(image),
+          ClipRRect(
+            borderRadius: BorderRadiusGeometry.circular(50),
+            child: Image.asset(image , height: 300,)),
 
-          const SizedBox(height: 50),
+          const SizedBox(height: 35),
 
           Text(
             title,

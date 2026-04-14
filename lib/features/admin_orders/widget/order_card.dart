@@ -21,7 +21,7 @@ class OrderCard extends StatelessWidget {
 
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset("assets/image/Image+Background.png",
+            child: Image.asset("assets/images/Image+Background.png",
               height: 120,
               width: double.infinity,
               fit: BoxFit.cover,

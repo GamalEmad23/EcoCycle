@@ -36,18 +36,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () async {
-              await context.setLocale(
-                context.locale.languageCode == 'en'
-                    ? const Locale('ar')
-                    : const Locale('en'),
-              );
-            },
-            icon: Icon(Icons.language),
-          ),
-        ),
         body: Center(
           child: SingleChildScrollView(
             child: SafeArea(
@@ -61,11 +49,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .03,
-                        vertical: h * .03,
+                        vertical: h * .01,
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadiusGeometry.circular(15),
-                        child: Image.asset("assets/authImages/signup.png"),
+                        child: Image.asset("assets/authImages/signup.png" , height: h*.18,width: double.infinity, fit: BoxFit.cover,),
                       ),
                     ),
 
@@ -83,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .04,
-                        vertical: h * .01,
+                        vertical: h * .007,
                       ),
                       child: CustomeText(
                         text: "signup.subtitle",
@@ -96,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .04,
-                        vertical: h * .01,
+                        vertical: h * .007,
                       ),
                       child: CustomeText(
                         text: "signup.name_label",
@@ -130,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .04,
-                        vertical: h * .01,
+                        vertical: h * .007,
                       ),
                       child: CustomeText(
                         text: "login.email",
@@ -163,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: w * .04,
-                        vertical: h * .01,
+                        vertical: h * .007,
                       ),
                       child: CustomeText(
                         text: "signup.password_label",
@@ -203,7 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         FocusScope.of(context).nextFocus();
                       },
                     ),
-                    SizedBox(height: h * .025),
+                    SizedBox(height: h * .018),
 
                     /// sign up Button
                     BlocConsumer<AuthCubit, AuthState>(
@@ -247,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                     ),
-                    SizedBox(height: h * .025),
+                    SizedBox(height: h * .018),
 
                     ///  have account
                     Row(

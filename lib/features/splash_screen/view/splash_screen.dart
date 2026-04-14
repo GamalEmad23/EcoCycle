@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ZoomIn(
               duration: Duration(seconds: 1),
               child: Image.asset(
-                "assets/image/Margin.png",
+                "assets/images/Margin.png",
                 width: 300,
                 height: 300,
               ),

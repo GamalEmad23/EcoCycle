@@ -17,6 +17,7 @@ class OnbordingScreen extends StatelessWidget {
       child: IntroductionScreen(
         globalBackgroundColor: Colors.white,
         pages: [
+          
             IntroWidget(
               image: 'assets/introImage/Overlay.png',
               title: "onboarding.title1".tr(),
