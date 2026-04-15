@@ -28,9 +28,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: Padding(
+      bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -44,9 +42,13 @@ class _NavBarState extends State<NavBar> {
               currentIndex: index,
               type: BottomNavigationBarType.fixed,
               elevation: 0,
-              backgroundColor: AppColors.lightGreen2,
+              
+              backgroundColor: AppColors.background,
               selectedItemColor: AppColors.green,
-              unselectedItemColor: AppColors.textPrimary,
+              unselectedItemColor: AppColors.textGrey,
+              selectedFontSize: 15,
+              selectedIconTheme: IconThemeData(size: 30),
+
               onTap: (value) {
                 setState(() {
                   index = value;
