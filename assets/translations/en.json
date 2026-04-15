@@ -142,6 +142,29 @@
     "daily_tip_content": "Did you know that recycling one aluminum can saves enough energy to run a television for three hours? Start today!"
   },
 
+  "add_process": {
+  "recycling": "Recycling",
+  "request_sent_success": "Request sent successfully",
+
+  "select_material": "Select Material",
+  "paper": "Paper",
+  "plastic": "Plastic",
+  "electronics": "Electronics",
+  "metal": "Metal",
+
+  "center": "Recycling Center",
+  "choose_center": "Choose a center",
+
+  "estimated_weight": "Estimated Weight",
+  "enter_weight": "Enter weight",
+
+  "upload_image": "Upload Image",
+  "upload_here": "Upload here",
+  "image_uploaded_success": "Image uploaded successfully",
+
+  "confirm": "Confirm"
+},
+
   "statistics":{
     "total_recycled": "Total Recycled",
   "kg": "kg",

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -16,10 +18,15 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? currentLocation;
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
+
+  currentLocation = LatLng(30.0444, 31.2357);
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     getLocation();
-  }
+  });
+}
 
   Future<void> getLocation() async {
   try {
@@ -37,6 +44,8 @@ class _MapScreenState extends State<MapScreen> {
 
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
+      if (!mounted) return;
+
       setState(() {
         currentLocation = LatLng(30.0444, 31.2357);
       });
@@ -54,11 +63,15 @@ class _MapScreenState extends State<MapScreen> {
       currentLocation = LatLng(position.latitude, position.longitude);
     });
 
-    _mapController.move(currentLocation!, 15);
+    if (_mapController.camera != null) {
+      _mapController.move(currentLocation!, 15);
+    }
 
   } catch (e) {
+    if (!mounted) return;
+
     setState(() {
-      currentLocation = LatLng(30.0444, 31.2357); // fallback
+      currentLocation = LatLng(30.0444, 31.2357);
     });
   }
 }
