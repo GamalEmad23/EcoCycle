@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
+import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 import 'package:eco_cycle/features/splash_screen/view/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +24,12 @@ void main() async {
       fallbackLocale: const Locale('en'),
 
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => AuthCubit())],
+        providers: [BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(
+          create: (context) => ProfileCubit()..getSavedLang(context),
+          child: Container(),
+        )
+        ],
         child: MyApp(),
       ),
     ),

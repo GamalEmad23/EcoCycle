@@ -13,15 +13,24 @@ class CustomeLangCard extends StatelessWidget {
     return GestureDetector(
     onTap: onTap,
     child: AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-      decoration: BoxDecoration(
-        color: selected ? Color(0xFFE8F5E9) : Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: selected ? Color(0xFF8FD3A8) : Colors.grey.shade300,
-          width: 1.5,
-        ),
+       duration: const Duration(milliseconds: 200),
+  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+  decoration: BoxDecoration(
+    color: selected ? const Color(0xFFE8F5E9) : Colors.white,
+    borderRadius: BorderRadius.circular(14),
+    border: Border.all(
+      color: selected ? const Color(0xFF4CAF50) : Colors.grey.shade300, 
+      width: selected ? 2 : 1.2,
+    ),
+    boxShadow: selected
+        ? [
+            BoxShadow(
+              color: Colors.green.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            )
+          ]
+        : [],
       ),
       child: Row(
         children: [
