@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/services/geocoding_service.dart';
 import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dart';
 import 'package:eco_cycle/features/map/view/widgets/center_details_bottom_sheet.dart';
 
@@ -16,6 +19,13 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
+
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  Timer? _debounce;
+  bool _isSearching = false;
+  List<GeocodingResult> _searchResults = [];
+  final GeocodingService _geocodingService = GeocodingService();
 
   LatLng? currentLocation;
   bool? hasPermission;
@@ -56,6 +66,58 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     _checkInitialPermission();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    if (query.trim().isEmpty) {
+      if (mounted) setState(() { _searchResults.clear(); _isSearching = false; });
+      return;
+    }
+    
+    if (mounted) setState(() => _isSearching = true);
+    
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      try {
+        final results = await _geocodingService.searchLocations(query);
+        if (mounted) {
+          setState(() {
+            _searchResults = results;
+            _isSearching = false;
+          });
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() {
+            _searchResults = [];
+            _isSearching = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('فشل في البحث عن الموقع: $e')),
+          );
+        }
+      }
+    });
+  }
+
+  void _onResultSelected(GeocodingResult result) {
+    _searchFocusNode.unfocus();
+    _searchController.text = result.displayName.split(',').first;
+    setState(() {
+      _searchResults.clear();
+      currentLocation = result.location;
+    });
+    
+    _updateMockLocationsAroundUser(result.location.latitude, result.location.longitude);
+    _mapController.move(result.location, 14);
   }
 
   Future<void> _checkInitialPermission() async {
@@ -203,26 +265,30 @@ class _MapScreenState extends State<MapScreen> {
                         ..._mockCenters.map((center) {
                           return Marker(
                             point: center['location'] as LatLng,
-                            width: 50,
-                            height: 50,
+                            width: 60,
+                            height: 60,
                             child: GestureDetector(
                               onTap: () => _showCenterDetails(center),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: AppColors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(
-                                  Icons.recycling_rounded,
-                                  color: AppColors.primary,
-                                  size: 28,
+                              child: FadeInUp(
+                                duration: const Duration(milliseconds: 400),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: AppColors.white, width: 3),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black38,
+                                        blurRadius: 8,
+                                        offset: Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.recycling_rounded,
+                                    color: AppColors.white,
+                                    size: 30,
+                                  ),
                                 ),
                               ),
                             ),
@@ -248,54 +314,178 @@ class _MapScreenState extends State<MapScreen> {
                   right: 20,
                   child: Directionality(
                     textDirection: TextDirection.rtl,
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 10,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 16),
-                          const Icon(
-                            Icons.search,
-                            color: AppColors.textSecondary,
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 16),
+                              const Icon(
+                                Icons.search,
+                                color: AppColors.textSecondary,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: TextField(
+                                  controller: _searchController,
+                                  focusNode: _searchFocusNode,
+                                  onChanged: _onSearchChanged,
+                                  decoration: const InputDecoration(
+                                    hintText: "أدخل موقعك...",
+                                    hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.textLight,
+                                    ),
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              if (_isSearching)
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                )
+                              else if (_searchController.text.isNotEmpty)
+                                IconButton(
+                                  icon: const Icon(Icons.clear, color: AppColors.textSecondary, size: 20),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    _onSearchChanged('');
+                                  },
+                                ),
+                              Container(
+                                height: double.infinity,
+                                width: 50,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.lightGreen3,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(25),
+                                    bottomLeft: Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.tune_rounded,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          const Expanded(
-                            child: Text(
-                              "خريطة المراكز",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
+                        ),
+                        if (!_isSearching && _searchController.text.isNotEmpty && _searchResults.isEmpty)
+                          FadeInDown(
+                            duration: const Duration(milliseconds: 300),
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 8),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Column(
+                                children: [
+                                  Icon(Icons.location_off, color: AppColors.textLight, size: 32),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    "لم يتم العثور على مواقع مطابقة",
+                                    style: TextStyle(color: AppColors.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          Container(
-                            height: double.infinity,
-                            width: 50,
-                            decoration: const BoxDecoration(
-                              color: AppColors.lightGreen3,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25),
-                                bottomLeft: Radius.circular(25),
+                        if (_searchResults.isNotEmpty)
+                          FadeInDown(
+                            duration: const Duration(milliseconds: 300),
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              constraints: const BoxConstraints(maxHeight: 280),
+                              child: ListView.separated(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                shrinkWrap: true,
+                                itemCount: _searchResults.length,
+                                separatorBuilder: (context, index) => const Divider(height: 1, color: AppColors.border),
+                                itemBuilder: (context, index) {
+                                  final result = _searchResults[index];
+                                  final parts = result.displayName.split(',');
+                                  final mainText = parts.first;
+                                  final subText = parts.length > 1 ? parts.skip(1).join(',').trim() : '';
+
+                                  return ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                                    leading: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.lightGreen3,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Icon(Icons.location_on, color: AppColors.primary),
+                                    ),
+                                    title: Text(
+                                      mainText,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                                    ),
+                                    subtitle: subText.isNotEmpty
+                                        ? Text(
+                                            subText,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(fontSize: 12, color: AppColors.textLight),
+                                          )
+                                        : null,
+                                    onTap: () => _onResultSelected(result),
+                                  );
+                                },
                               ),
                             ),
-                            child: const Icon(
-                              Icons.tune_rounded,
-                              color: AppColors.primary,
-                            ),
                           ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),

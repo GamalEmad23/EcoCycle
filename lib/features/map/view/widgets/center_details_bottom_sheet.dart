@@ -1,5 +1,6 @@
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 
 class CenterDetailsBottomSheet extends StatelessWidget {
   final Map<String, dynamic> centerData;
@@ -13,15 +14,24 @@ class CenterDetailsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
+    return FadeInUp(
+      duration: const Duration(milliseconds: 300),
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 20,
+                offset: Offset(0, -5),
+              ),
+            ],
+          ),
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -154,19 +164,34 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            SizedBox(
+            const SizedBox(height: 32),
+            Container(
               width: double.infinity,
-              height: 52,
+              height: 56,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
+                  colors: [AppColors.primary, AppColors.primaryDark],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
               child: ElevatedButton.icon(
                 onPressed: onGetDirections,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: Colors.transparent,
                   foregroundColor: AppColors.white,
+                  shadowColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  elevation: 0,
                 ),
                 icon: const Icon(Icons.near_me_rounded),
                 label: const Text(
@@ -178,6 +203,7 @@ class CenterDetailsBottomSheet extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
