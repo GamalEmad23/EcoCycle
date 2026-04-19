@@ -27,7 +27,6 @@ void main() async {
         providers: [BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(
           create: (context) => ProfileCubit()..getSavedLang(context),
-          child: Container(),
         )
         ],
         child: MyApp(),

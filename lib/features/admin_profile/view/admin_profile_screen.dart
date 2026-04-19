@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/admin_profile/view/widgets/section_widget.dart';
 import 'package:eco_cycle/features/admin_orders/widget/state_box.dart';
@@ -8,6 +8,7 @@ import 'package:eco_cycle/features/profile/view/widgets/custome_lang_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 
 import '../../../core/helper/navigate_helper/navigate_helper.dart';
 import '../../../core/themes/app_colors.dart';
@@ -21,7 +22,6 @@ class AdminProfileScreen extends StatefulWidget {
 }
 
 class _AdminProfileScreenState extends State<AdminProfileScreen> {
-  String language = "en";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,62 +119,71 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         backgroundColor: Colors.grey.shade100,
                         child: Padding(
                           padding: const EdgeInsets.all(20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              /// Title
-                              Text(
-                                "Select Language",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade800,
-                                ),
-                              ),
-
-                              SizedBox(height: 20),
-
-                              /// English
-                              CustomeLangCard(
-                                title: "English",
-                                icon: Icons.language,
-                                selected: language == "en",
-                                onTap: () {
-                                  setState(() => language = "en");
-                                  context.setLocale(Locale("en"));
-                                },
-                              ),
-
-                              SizedBox(height: 12),
-
-                              /// Arabic
-                              CustomeLangCard(
-                                title: "العربية",
-                                icon: Icons.language,
-                                selected: language == "ar",
-                                onTap: () {
-                                  setState(() => language = "ar");
-                                  context.setLocale(Locale("ar"));
-                                },
-                              ),
-
-                              SizedBox(height: 20),
-
-                              /// Button
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFF8FD3A8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                          child: BlocBuilder<ProfileCubit, ProfileState>(
+                            builder: (context, state) {
+                              if (state is ProfileLanguageState) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    /// Title
+                                    Text(
+                                      "Select Language",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade800,
+                                      ),
                                     ),
-                                  ),
-                                  child: Text("Done"),
-                                ),
-                              ),
-                            ],
+
+                                    SizedBox(height: 20),
+
+                                    /// English
+                                    CustomeLangCard(
+                                      title: "English",
+                                      icon: Icons.language,
+                                      selected: state.langCode == "en",
+                                      onTap: () {
+                                        context
+                                            .read<ProfileCubit>()
+                                            .changeLanguage(context, "en");
+                                      },
+                                    ),
+
+                                    SizedBox(height: 12),
+
+                                    /// Arabic
+                                    CustomeLangCard(
+                                      title: "العربية",
+                                      icon: Icons.language,
+                                      selected: state.langCode == "ar",
+                                      onTap: () {
+                                        context
+                                            .read<ProfileCubit>()
+                                            .changeLanguage(context, "ar");
+                                      },
+                                    ),
+
+                                    SizedBox(height: 20),
+
+                                    /// Button
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color(0xFF8FD3A8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        child: Text("Done"),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                              return SizedBox();
+                            },
                           ),
                         ),
                       ),

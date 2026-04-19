@@ -23,7 +23,7 @@ class CustomeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text.tr(), // تأكدت من وجود comma هنا
+      text.tr(context: context), // تأكدت من وجود comma هنا
       maxLines: maxLines,
       overflow: overflow,
       style: TextStyle(
