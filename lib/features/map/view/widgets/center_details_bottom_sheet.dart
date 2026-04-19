@@ -20,10 +20,10 @@ class CenterDetailsBottomSheet extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: Container(
           padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-            boxShadow: [
+            borderRadius: BorderRadius.circular(32),
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black12,
                 blurRadius: 20,

@@ -52,6 +52,7 @@ dependencies:
   geolocator: ^14.0.2
   shared_preferences: ^2.5.5
   http: ^1.2.1
+  lottie: ^3.3.3
 
 
 dev_dependencies:
@@ -90,6 +91,7 @@ flutter:
      - assets/introImage/
      - assets/translations/
      - assets/authImages/
+     - assets/lotties/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

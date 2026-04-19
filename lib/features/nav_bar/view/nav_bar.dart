@@ -27,61 +27,97 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
+    return Scaffold(
+      extendBody: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              index = 2;
+            });
+          },
+          backgroundColor: AppColors.green,
+          elevation: 4,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.recycling, color: Colors.white, size: 32),
+        ),
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, -2),
+              ),
+            ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(20),
-            child: BottomNavigationBar(
-              currentIndex: index,
-              type: BottomNavigationBarType.fixed,
-              elevation: 0,
-              
-              backgroundColor: AppColors.background,
-              selectedItemColor: AppColors.green,
-              unselectedItemColor: AppColors.textGrey,
-              selectedFontSize: 15,
-              selectedIconTheme: IconThemeData(size: 30),
-
-              onTap: (value) {
-                setState(() {
-                  index = value;
-                });
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined, size: 25),
-                  label: "nav_bar.home".tr(),
+          child: BottomNavigationBar(
+            currentIndex: index,
+            type: BottomNavigationBarType.fixed,
+            elevation: 0,
+            backgroundColor: AppColors.white,
+            selectedItemColor: AppColors.green,
+            unselectedItemColor: AppColors.textGrey,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            selectedIconTheme: const IconThemeData(size: 26),
+            unselectedIconTheme: const IconThemeData(size: 26),
+            onTap: (value) {
+              setState(() {
+                index = value;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.home_outlined),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.map_outlined, size: 25),
-                  label: "nav_bar.map".tr(),
+                label: "nav_bar.home".tr(),
+              ),
+              BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.map_outlined),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.add, size: 25),
-                  label: "nav_bar.add".tr(),
+                label: "nav_bar.map".tr(),
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.transparent,
+                  size: 10,
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart, size: 25),
-                  label: "nav_bar.statistic".tr(),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.bar_chart),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_2_outlined, size: 25),
-                  label: "nav_bar.profile".tr(),
+                label: "nav_bar.statistic".tr(),
+              ),
+              BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.person_2_outlined),
                 ),
-              ],
-            ),
+                label: "nav_bar.profile".tr(),
+              ),
+            ],
           ),
         ),
       ),
-
-      body: pages[index]
+      body: pages[index],
     );
   }
 }
