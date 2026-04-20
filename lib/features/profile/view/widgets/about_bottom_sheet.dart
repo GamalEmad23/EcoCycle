@@ -1,6 +1,7 @@
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AboutBottomSheet extends StatelessWidget {
   const AboutBottomSheet({super.key});
@@ -65,9 +66,9 @@ class AboutBottomSheet extends StatelessWidget {
             const SizedBox(height: 16),
 
             // App Name
-            const Text(
-              "EcoCycle",
-              style: TextStyle(
+            Text(
+              "about_app.name".tr(),
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
@@ -82,9 +83,9 @@ class AboutBottomSheet extends StatelessWidget {
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text(
-                "v1.0.0",
-                style: TextStyle(
+              child: Text(
+                "about_app.version".tr(),
+                style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textSecondary,
@@ -94,10 +95,10 @@ class AboutBottomSheet extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Description
-            const Text(
-              "EcoCycle is your smart companion for a cleaner, greener world. We help you find nearby recycling centers, track your eco-impact, and earn points for saving the environment.\n\nJoin the green revolution and make every day Earth Day!",
+            Text(
+              "about_app.description".tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 height: 1.5,
                 color: AppColors.textSecondary,
@@ -119,9 +120,9 @@ class AboutBottomSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  "Done",
-                  style: TextStyle(
+                child: Text(
+                  "about_app.done".tr(),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
