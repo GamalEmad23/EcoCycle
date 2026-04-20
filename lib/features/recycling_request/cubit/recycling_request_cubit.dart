@@ -1,13 +1,14 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:eco_cycle/features/recycling_request/repository/recycling_request_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'recycling_request_state.dart';
 
 class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
-  RecyclingRequestCubit() : super(RecyclingRequestInitial());
+  final RecyclingRequestRepo _recyclingRepo;
+
+  RecyclingRequestCubit(this._recyclingRepo) : super(RecyclingRequestInitial());
 
   String selectedMaterial = 'بلاستيك';
   String? selectedCenter;
@@ -44,27 +45,20 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
   }
 
   Future<void> submitRequest() async {
-    if (selectedCenter == null || weight.isEmpty || image == null) {
-      emit(RecyclingRequestError('يرجى تعبئة جميع الحقول وإرفاق صورة'));
+    if (selectedCenter == null || weight.isEmpty) {
+      emit(RecyclingRequestError('يرجى تعبئة جميع الحقول المطلوبة'));
       return;
     }
 
     emit(RecyclingRequestLoading());
 
     try {
-      final String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
-      final Reference storageRef = FirebaseStorage.instance.ref().child('recycling_requests/$fileName');
-      final UploadTask uploadTask = storageRef.putFile(image!);
-      final TaskSnapshot snapshot = await uploadTask;
-      final String imageUrl = await snapshot.ref.getDownloadURL();
-
-      await FirebaseFirestore.instance.collection('recycling_requests').add({
-        'material': selectedMaterial,
-        'center': selectedCenter,
-        'weight': double.tryParse(weight) ?? 0.0,
-        'imageUrl': imageUrl,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+      await _recyclingRepo.submitRecyclingRequest(
+        material: selectedMaterial,
+        center: selectedCenter,
+        weight: weight,
+        image: image,
+      );
 
       selectedMaterial = 'بلاستيك';
       selectedCenter = null;
@@ -76,4 +70,4 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       emit(RecyclingRequestError('حدث خطأ أثناء تقديم الطلب: ${e.toString()}'));
     }
   }
-}
+}

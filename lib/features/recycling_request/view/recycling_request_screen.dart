@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/features/recycling_request/repository/recycling_request_repo.dart';
 import 'package:eco_cycle/features/recycling_request/cubit/recycling_request_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,7 @@ class RecyclingRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RecyclingRequestCubit(),
+      create: (context) => RecyclingRequestCubit(RecyclingRequestRepo()),
       child: const _RecyclingRequestView(),
     );
   }
