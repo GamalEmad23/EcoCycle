@@ -8,7 +8,7 @@ class RecyclingRequestRepo {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   RecyclingRequestRepo({RecyclingFirebaseService? firebaseService})
-      : _firebaseService = firebaseService ?? RecyclingFirebaseService();
+    : _firebaseService = firebaseService ?? RecyclingFirebaseService();
 
   Future<void> submitRecyclingRequest({
     required String material,
@@ -24,8 +24,6 @@ class RecyclingRequestRepo {
       userId: user?.uid,
     );
 
-    await _firebaseService.uploadRecyclingRequest(
-      requestModel: model,
-    );
+    await _firebaseService.uploadRecyclingRequest(requestModel: model);
   }
 }

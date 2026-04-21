@@ -604,6 +604,15 @@ class _MapScreenState extends State<MapScreen> {
                       },
                     ),
                   ),
+                if (_isLoadingCenters)
+                  const Positioned(
+                    top: 120,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircularProgressIndicator(color: AppColors.primary),
+                    ),
+                  ),
               ],
             ),
     );

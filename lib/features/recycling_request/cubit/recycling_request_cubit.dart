@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_cycle/features/recycling_request/repository/recycling_request_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,33 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
   final ImagePicker _picker = ImagePicker();
 
+  // 🔥 centers
+  List<String> centers = [];
+  bool isLoadingCenters = false;
+
+  // ✅ FIXED
+  Future<void> getCenters() async {
+    try {
+      isLoadingCenters = true;
+      emit(RecyclingRequestUpdated()); // 👈 بدل loading
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('centers')
+          .get();
+
+      print("Centers count: ${snapshot.docs.length}"); // 🔍 debug
+
+      centers = snapshot.docs.map((doc) => doc['name'] as String).toList();
+
+      isLoadingCenters = false;
+      emit(RecyclingRequestUpdated());
+    } catch (e) {
+      isLoadingCenters = false;
+      print(e); // 🔍 مهم
+      emit(RecyclingRequestError('Failed to load centers'));
+    }
+  }
+
   void selectMaterial(String material) {
     selectedMaterial = material;
     emit(RecyclingRequestUpdated());
@@ -34,7 +62,10 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
   Future<void> pickImage() async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+
       if (pickedFile != null) {
         image = File(pickedFile.path);
         emit(RecyclingRequestUpdated());
@@ -70,4 +101,4 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       emit(RecyclingRequestError('حدث خطأ أثناء تقديم الطلب: ${e.toString()}'));
     }
   }
-}
+}
