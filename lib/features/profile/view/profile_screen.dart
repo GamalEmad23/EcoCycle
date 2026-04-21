@@ -134,14 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   /// History
-                  customeLongProfileCard(
-                    h: h,
-                    w: w,
-                    icon: Icons.history,
-                    text: CustomeText(text: "actions.recycling_history"),
-                  ),
-
-                  /// Language
+                  // Language
                   customeLongProfileCard(
                     h: h,
                     w: w,
@@ -276,6 +269,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                   ),
+
+                  SizedBox(height: h * .07),
                 ],
               ),
             ],
