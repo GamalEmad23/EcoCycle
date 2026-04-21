@@ -188,7 +188,11 @@
   "plastic_bottles": "Plastic Bottles",
   "metal_cans": "Metal Cans"
 
-
+  },
+  "about_app": {
+    "name": "EcoCycle",
+    "version": "v1.0.0",
+    "description": "EcoCycle is your smart companion for a cleaner, greener world. We help you find nearby recycling centers, track your eco-impact, and earn points for saving the environment.\n\nJoin the green revolution and make every day Earth Day!",
+    "done": "Done"
   }
-
 }

@@ -13,9 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     EasyLocalization(
@@ -24,18 +22,34 @@ void main() async {
       fallbackLocale: const Locale('en'),
 
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => AuthCubit()),
-        BlocProvider(
-          create: (context) => ProfileCubit()..getSavedLang(context),
-        )
+        providers: [
+          BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(
+            create: (context) => ProfileCubit()..getSavedLang(context),
+            child: Container(),
+          ),
         ],
         child: MyApp(),
       ),
     ),
   );
 }
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Stream<User?> _authStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _authStream = FirebaseAuth.instance.authStateChanges();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,19 +59,19 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
+        stream: _authStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return SplashScreen();
+            return const SplashScreen();
           }
 
           final user = snapshot.data;
 
           if (user != null && user.emailVerified) {
-            return NavBar(); 
+            return const NavBar();
           }
 
-          return SplashScreen();
+          return const SplashScreen();
         },
       ),
     );
