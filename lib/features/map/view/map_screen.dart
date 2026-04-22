@@ -11,6 +11,8 @@ import 'package:eco_cycle/core/services/geocoding_service.dart';
 import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dart';
 import 'package:eco_cycle/features/map/view/widgets/center_details_bottom_sheet.dart';
 import 'package:eco_cycle/core/services/overpass_service.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:eco_cycle/core/services/favorites_service.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -37,11 +39,24 @@ class _MapScreenState extends State<MapScreen> {
   bool _isSearchExpanded = false;
   Map<String, dynamic>? _selectedCenter;
   StreamSubscription<Position>? _positionStreamSubscription;
+  Timer? _emptyStateTimer;
+  bool _showEmptyStateMessage = false;
+  bool _isTrackingLocation = true;
+
+  String _selectedFilter = 'الكل';
+  final List<String> _filters = ['الكل', 'بلاستيك', 'ورق', 'زجاج', 'معدن'];
+  
+  List<String> _favoriteIds = [];
+  final FavoritesService _favoritesService = FavoritesService();
+  StreamSubscription<List<String>>? _favoritesSubscription;
 
   @override
   void initState() {
     super.initState();
     _checkInitialPermission();
+    _favoritesSubscription = _favoritesService.getFavoritesStream().listen((favs) {
+      if (mounted) setState(() => _favoriteIds = favs);
+    });
   }
 
   @override
@@ -49,8 +64,24 @@ class _MapScreenState extends State<MapScreen> {
     _searchController.dispose();
     _searchFocusNode.dispose();
     _debounce?.cancel();
+    _emptyStateTimer?.cancel();
     _positionStreamSubscription?.cancel();
+    _favoritesSubscription?.cancel();
     super.dispose();
+  }
+
+  List<Map<String, dynamic>> get _filteredCenters {
+    if (_selectedFilter == 'الكل') return _centers;
+    return _centers.where((center) {
+      final materials = (center['materials'] as String?)?.toLowerCase() ?? '';
+      String searchKeyword = '';
+      if (_selectedFilter == 'بلاستيك') searchKeyword = 'plastic';
+      if (_selectedFilter == 'ورق') searchKeyword = 'paper';
+      if (_selectedFilter == 'زجاج') searchKeyword = 'glass';
+      if (_selectedFilter == 'معدن') searchKeyword = 'metal';
+      
+      return materials.contains(searchKeyword) || materials.contains(_selectedFilter);
+    }).toList();
   }
 
   void _onSearchChanged(String query) {
@@ -95,6 +126,7 @@ class _MapScreenState extends State<MapScreen> {
     setState(() {
       _searchResults.clear();
       currentLocation = result.location;
+      _isTrackingLocation = false;
     });
 
     _fetchCentersAround(result.location);
@@ -150,19 +182,23 @@ class _MapScreenState extends State<MapScreen> {
 
       _mapController.move(currentLocation!, 15);
 
-      _positionStreamSubscription ??= Geolocator.getPositionStream(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.medium, // Optimized for battery
-          distanceFilter: 500, // Update if moved by 500 meters
-        ),
-      ).listen((Position newPosition) {
-        if (mounted) {
-          setState(() {
-            currentLocation = LatLng(newPosition.latitude, newPosition.longitude);
+      _positionStreamSubscription ??=
+          Geolocator.getPositionStream(
+            locationSettings: const LocationSettings(
+              accuracy: LocationAccuracy.medium,
+              distanceFilter: 500,
+            ),
+          ).listen((Position newPosition) {
+            if (mounted && _isTrackingLocation) {
+              setState(() {
+                currentLocation = LatLng(
+                  newPosition.latitude,
+                  newPosition.longitude,
+                );
+              });
+              _fetchCentersAround(currentLocation!);
+            }
           });
-          _fetchCentersAround(currentLocation!);
-        }
-      });
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -175,6 +211,7 @@ class _MapScreenState extends State<MapScreen> {
     if (!mounted) return;
     setState(() {
       _isLoadingCenters = true;
+      _showEmptyStateMessage = false;
     });
 
     try {
@@ -186,6 +223,18 @@ class _MapScreenState extends State<MapScreen> {
         setState(() {
           _centers = centers;
           _isLoadingCenters = false;
+
+          _emptyStateTimer?.cancel();
+          if (_centers.isEmpty) {
+            _showEmptyStateMessage = true;
+            _emptyStateTimer = Timer(const Duration(seconds: 60), () {
+              if (mounted) {
+                setState(() {
+                  _showEmptyStateMessage = false;
+                });
+              }
+            });
+          }
         });
       }
     } catch (e) {
@@ -270,9 +319,14 @@ class _MapScreenState extends State<MapScreen> {
                       userAgentPackageName: 'com.ecocycle.app',
                     ),
 
-                    MarkerLayer(
-                      markers: [
-                        ..._centers.map((center) {
+                    MarkerClusterLayerWidget(
+                      options: MarkerClusterLayerOptions(
+                        maxClusterRadius: 45,
+                        size: const Size(40, 40),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(50),
+                        maxZoom: 15,
+                        markers: _filteredCenters.map((center) {
                           final isSelected = _selectedCenter == center;
                           return Marker(
                             point: center['location'] as LatLng,
@@ -281,18 +335,38 @@ class _MapScreenState extends State<MapScreen> {
                             alignment: Alignment.topCenter,
                             child: GestureDetector(
                               onTap: () => _onCenterTapped(center),
-                              child: isSelected 
+                              child: isSelected
                                   ? Pulse(
                                       infinite: true,
                                       child: _buildPin(isSelected),
                                     )
                                   : FadeInUp(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
                                       child: _buildPin(isSelected),
                                     ),
                             ),
                           );
                         }).toList(),
+                        builder: (context, markers) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: AppColors.primary,
+                            ),
+                            child: Center(
+                              child: Text(
+                                markers.length.toString(),
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    MarkerLayer(
+                      markers: [
                         Marker(
                           point: currentLocation!,
                           width: 80,
@@ -306,7 +380,10 @@ class _MapScreenState extends State<MapScreen> {
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.white, width: 4),
+                                  border: Border.all(
+                                    color: AppColors.white,
+                                    width: 4,
+                                  ),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.blue.withValues(alpha: 0.5),
@@ -323,7 +400,7 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                   ],
                 ),
-                // Zoom & Location Controls (Left Side)
+
                 Positioned(
                   left: 20,
                   top: MediaQuery.of(context).size.height * 0.4,
@@ -378,17 +455,17 @@ class _MapScreenState extends State<MapScreen> {
                         foregroundColor: AppColors.primary,
                         elevation: 4,
                         onPressed: () {
-                          if (currentLocation != null) {
-                            _mapController.move(currentLocation!, 15);
-                          }
+                          setState(() {
+                            _isTrackingLocation = true;
+                            _searchController.clear();
+                          });
+                          _fetchCurrentLocation();
                         },
                         child: const Icon(Icons.my_location),
                       ),
                     ],
                   ),
                 ),
-
-                // Top Header / Search
                 Positioned(
                   top: 50,
                   left: 20,
@@ -602,12 +679,40 @@ class _MapScreenState extends State<MapScreen> {
                               },
                             ),
                           ),
+                        const SizedBox(height: 12),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: _filters.map((filter) {
+                              final isSelected = _selectedFilter == filter;
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: ChoiceChip(
+                                  label: Text(filter),
+                                  selected: isSelected,
+                                  selectedColor: AppColors.primary,
+                                  labelStyle: TextStyle(
+                                    color: isSelected ? AppColors.white : AppColors.textSecondary,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                  backgroundColor: AppColors.white,
+                                  onSelected: (selected) {
+                                    if (selected) {
+                                      setState(() {
+                                        _selectedFilter = filter;
+                                        _selectedCenter = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-
-                // Selected Center Floating Card
                 if (_selectedCenter != null)
                   Positioned(
                     bottom: 110,
@@ -615,6 +720,11 @@ class _MapScreenState extends State<MapScreen> {
                     right: 20,
                     child: CenterDetailsBottomSheet(
                       centerData: _selectedCenter!,
+                      isFavorite: _favoriteIds.contains(_selectedCenter!['id']),
+                      onFavoriteToggle: () {
+                        final isFav = _favoriteIds.contains(_selectedCenter!['id']);
+                        _favoritesService.toggleFavorite(_selectedCenter!['id'], isFav);
+                      },
                       onGetDirections: () {
                         _launchGoogleMaps(
                           _selectedCenter!['location'] as LatLng,
@@ -629,12 +739,19 @@ class _MapScreenState extends State<MapScreen> {
                     right: 20,
                     child: FadeInDown(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 20,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.white.withValues(alpha: 0.95),
                           borderRadius: BorderRadius.circular(25),
                           boxShadow: const [
-                            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
                           ],
                         ),
                         child: Row(
@@ -643,7 +760,10 @@ class _MapScreenState extends State<MapScreen> {
                             const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2.5),
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                                strokeWidth: 2.5,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             const Text(
@@ -659,25 +779,35 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     ),
                   )
-                else if (_centers.isEmpty && currentLocation != null)
+                else if (_showEmptyStateMessage && currentLocation != null)
                   Positioned(
                     top: 130,
                     left: 20,
                     right: 20,
                     child: FadeInDown(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 20,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.white.withValues(alpha: 0.95),
                           borderRadius: BorderRadius.circular(25),
                           boxShadow: const [
-                            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
                           ],
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.info_outline, color: AppColors.textSecondary),
+                            const Icon(
+                              Icons.info_outline,
+                              color: AppColors.textSecondary,
+                            ),
                             const SizedBox(width: 8),
                             const Text(
                               "لا توجد مراكز إعادة تدوير في هذا النطاق",
@@ -712,7 +842,9 @@ class _MapScreenState extends State<MapScreen> {
             ),
             boxShadow: [
               BoxShadow(
-                color: isSelected ? AppColors.primary.withValues(alpha: 0.4) : Colors.black26,
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.4)
+                    : Colors.black26,
                 blurRadius: isSelected ? 12 : 6,
                 offset: const Offset(0, 3),
               ),
