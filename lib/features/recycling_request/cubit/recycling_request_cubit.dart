@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eco_cycle/features/recycling_request/repository/recycling_request_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eco_cycle/features/recycling_request/model/recycling_request_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'recycling_request_state.dart';
 
 class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
-  final RecyclingRequestRepo _recyclingRepo;
-
-  RecyclingRequestCubit(this._recyclingRepo) : super(RecyclingRequestInitial());
+  RecyclingRequestCubit() : super(RecyclingRequestInitial());
 
   String selectedMaterial = 'بلاستيك';
   String? selectedCenter;
@@ -18,15 +17,15 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
   final ImagePicker _picker = ImagePicker();
 
-  // 🔥 centers
+  
   List<String> centers = [];
   bool isLoadingCenters = false;
 
-  // ✅ FIXED
+  
   Future<void> getCenters() async {
     try {
       isLoadingCenters = true;
-      emit(RecyclingRequestUpdated()); // 👈 بدل loading
+      emit(RecyclingRequestUpdated()); 
 
       final snapshot = await FirebaseFirestore.instance
           .collection('centers')
@@ -84,12 +83,23 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
     emit(RecyclingRequestLoading());
 
     try {
-      await _recyclingRepo.submitRecyclingRequest(
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User must be logged in to create a request');
+      }
+
+      final model = RecyclingRequestModel(
         material: selectedMaterial,
         center: selectedCenter,
-        weight: weight,
-        image: image,
+        weight: double.tryParse(weight) ?? 0.0,
+        userId: user.uid,
       );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('recycling_requests')
+          .add(model.toMap());
 
       selectedMaterial = 'بلاستيك';
       selectedCenter = null;
