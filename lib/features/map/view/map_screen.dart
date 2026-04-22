@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart' hide Marker;
@@ -11,7 +12,6 @@ import 'package:eco_cycle/core/services/geocoding_service.dart';
 import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dart';
 import 'package:eco_cycle/features/map/view/widgets/center_details_bottom_sheet.dart';
 import 'package:eco_cycle/core/services/overpass_service.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:eco_cycle/core/services/favorites_service.dart';
 
 class MapScreen extends StatefulWidget {

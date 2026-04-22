@@ -19,11 +19,24 @@ class AuthCubit extends Cubit<AuthState> {
   /// Sign Up
   Future<void> createUser(UserData userData) async {
     emit(AuthLoading());
+
     try {
+      /// 🔥 حاول تسجل دخول الأول
+      try {
+        await instance.signInWithEmailAndPassword(
+          email: userData.email,
+          password: userData.password,
+        );
+
+        emit(AuthSuccess());
+        return;
+      } catch (_) {}
+
       final credential = await instance.createUserWithEmailAndPassword(
         email: userData.email,
         password: userData.password,
       );
+
       await fireInstase.collection('users').doc(credential.user!.uid).set({
         "email": userData.email,
         "name": userData.name,
@@ -32,8 +45,6 @@ class AuthCubit extends Cubit<AuthState> {
       await instance.currentUser!.sendEmailVerification();
 
       emit(AuthSuccess());
-    } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(message: e.message ?? "Unknown Firebase error"));
     } catch (e) {
       emit(AuthFailure(message: e.toString()));
     }
@@ -114,10 +125,6 @@ class AuthCubit extends Cubit<AuthState> {
   /// Log out
   Future<void> Signout() async {
     final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      await fireInstase.collection('users').doc(user.uid).delete();
-    }
 
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();

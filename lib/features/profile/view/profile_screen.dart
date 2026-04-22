@@ -24,6 +24,14 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
+  void initState() {
+    super.initState();
+    context.read<ProfileCubit>().getUserName();
+    context.read<ProfileCubit>().getUserStats();
+  }
+
+  var instance = FirebaseAuth.instance;
+  @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
     double w = MediaQuery.sizeOf(context).width;
@@ -40,240 +48,328 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
       ),
 
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.only(bottom: h * 0.05),
-          child: Column(
-            children: [
-              SizedBox(height: h * 0.04),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<ProfileCubit>().getUserStats();
+        },
 
-              /// User Profile Image
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: AppColors.lightGreen4,
-                    maxRadius: w * .19,
-                  ),
-                  CircleAvatar(
-                    maxRadius: w * .17,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.person,
-                      size: w * 0.15,
-                      color: Colors.grey.shade400,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.only(bottom: h * 0.05),
+            child: Column(
+              children: [
+                SizedBox(height: h * 0.04),
+
+                /// User Profile Image
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: AppColors.lightGreen4,
+                      maxRadius: w * .19,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: h * 0.02),
-
-              /// User Name
-              CustomeText(
-                text: "profile.name",
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-              SizedBox(height: h * 0.01),
-
-              /// User Rate
-              Container(
-                height: h * .04,
-                width: w * .5,
-                decoration: BoxDecoration(
-                  color: AppColors.lightGreen3,
-                  borderRadius: BorderRadius.circular(20),
+                    CircleAvatar(
+                      maxRadius: w * .17,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person,
+                        size: w * 0.15,
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
+                  ],
                 ),
-                child: Row(
+                SizedBox(height: h * 0.02),
+
+                /// User Name
+                BlocBuilder<ProfileCubit, ProfileState>(
+                  buildWhen: (previous, current) =>
+                      current is userNameFailuer ||
+                      current is userNameLoading ||
+                      current is userNameSuccess,
+                  builder: (context, state) {
+                    if (state is userNameLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is userNameSuccess) {
+                      return CustomeText(
+                        text: state.userName,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        textColor: AppColors.black,
+                      );
+                    }
+
+                    if (state is userNameFailuer) {
+                      return Text("error");
+                    }
+
+                    return SizedBox();
+                  },
+                ),
+                SizedBox(height: h * 0.01),
+
+                /// User Rate
+                Container(
+                  height: h * .04,
+                  width: w * .5,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGreen3,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomeText(
+                        text: context.watch<ProfileCubit>().getRank(
+                          context.watch<ProfileCubit>().Tpoints,
+                        ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      const SizedBox(width: 5),
+                      Icon(
+                        context.watch<ProfileCubit>().getRankIcon(
+                          context.watch<ProfileCubit>().Tpoints,
+                        ),
+                        color: context.watch<ProfileCubit>().getRankColor(
+                          context.watch<ProfileCubit>().Tpoints,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: h * 0.03),
+
+                /// Amountes Cards
+                /// Amountes Cards
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * .031),
+                  child: BlocBuilder<ProfileCubit, ProfileState>(
+                    buildWhen: (previous, current) =>
+                        current is ProfileStatsFailuer ||
+                        current is ProfileStatsLoading ||
+                        current is ProfileStatsSuccess,
+                    builder: (context, state) {
+                      if (state is ProfileStatsLoading) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            customeProfileCard(
+                              h: h,
+                              w: w,
+                              text: '...',
+                              rate: '...',
+                            ),
+                            customeProfileCard(
+                              h: h,
+                              w: w,
+                              text: '...',
+                              rate: '...',
+                            ),
+                            customeProfileCard(
+                              h: h,
+                              w: w,
+                              text: '...',
+                              rate: '...',
+                            ),
+                          ],
+                        );
+                      }
+
+                      if (state is ProfileStatsSuccess) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            customeProfileCard(
+                              h: h,
+                              w: w,
+                              text: 'stats.points',
+                              rate: state.points.toString(),
+                            ),
+                            customeProfileCard(
+                              h: h,
+                              w: w,
+                              text: 'stats.recycled',
+                              rate: state.totalWeight.toString(),
+                            ),
+                            customeProfileCard(
+                              h: h,
+                              w: w,
+                              text: 'stats.rank',
+                              rate: state.totalRequests.toString(),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          customeProfileCard(
+                            h: h,
+                            w: w,
+                            text: 'stats.points',
+                            rate: '0',
+                          ),
+                          customeProfileCard(
+                            h: h,
+                            w: w,
+                            text: 'stats.recycled',
+                            rate: '0',
+                          ),
+                          customeProfileCard(
+                            h: h,
+                            w: w,
+                            text: 'stats.rank',
+                            rate: '0',
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: h * 0.03),
+
+                /// Actions
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomeText(
-                      text: "profile.badge",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    const SizedBox(width: 5),
-                    Icon(Icons.workspace_premium, color: AppColors.green),
-                  ],
-                ),
-              ),
-              SizedBox(height: h * 0.03),
-
-              /// Amountes Cards
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: w * .031),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    customeProfileCard(
+                    /// History
+                    // Language
+                    customeLongProfileCard(
                       h: h,
                       w: w,
-                      text: 'stats.points',
-                      rate: '4.8K',
-                    ),
-                    customeProfileCard(
-                      h: h,
-                      w: w,
-                      text: 'stats.recycled',
-                      rate: '15.2',
-                    ),
-                    customeProfileCard(
-                      h: h,
-                      w: w,
-                      text: 'stats.rank',
-                      rate: '124',
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: h * 0.03),
+                      icon: Icons.language,
+                      text: CustomeText(
+                        text: "actions.language",
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => StatefulBuilder(
+                            builder: (context, setState) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              backgroundColor: Colors.grey.shade100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    /// Title
+                                    Text(
+                                      "Select Language",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
 
-              /// Actions
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  /// History
-                  // Language
-                  customeLongProfileCard(
-                    h: h,
-                    w: w,
-                    icon: Icons.language,
-                    text: CustomeText(
-                      text: "actions.language",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => StatefulBuilder(
-                          builder: (context, setState) => Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            backgroundColor: Colors.grey.shade100,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: BlocBuilder<ProfileCubit, ProfileState>(
-                                builder: (context, state) {
-                                  if (state is ProfileLanguageState) {
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        /// Title
-                                        Text(
-                                          "Select Language",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey.shade800,
-                                          ),
-                                        ),
+                                    SizedBox(height: 20),
 
-                                        SizedBox(height: 20),
+                                    /// English
+                                    CustomeLangCard(
+                                      title: "English",
+                                      icon: Icons.language,
+                                      selected:
+                                          context.locale.languageCode ==
+                                          'en', // ✅
+                                      onTap: () {
+                                        context
+                                            .read<ProfileCubit>()
+                                            .changeLanguage(context, "en");
+                                      },
+                                    ),
 
-                                        /// English
-                                        CustomeLangCard(
-                                          title: "English",
-                                          icon: Icons.language,
-                                          selected: state.langCode == 'en',
-                                          onTap: () {
-                                            context
-                                                .read<ProfileCubit>()
-                                                .changeLanguage(context, "en");
-                                          },
-                                        ),
+                                    SizedBox(height: 12),
 
-                                        SizedBox(height: 12),
+                                    /// Arabic
+                                    CustomeLangCard(
+                                      title: "العربية",
+                                      icon: Icons.language,
+                                      selected:
+                                          context.locale.languageCode ==
+                                          'ar', // ✅
+                                      onTap: () {
+                                        context
+                                            .read<ProfileCubit>()
+                                            .changeLanguage(context, "ar");
+                                      },
+                                    ),
 
-                                        /// Arabic
-                                        CustomeLangCard(
-                                          title: "العربية",
-                                          icon: Icons.language,
-                                          selected: state.langCode == 'ar',
-                                          onTap: () {
-                                            context
-                                                .read<ProfileCubit>()
-                                                .changeLanguage(context, "ar");
-                                          },
-                                        ),
+                                    SizedBox(height: 20),
 
-                                        SizedBox(height: 20),
-
-                                        /// Button
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color(
-                                                0xFF8FD3A8,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                            ),
-                                            child: Text("Done"),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }
-
-                                  return SizedBox();
-                                },
+                                    /// Button
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          context
+                                              .read<ProfileCubit>()
+                                              .getUserStats();
+                                        },
+                                        child: Text("Done"),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
 
-                  /// Info
-                  customeLongProfileCard(
-                    h: h,
-                    w: w,
-                    icon: Icons.info_outline,
-                    text: CustomeText(text: "actions.about"),
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        isScrollControlled: true,
-                        builder: (context) => const AboutBottomSheet(),
-                      );
-                    },
-                  ),
+                    /// Info
+                    customeLongProfileCard(
+                      h: h,
+                      w: w,
+                      icon: Icons.info_outline,
+                      text: CustomeText(text: "actions.about"),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          builder: (context) => const AboutBottomSheet(),
+                        );
+                      },
+                    ),
 
-                  customeLongProfileCard(
-                    h: h,
-                    w: w,
-                    icon: context.locale.languageCode == "en"
-                        ? Icons.logout
-                        : Icons.login_outlined,
-                    text: CustomeText(text: "actions.logout"),
-                    iconColor: AppColors.red,
-                    backGroung: AppColors.lightRed,
-                    onTap: () async {
-                      if (FirebaseAuth.instance.currentUser != null) {
-                        await context.read<AuthCubit>().Signout();
-                        if (context.mounted) {
-                          NavigateHelper.pushAndRemoveUntil(
-                            context,
-                            LoginScreen(),
-                          );
+                    customeLongProfileCard(
+                      h: h,
+                      w: w,
+                      icon: context.locale.languageCode == "en"
+                          ? Icons.logout
+                          : Icons.login_outlined,
+                      text: CustomeText(text: "actions.logout"),
+                      iconColor: AppColors.red,
+                      backGroung: AppColors.lightRed,
+                      onTap: () async {
+                        if (FirebaseAuth.instance.currentUser != null) {
+                          await context.read<AuthCubit>().Signout();
+                          if (context.mounted) {
+                            NavigateHelper.pushAndRemoveUntil(
+                              context,
+                              LoginScreen(),
+                            );
+                          }
                         }
-                      }
-                    },
-                  ),
+                      },
+                    ),
 
-                  SizedBox(height: h * .07),
-                ],
-              ),
-            ],
+                    SizedBox(height: h * .07),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
