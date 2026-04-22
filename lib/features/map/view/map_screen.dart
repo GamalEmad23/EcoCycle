@@ -36,6 +36,7 @@ class _MapScreenState extends State<MapScreen> {
   final OverpassService _overpassService = OverpassService();
   bool _isSearchExpanded = false;
   Map<String, dynamic>? _selectedCenter;
+  StreamSubscription<Position>? _positionStreamSubscription;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _MapScreenState extends State<MapScreen> {
     _searchController.dispose();
     _searchFocusNode.dispose();
     _debounce?.cancel();
+    _positionStreamSubscription?.cancel();
     super.dispose();
   }
 
@@ -147,6 +149,20 @@ class _MapScreenState extends State<MapScreen> {
       _fetchCentersAround(LatLng(position.latitude, position.longitude));
 
       _mapController.move(currentLocation!, 15);
+
+      _positionStreamSubscription ??= Geolocator.getPositionStream(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.medium, // Optimized for battery
+          distanceFilter: 500, // Update if moved by 500 meters
+        ),
+      ).listen((Position newPosition) {
+        if (mounted) {
+          setState(() {
+            currentLocation = LatLng(newPosition.latitude, newPosition.longitude);
+          });
+          _fetchCentersAround(currentLocation!);
+        }
+      });
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -257,48 +273,50 @@ class _MapScreenState extends State<MapScreen> {
                     MarkerLayer(
                       markers: [
                         ..._centers.map((center) {
+                          final isSelected = _selectedCenter == center;
                           return Marker(
                             point: center['location'] as LatLng,
                             width: 60,
-                            height: 60,
+                            height: 70,
+                            alignment: Alignment.topCenter,
                             child: GestureDetector(
                               onTap: () => _onCenterTapped(center),
-                              child: FadeInUp(
-                                duration: const Duration(milliseconds: 400),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AppColors.white,
-                                      width: 3,
+                              child: isSelected 
+                                  ? Pulse(
+                                      infinite: true,
+                                      child: _buildPin(isSelected),
+                                    )
+                                  : FadeInUp(
+                                      duration: const Duration(milliseconds: 400),
+                                      child: _buildPin(isSelected),
                                     ),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black38,
-                                        blurRadius: 8,
-                                        offset: Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.recycling_rounded,
-                                    color: AppColors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
                             ),
                           );
                         }).toList(),
                         Marker(
                           point: currentLocation!,
-                          width: 40,
-                          height: 40,
-                          child: const Icon(
-                            Icons.my_location,
-                            color: Colors.blue,
-                            size: 30,
+                          width: 80,
+                          height: 80,
+                          child: Pulse(
+                            infinite: true,
+                            child: Center(
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: AppColors.white, width: 4),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blue.withValues(alpha: 0.5),
+                                      blurRadius: 12,
+                                      spreadRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -605,16 +623,123 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                   ),
                 if (_isLoadingCenters)
-                  const Positioned(
-                    top: 120,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                  Positioned(
+                    top: 130,
+                    left: 20,
+                    right: 20,
+                    child: FadeInDown(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.95),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2.5),
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              "جاري البحث عن مراكز قريبة...",
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                else if (_centers.isEmpty && currentLocation != null)
+                  Positioned(
+                    top: 130,
+                    left: 20,
+                    right: 20,
+                    child: FadeInDown(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.95),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.info_outline, color: AppColors.textSecondary),
+                            const SizedBox(width: 8),
+                            const Text(
+                              "لا توجد مراكز إعادة تدوير في هذا النطاق",
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
               ],
             ),
+    );
+  }
+
+  Widget _buildPin(bool isSelected) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.white : AppColors.primary,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: isSelected ? AppColors.primary : AppColors.white,
+              width: 2.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: isSelected ? AppColors.primary.withValues(alpha: 0.4) : Colors.black26,
+                blurRadius: isSelected ? 12 : 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.recycling_rounded,
+            color: isSelected ? AppColors.primary : AppColors.white,
+            size: isSelected ? 24 : 20,
+          ),
+        ),
+        Container(
+          width: 3,
+          height: 10,
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primary : AppColors.white,
+            borderRadius: BorderRadius.circular(2),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
