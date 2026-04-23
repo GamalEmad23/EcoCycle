@@ -47,7 +47,7 @@ class _MapScreenState extends State<MapScreen> {
 
   String _selectedFilter = 'الكل';
   final List<String> _filters = ['الكل', 'بلاستيك', 'ورق', 'زجاج', 'معدن'];
-  
+
   List<String> _favoriteIds = [];
   final FavoritesService _favoritesService = FavoritesService();
   StreamSubscription<List<String>>? _favoritesSubscription;
@@ -56,7 +56,9 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     _checkInitialPermission();
-    _favoritesSubscription = _favoritesService.getFavoritesStream().listen((favs) {
+    _favoritesSubscription = _favoritesService.getFavoritesStream().listen((
+      favs,
+    ) {
       if (mounted) setState(() => _favoriteIds = favs);
     });
   }
@@ -81,8 +83,9 @@ class _MapScreenState extends State<MapScreen> {
       if (_selectedFilter == 'ورق') searchKeyword = 'paper';
       if (_selectedFilter == 'زجاج') searchKeyword = 'glass';
       if (_selectedFilter == 'معدن') searchKeyword = 'metal';
-      
-      return materials.contains(searchKeyword) || materials.contains(_selectedFilter);
+
+      return materials.contains(searchKeyword) ||
+          materials.contains(_selectedFilter);
     }).toList();
   }
 
@@ -214,11 +217,15 @@ class _MapScreenState extends State<MapScreen> {
       final lat = c['lat'] as double;
       final lng = c['lng'] as double;
       final location = LatLng(lat, lng);
-      
+
       double distanceInMeters = 0.0;
       if (currentLoc != null) {
         distanceInMeters = Geolocator.distanceBetween(
-            currentLoc.latitude, currentLoc.longitude, lat, lng);
+          currentLoc.latitude,
+          currentLoc.longitude,
+          lat,
+          lng,
+        );
       }
 
       return {
@@ -227,7 +234,8 @@ class _MapScreenState extends State<MapScreen> {
         "materials": "بلاستيك، ورق، معدن، زجاج",
         "hours": "08:00 ص - 09:00 م",
         "distance": (distanceInMeters / 1000).toStringAsFixed(1),
-        "imgUrl": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15f?w=400&q=80",
+        "imgUrl":
+            "https://images.unsplash.com/photo-1532996122724-e3c354a0b15f?w=400&q=80",
         "location": location,
         "city": c['city'],
       };
@@ -236,18 +244,19 @@ class _MapScreenState extends State<MapScreen> {
 
   void _fitBoundsToCenters() {
     if (_filteredCenters.isEmpty) return;
-    
-    final points = _filteredCenters.map((c) => c['location'] as LatLng).toList();
+
+    final points = _filteredCenters
+        .map((c) => c['location'] as LatLng)
+        .toList();
     if (currentLocation != null) {
       points.add(currentLocation!);
     }
-    
+
     if (points.length > 1) {
       final bounds = LatLngBounds.fromPoints(points);
-      _mapController.fitCamera(CameraFit.bounds(
-        bounds: bounds,
-        padding: const EdgeInsets.all(50.0),
-      ));
+      _mapController.fitCamera(
+        CameraFit.bounds(bounds: bounds, padding: const EdgeInsets.all(50.0)),
+      );
     } else if (points.isNotEmpty) {
       _mapController.move(points.first, 14);
     }
@@ -261,31 +270,26 @@ class _MapScreenState extends State<MapScreen> {
     });
 
     try {
-      final overpassCenters = await _overpassService.fetchNearbyRecyclingCenters(
-        location.latitude,
-        location.longitude,
-      );
-      
+      final overpassCenters = await _overpassService
+          .fetchNearbyRecyclingCenters(location.latitude, location.longitude);
+
       final staticCenters = _getStaticCenters(currentLocation);
-      
-      // Combine and avoid duplicates by name
       final List<Map<String, dynamic>> allCenters = [...staticCenters];
       for (var oc in overpassCenters) {
         if (!allCenters.any((sc) => sc['name'] == oc['name'])) {
           allCenters.add(oc);
         }
       }
-
-      // Sort by distance
-      allCenters.sort((a, b) => double.parse(a['distance']).compareTo(double.parse(b['distance'])));
+      allCenters.sort(
+        (a, b) =>
+            double.parse(a['distance']).compareTo(double.parse(b['distance'])),
+      );
 
       if (mounted) {
         setState(() {
           _centers = allCenters;
           _isLoadingCenters = false;
         });
-        
-        // Fit bounds after a short delay to ensure map is ready
         if (_isInitialLoad) {
           Future.delayed(const Duration(milliseconds: 300), () {
             if (mounted) {
@@ -329,16 +333,19 @@ class _MapScreenState extends State<MapScreen> {
     String urlString =
         'https://www.google.com/maps/dir/?api=1&destination=${destination.latitude},${destination.longitude}&travelmode=$mode';
     if (currentLocation != null) {
-      urlString += '&origin=${currentLocation!.latitude},${currentLocation!.longitude}';
+      urlString +=
+          '&origin=${currentLocation!.latitude},${currentLocation!.longitude}';
     }
-    
+
     debugPrint('Final Navigation URL: $urlString');
     final url = Uri.parse(urlString);
 
     try {
-      bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
+      bool launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
       if (!launched) {
-        // Fallback to open in browser if external app fails
         launched = await launchUrl(url, mode: LaunchMode.platformDefault);
         if (!launched) {
           if (mounted) {
@@ -401,9 +408,15 @@ class _MapScreenState extends State<MapScreen> {
                     color: AppColors.lightGreen2,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.directions_car, color: AppColors.primary),
+                  child: const Icon(
+                    Icons.directions_car,
+                    color: AppColors.primary,
+                  ),
                 ),
-                title: const Text("قيادة (سيارة)", style: TextStyle(fontWeight: FontWeight.bold)),
+                title: const Text(
+                  "قيادة (سيارة)",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 onTap: () {
                   Navigator.pop(context);
                   _launchNavigation(destination, 'driving');
@@ -417,9 +430,15 @@ class _MapScreenState extends State<MapScreen> {
                     color: AppColors.lightGreen2,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.directions_walk, color: AppColors.primary),
+                  child: const Icon(
+                    Icons.directions_walk,
+                    color: AppColors.primary,
+                  ),
                 ),
-                title: const Text("مشي", style: TextStyle(fontWeight: FontWeight.bold)),
+                title: const Text(
+                  "مشي",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 onTap: () {
                   Navigator.pop(context);
                   _launchNavigation(destination, 'walking');
@@ -520,7 +539,10 @@ class _MapScreenState extends State<MapScreen> {
                             child: Center(
                               child: Text(
                                 markers.length.toString(),
-                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           );
@@ -812,7 +834,6 @@ class _MapScreenState extends State<MapScreen> {
                               },
                             ),
                           ),
-
                       ],
                     ),
                   ),
@@ -826,8 +847,13 @@ class _MapScreenState extends State<MapScreen> {
                       centerData: _selectedCenter!,
                       isFavorite: _favoriteIds.contains(_selectedCenter!['id']),
                       onFavoriteToggle: () {
-                        final isFav = _favoriteIds.contains(_selectedCenter!['id']);
-                        _favoritesService.toggleFavorite(_selectedCenter!['id'], isFav);
+                        final isFav = _favoriteIds.contains(
+                          _selectedCenter!['id'],
+                        );
+                        _favoritesService.toggleFavorite(
+                          _selectedCenter!['id'],
+                          isFav,
+                        );
                       },
                       onGetDirections: () {
                         _showNavigationOptions(

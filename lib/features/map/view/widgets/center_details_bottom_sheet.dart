@@ -91,19 +91,13 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            centerData['imgUrl'],
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 600),
+                            child: Image.asset(
+                              'assets/images/card.png',
                               width: 100,
                               height: 100,
-                              color: AppColors.lightGreen2,
-                              child: const Icon(
-                                Icons.recycling,
-                                color: AppColors.primary,
-                              ),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
