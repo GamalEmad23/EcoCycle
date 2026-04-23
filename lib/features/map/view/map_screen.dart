@@ -13,6 +13,7 @@ import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dar
 import 'package:eco_cycle/features/map/view/widgets/center_details_bottom_sheet.dart';
 import 'package:eco_cycle/core/services/overpass_service.dart';
 import 'package:eco_cycle/core/services/favorites_service.dart';
+import 'package:eco_cycle/core/Data/centers_data.dart' as static_data;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -42,6 +43,7 @@ class _MapScreenState extends State<MapScreen> {
   Timer? _emptyStateTimer;
   bool _showEmptyStateMessage = false;
   bool _isTrackingLocation = true;
+  bool _isInitialLoad = true;
 
   String _selectedFilter = 'الكل';
   final List<String> _filters = ['الكل', 'بلاستيك', 'ورق', 'زجاج', 'معدن'];
@@ -207,6 +209,50 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  List<Map<String, dynamic>> _getStaticCenters(LatLng? currentLoc) {
+    return static_data.centers.map((c) {
+      final lat = c['lat'] as double;
+      final lng = c['lng'] as double;
+      final location = LatLng(lat, lng);
+      
+      double distanceInMeters = 0.0;
+      if (currentLoc != null) {
+        distanceInMeters = Geolocator.distanceBetween(
+            currentLoc.latitude, currentLoc.longitude, lat, lng);
+      }
+
+      return {
+        "id": "static_${c['name']}",
+        "name": c['name'],
+        "materials": "بلاستيك، ورق، معدن، زجاج",
+        "hours": "08:00 ص - 09:00 م",
+        "distance": (distanceInMeters / 1000).toStringAsFixed(1),
+        "imgUrl": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15f?w=400&q=80",
+        "location": location,
+        "city": c['city'],
+      };
+    }).toList();
+  }
+
+  void _fitBoundsToCenters() {
+    if (_filteredCenters.isEmpty) return;
+    
+    final points = _filteredCenters.map((c) => c['location'] as LatLng).toList();
+    if (currentLocation != null) {
+      points.add(currentLocation!);
+    }
+    
+    if (points.length > 1) {
+      final bounds = LatLngBounds.fromPoints(points);
+      _mapController.fitCamera(CameraFit.bounds(
+        bounds: bounds,
+        padding: const EdgeInsets.all(50.0),
+      ));
+    } else if (points.isNotEmpty) {
+      _mapController.move(points.first, 14);
+    }
+  }
+
   Future<void> _fetchCentersAround(LatLng location) async {
     if (!mounted) return;
     setState(() {
@@ -215,13 +261,27 @@ class _MapScreenState extends State<MapScreen> {
     });
 
     try {
-      final centers = await _overpassService.fetchNearbyRecyclingCenters(
+      final overpassCenters = await _overpassService.fetchNearbyRecyclingCenters(
         location.latitude,
         location.longitude,
       );
+      
+      final staticCenters = _getStaticCenters(currentLocation);
+      
+      // Combine and avoid duplicates by name
+      final List<Map<String, dynamic>> allCenters = [...staticCenters];
+      for (var oc in overpassCenters) {
+        if (!allCenters.any((sc) => sc['name'] == oc['name'])) {
+          allCenters.add(oc);
+        }
+      }
+
+      // Sort by distance
+      allCenters.sort((a, b) => double.parse(a['distance']).compareTo(double.parse(b['distance'])));
+
       if (mounted) {
         setState(() {
-          _centers = centers;
+          _centers = allCenters;
           _isLoadingCenters = false;
 
           _emptyStateTimer?.cancel();
@@ -236,6 +296,18 @@ class _MapScreenState extends State<MapScreen> {
             });
           }
         });
+        
+        // Fit bounds after a short delay to ensure map is ready
+        if (_isInitialLoad) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted) {
+              _fitBoundsToCenters();
+              setState(() {
+                _isInitialLoad = false;
+              });
+            }
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
