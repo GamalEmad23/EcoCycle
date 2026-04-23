@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart' hide Marker;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/services/geocoding_service.dart';
 import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dart';
@@ -119,7 +120,7 @@ class _MapScreenState extends State<MapScreen> {
           });
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text('فشل في البحث عن الموقع: $e')));
+          ).showSnackBar(SnackBar(content: Text('map.search_failed'.tr(args: [e.toString()]))));
         }
       }
     });
@@ -308,7 +309,7 @@ class _MapScreenState extends State<MapScreen> {
         });
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('فشل في جلب المراكز: $e')));
+        ).showSnackBar(SnackBar(content: Text('map.fetch_centers_failed'.tr(args: [e.toString()]))));
       }
     }
   }
@@ -324,7 +325,7 @@ class _MapScreenState extends State<MapScreen> {
     if (destination == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('إحداثيات الوجهة غير متوفرة.')),
+           SnackBar(content: Text('map.destination_coords_unavailable'.tr())),
         );
       }
       return;
@@ -350,7 +351,7 @@ class _MapScreenState extends State<MapScreen> {
         if (!launched) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('لا يمكن فتح الخرائط أو المتصفح.')),
+               SnackBar(content: Text('map.cannot_open_maps'.tr())),
             );
           }
         }
@@ -359,7 +360,7 @@ class _MapScreenState extends State<MapScreen> {
       debugPrint('Error launching map URL: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('حدث خطأ أثناء فتح الخرائط.')),
+           SnackBar(content: Text('map.error_opening_maps'.tr())),
         );
       }
     }
@@ -368,7 +369,7 @@ class _MapScreenState extends State<MapScreen> {
   void _showNavigationOptions(LatLng? destination) {
     if (destination == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('إحداثيات المركز غير متوفرة.')),
+         SnackBar(content: Text('map.center_coords_unavailable'.tr())),
       );
       return;
     }
@@ -396,9 +397,9 @@ class _MapScreenState extends State<MapScreen> {
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const Text(
-                "اختر وسيلة التنقل",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+               Text(
+                'map.choose_transport_mode'.tr(),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
               ListTile(
@@ -413,9 +414,9 @@ class _MapScreenState extends State<MapScreen> {
                     color: AppColors.primary,
                   ),
                 ),
-                title: const Text(
-                  "قيادة (سيارة)",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                title:  Text(
+                  'map.driving'.tr(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -435,9 +436,9 @@ class _MapScreenState extends State<MapScreen> {
                     color: AppColors.primary,
                   ),
                 ),
-                title: const Text(
-                  "مشي",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                title:  Text(
+                  'map.walking'.tr(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -699,9 +700,9 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                   ],
                                 ),
-                                child: const Text(
-                                  "خريطة المراكز",
-                                  style: TextStyle(
+                                child:  Text(
+                                  'map.centers_map'.tr(),
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.textPrimary,
@@ -768,8 +769,8 @@ class _MapScreenState extends State<MapScreen> {
                                     controller: _searchController,
                                     focusNode: _searchFocusNode,
                                     onChanged: _onSearchChanged,
-                                    decoration: const InputDecoration(
-                                      hintText: "أدخل موقعك...",
+                                    decoration:  InputDecoration(
+                                      hintText: 'map.enter_your_location'.tr(),
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -896,9 +897,9 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             ),
                             const SizedBox(width: 12),
-                            const Text(
-                              "جاري البحث عن مراكز قريبة...",
-                              style: TextStyle(
+                             Text(
+                              'map.searching_nearby_centers'.tr(),
+                              style: const TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -939,9 +940,9 @@ class _MapScreenState extends State<MapScreen> {
                               color: AppColors.textSecondary,
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              "لا توجد مراكز إعادة تدوير في هذا النطاق",
-                              style: TextStyle(
+                             Text(
+                              'map.no_centers_in_range'.tr(),
+                              style: const TextStyle(
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
