@@ -283,18 +283,6 @@ class _MapScreenState extends State<MapScreen> {
         setState(() {
           _centers = allCenters;
           _isLoadingCenters = false;
-
-          _emptyStateTimer?.cancel();
-          if (_centers.isEmpty) {
-            _showEmptyStateMessage = true;
-            _emptyStateTimer = Timer(const Duration(seconds: 60), () {
-              if (mounted) {
-                setState(() {
-                  _showEmptyStateMessage = false;
-                });
-              }
-            });
-          }
         });
         
         // Fit bounds after a short delay to ensure map is ready
@@ -690,36 +678,7 @@ class _MapScreenState extends State<MapScreen> {
                               ],
                             ),
                           ),
-                        if (_isSearchExpanded &&
-                            !_isSearching &&
-                            _searchController.text.isNotEmpty &&
-                            _searchResults.isEmpty)
-                          Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Column(
-                              children: [
-                                Icon(
-                                  Icons.location_off,
-                                  color: AppColors.textLight,
-                                  size: 32,
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "لم يتم العثور على مواقع مطابقة",
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+
                         if (_isSearchExpanded && _searchResults.isNotEmpty)
                           Container(
                             margin: const EdgeInsets.only(top: 8),
@@ -751,36 +710,7 @@ class _MapScreenState extends State<MapScreen> {
                               },
                             ),
                           ),
-                        const SizedBox(height: 12),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: _filters.map((filter) {
-                              final isSelected = _selectedFilter == filter;
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: ChoiceChip(
-                                  label: Text(filter),
-                                  selected: isSelected,
-                                  selectedColor: AppColors.primary,
-                                  labelStyle: TextStyle(
-                                    color: isSelected ? AppColors.white : AppColors.textSecondary,
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                  ),
-                                  backgroundColor: AppColors.white,
-                                  onSelected: (selected) {
-                                    if (selected) {
-                                      setState(() {
-                                        _selectedFilter = filter;
-                                        _selectedCenter = null;
-                                      });
-                                    }
-                                  },
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+
                       ],
                     ),
                   ),
