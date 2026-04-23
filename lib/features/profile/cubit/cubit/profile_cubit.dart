@@ -86,6 +86,16 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       if (user == null) return;
 
+      // Fetch User Profile Data
+      final userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      
+      final userName = userSnapshot.data()?['name'] ?? "No Name";
+      final userImage = userSnapshot.data()?['image'] ?? "";
+
+      // Fetch Recycling Requests
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -103,6 +113,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       double points = totalWeight * 5;
+      double co2Saved = totalWeight * 2.5; // Example: 1kg = 2.5kg CO2
+      double waterSaved = totalWeight * 15; // Example: 1kg = 15L water saved
+      double energySaved = totalWeight * 3.5; // Example: 1kg = 3.5kWh energy saved
+      double co2Percentage = (co2Saved / 50).clamp(0.0, 1.0) * 100; // Goal: 50kg CO2
+      
       Tpoints = points;
 
       emit(
@@ -110,6 +125,12 @@ class ProfileCubit extends Cubit<ProfileState> {
           totalWeight: totalWeight,
           totalRequests: totalRequests,
           points: points,
+          co2Saved: co2Saved,
+          waterSaved: waterSaved,
+          energySaved: energySaved,
+          co2Percentage: co2Percentage,
+          userName: userName,
+          userImage: userImage,
         ),
       );
     } catch (e) {
@@ -142,5 +163,23 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (points >= 10000) return Colors.grey.shade400; // silver
     if (points >= 2000) return Colors.brown; // bronze
     return Colors.green; // beginner
+  }
+
+  double getNextLevelPoints(double points) {
+    if (points >= 100000) return 100000;
+    if (points >= 50000) return 100000;
+    if (points >= 20000) return 50000;
+    if (points >= 10000) return 20000;
+    if (points >= 2000) return 10000;
+    return 2000;
+  }
+
+  double getPreviousLevelPoints(double points) {
+    if (points >= 100000) return 100000;
+    if (points >= 50000) return 50000;
+    if (points >= 20000) return 20000;
+    if (points >= 10000) return 10000;
+    if (points >= 2000) return 2000;
+    return 0;
   }
 }

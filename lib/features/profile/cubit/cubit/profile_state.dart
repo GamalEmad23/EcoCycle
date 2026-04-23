@@ -44,11 +44,23 @@ final class ProfileStatsSuccess extends ProfileState {
   final double totalWeight;
   final int totalRequests;
   final double points;
+  final double co2Saved;
+  final double waterSaved;
+  final double energySaved;
+  final double co2Percentage;
+  final String userName;
+  final String userImage;
 
   ProfileStatsSuccess({
     required this.totalWeight,
     required this.totalRequests,
     required this.points,
+    required this.co2Saved,
+    required this.waterSaved,
+    required this.energySaved,
+    required this.co2Percentage,
+    required this.userName,
+    required this.userImage,
   });
 }
 

@@ -3,23 +3,35 @@ import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomeLevelCard extends StatelessWidget {
-  const CustomeLevelCard({super.key});
+  const CustomeLevelCard({
+    super.key,
+    required this.points,
+    required this.nextLevelPoints,
+    required this.rankName,
+    required this.rankColor,
+  });
+
+  final double points;
+  final double nextLevelPoints;
+  final String rankName;
+  final Color rankColor;
 
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.sizeOf(context).width;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(w * 0.06),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF00E676), Color(0xFF00C853)],
+        gradient: LinearGradient(
+          colors: [rankColor.withValues(alpha: 0.8), rankColor],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00E676).withValues(alpha: 0.3),
+            color: rankColor.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -31,37 +43,42 @@ class CustomeLevelCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: CustomeText(
-                  text: "home.excellent_category",
-                  textColor: AppColors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: CustomeText(
+                    text: rankName,
+                    textColor: AppColors.white,
+                    fontSize: w * 0.03,
+                    fontWeight: FontWeight.bold,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-
+              const SizedBox(width: 8),
               CustomeText(
                 text: "home.current_level",
                 textColor: AppColors.white,
-                fontSize: 14,
+                fontSize: w * 0.035,
                 fontWeight: FontWeight.bold,
               ),
             ],
           ),
           const SizedBox(height: 6),
-          const Align(
+          Align(
             alignment: Alignment.centerRight,
             child: CustomeText(
               text: "home.golden_member",
               textColor: AppColors.white,
+              fontSize: w * 0.04,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -69,38 +86,50 @@ class CustomeLevelCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  CustomeText(
-                    text: " 3000 ",
-                    textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  CustomeText(
-                    text: "home.points_unit",
-                    textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    CustomeText(
+                      text: " ${points.toInt()} ",
+                      textColor: AppColors.white,
+                      fontSize: w * 0.032,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    Flexible(
+                      child: CustomeText(
+                        text: "home.points_unit",
+                        textColor: AppColors.white,
+                        fontSize: w * 0.032,
+                        fontWeight: FontWeight.w500,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
-              Row(
-                children: [
-                  CustomeText(
-                    text: " 3000 ",
-                    textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  CustomeText(
-                    text: "home.points_unit",
-                    textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustomeText(
+                      text: " ${nextLevelPoints.toInt()} ",
+                      textColor: AppColors.white,
+                      fontSize: w * 0.032,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    Flexible(
+                      child: CustomeText(
+                        text: "home.points_unit",
+                        textColor: AppColors.white,
+                        fontSize: w * 0.032,
+                        fontWeight: FontWeight.w500,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -108,7 +137,7 @@ class CustomeLevelCard extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: 12,
+                height: 10,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
@@ -117,9 +146,9 @@ class CustomeLevelCard extends StatelessWidget {
               ),
               FractionallySizedBox(
                 alignment: Alignment.centerRight,
-                widthFactor: 2450 / 3000,
+                widthFactor: (points / nextLevelPoints).clamp(0.0, 1.0),
                 child: Container(
-                  height: 12,
+                  height: 10,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -135,11 +164,26 @@ class CustomeLevelCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          CustomeText(
-            text: "home.points_left",
-            textColor: AppColors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CustomeText(
+                text: " ${(nextLevelPoints - points).toInt()} ",
+                textColor: AppColors.white,
+                fontSize: w * 0.03,
+                fontWeight: FontWeight.bold,
+              ),
+              Flexible(
+                child: CustomeText(
+                  text: "home.points_left",
+                  textColor: AppColors.white,
+                  fontSize: w * 0.03,
+                  fontWeight: FontWeight.bold,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
         ],
       ),
