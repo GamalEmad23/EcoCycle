@@ -143,6 +143,26 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                 color: AppColors.textPrimary,
                               ),
                             ),
+                            if (centerData['city'] != null) ...[
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_city,
+                                    size: 14,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    centerData['city'],
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                             const SizedBox(height: 4),
                             Text(
                               centerData['materials'] ?? "بلاستيك، ورق، معدن، زجاج",
