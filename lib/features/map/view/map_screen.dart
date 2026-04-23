@@ -316,19 +316,121 @@ class _MapScreenState extends State<MapScreen> {
     _mapController.move(center['location'] as LatLng, 15);
   }
 
-  Future<void> _launchGoogleMaps(LatLng destination) async {
-    final url = Uri.parse(
-      'https://www.google.com/maps/search/?api=1&query=${destination.latitude},${destination.longitude}',
-    );
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+  Future<void> _launchNavigation(LatLng? destination, String mode) async {
+    if (destination == null) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('لا يمكن فتح الخرائط.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('إحداثيات الوجهة غير متوفرة.')),
+        );
+      }
+      return;
+    }
+
+    String urlString =
+        'https://www.google.com/maps/dir/?api=1&destination=${destination.latitude},${destination.longitude}&travelmode=$mode';
+    if (currentLocation != null) {
+      urlString += '&origin=${currentLocation!.latitude},${currentLocation!.longitude}';
+    }
+    
+    debugPrint('Final Navigation URL: $urlString');
+    final url = Uri.parse(urlString);
+
+    try {
+      bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        // Fallback to open in browser if external app fails
+        launched = await launchUrl(url, mode: LaunchMode.platformDefault);
+        if (!launched) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('لا يمكن فتح الخرائط أو المتصفح.')),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching map URL: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('حدث خطأ أثناء فتح الخرائط.')),
+        );
       }
     }
+  }
+
+  void _showNavigationOptions(LatLng? destination) {
+    if (destination == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('إحداثيات المركز غير متوفرة.')),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const Text(
+                "اختر وسيلة التنقل",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: AppColors.lightGreen2,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.directions_car, color: AppColors.primary),
+                ),
+                title: const Text("قيادة (سيارة)", style: TextStyle(fontWeight: FontWeight.bold)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _launchNavigation(destination, 'driving');
+                },
+              ),
+              const SizedBox(height: 10),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: AppColors.lightGreen2,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.directions_walk, color: AppColors.primary),
+                ),
+                title: const Text("مشي", style: TextStyle(fontWeight: FontWeight.bold)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _launchNavigation(destination, 'walking');
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -728,7 +830,7 @@ class _MapScreenState extends State<MapScreen> {
                         _favoritesService.toggleFavorite(_selectedCenter!['id'], isFav);
                       },
                       onGetDirections: () {
-                        _launchGoogleMaps(
+                        _showNavigationOptions(
                           _selectedCenter!['location'] as LatLng,
                         );
                       },

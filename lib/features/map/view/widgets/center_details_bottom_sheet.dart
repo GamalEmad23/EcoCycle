@@ -242,20 +242,28 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: ElevatedButton.icon(
-                      onPressed: onGetDirections,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: AppColors.white,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: onGetDirections,
+                        borderRadius: BorderRadius.circular(16),
+                        splashColor: AppColors.white.withValues(alpha: 0.2),
+                        highlightColor: AppColors.white.withValues(alpha: 0.1),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.near_me_rounded, color: AppColors.white),
+                            SizedBox(width: 8),
+                            Text(
+                              "الحصول على الاتجاهات",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      icon: const Icon(Icons.near_me_rounded),
-                      label: const Text(
-                        "الحصول على الاتجاهات",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
