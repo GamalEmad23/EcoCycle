@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, deprecated_member_use
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
+import 'package:eco_cycle/core/widgets/custome_button.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
@@ -71,8 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'profile.upload_failed'
-                                .tr(args: [state.message]),
+                            'profile.upload_failed'.tr(args: [state.message]),
                           ),
                           backgroundColor: Colors.red,
                         ),
@@ -101,15 +101,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           : null;
                     }
 
-                    final bool isUploading =
-                        state is ProfileImageUploadLoading;
+                    final bool isUploading = state is ProfileImageUploadLoading;
 
                     return GestureDetector(
                       onTap: isUploading
                           ? null
                           : () => context
-                              .read<ProfileCubit>()
-                              .uploadProfileImage(),
+                                .read<ProfileCubit>()
+                                .uploadProfileImage(),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -325,7 +324,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    /// History
                     // Language
                     customeLongProfileCard(
                       h: h,
@@ -366,8 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       title: 'actions.en'.tr(),
                                       icon: Icons.language,
                                       selected:
-                                          context.locale.languageCode ==
-                                          'en',
+                                          context.locale.languageCode == 'en',
                                       onTap: () {
                                         context
                                             .read<ProfileCubit>()
@@ -382,8 +379,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       title: 'actions.ar'.tr(),
                                       icon: Icons.language,
                                       selected:
-                                          context.locale.languageCode ==
-                                          'ar',
+                                          context.locale.languageCode == 'ar',
                                       onTap: () {
                                         context
                                             .read<ProfileCubit>()
@@ -396,14 +392,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     /// Button
                                     SizedBox(
                                       width: double.infinity,
-                                      child: ElevatedButton(
+                                      child: CustomeButton(
+                                        btnColor: AppColors.green,
+                                        btnText: CustomeText(
+                                          textColor: AppColors.white,
+                                          text: 'profile.done'.tr(),
+                                        ),
                                         onPressed: () {
                                           Navigator.pop(context);
                                           context
                                               .read<ProfileCubit>()
                                               .getUserStats();
                                         },
-                                        child: Text('profile.done'.tr()),
                                       ),
                                     ),
                                   ],

@@ -2,20 +2,16 @@
   "onboarding": {
     "title1": "Welcome to EcoCycle",
     "desc1": "Help protect the environment by recycling easily in a smart way.",
-
     "title2": "Find the nearest center",
     "desc2": "Use the map to locate nearby recycling centers and deliver your waste easily.",
-
     "title3": "Earn points and rewards",
     "desc3": "Record your recycling activities and earn points to redeem for eco-friendly rewards."
   },
-
   "buttons": {
     "skip": "Skip",
     "next": "Next",
     "finish": "Finish"
   },
-
   "login": {
     "title": "Login",
     "subtitle": "Sign in to continue and contribute to a better environment",
@@ -27,62 +23,44 @@
     "google_login": "Continue with Google",
     "no_account": "Don't have an account?",
     "create_account": "Create Account",
-
     "success_login": "Login successful"
   },
-
-    "login_validation": {
+  "login_validation": {
     "email_required": "Please enter your email",
     "email_invalid": "Please enter a valid email address",
-
     "password_required": "Please enter your password",
     "password_short": "Password must be at least 6 characters",
-
     "invalid_credentials": "Invalid email or password",
     "user_not_found": "No account found with this email",
     "wrong_password": "Incorrect password"
-
   },
-
   "signup": {
     "title": "Sign Up",
     "subtitle": "Create your account and start your journey toward a cleaner environment",
-
     "name_label": "Name",
     "name_hint": "Enter your name",
-
     "email_label": "Email",
     "email_hint": "example@email.com",
-
     "password_label": "Password",
-
     "signup_button": "Sign Up",
-
     "have_account": "Already have an account?",
     "login_now": "Login"
-
   },
-
   "signup_validation": {
     "name_required": "Please enter your name",
     "name_short": "Name must be at least 2 characters",
-
     "email_required": "Please enter your email",
     "email_invalid": "Please enter a valid email address",
     "email_already_used": "This email is already in use",
-
     "password_required": "Please enter your password",
     "password_short": "Password must be at least 6 characters",
     "password_weak": "Password is too weak, try using letters and numbers",
-
     "confirm_password_required": "Please confirm your password",
     "passwords_not_match": "Passwords do not match"
   },
-
-  "verification_message" : "Check you Spam messages in you gmail to verify your email",
-  "admin_login_message" : "You are not Admin",
-
-   "forgot_password": {
+  "verification_message": "Check you Spam messages in you gmail to verify your email",
+  "admin_login_message": "You are not Admin",
+  "forgot_password": {
     "title": "Forgot Password",
     "subtitle": "Enter your email to reset your password",
     "email_label": "Email",
@@ -90,20 +68,17 @@
     "reset_button": "Send Reset Link",
     "info_message": "A password reset link will be sent to your email.",
     "back_to_login": "Back to Login",
-
     "success": "Check your email to reset your password 📩",
     "error": "Something went wrong, please try again"
   },
-
-  "nav_bar":{
-     "home":"home",
-     "map":"map",
-     "add":"add",
-     "statistic":"statistic",
-     "profile":"profile"
+  "nav_bar": {
+    "home": "home",
+    "map": "map",
+    "add": "add",
+    "statistic": "statistic",
+    "profile": "profile"
   },
-
-   "profile": {
+  "profile": {
     "title": "Profile",
     "name": "Gamal Emad",
     "badge": "Gold Member",
@@ -121,7 +96,7 @@
   "stats": {
     "points": "Points",
     "recycled": "Recycled",
-    "rank": "Rank"
+    "rank": "Processes"
   },
   "actions": {
     "recycling_history": "Recycling History",
@@ -129,8 +104,8 @@
     "about": "About EcoCycle",
     "logout": "Log Out",
     "select_language": "Select Language",
-    "en":"English",
-    "ar":"Arabic"
+    "en": "English",
+    "ar": "Arabic"
   },
   "home": {
     "welcome": "Welcome {} 👋",
@@ -161,53 +136,42 @@
     "daily_tip_title": "Daily Environmental Tip",
     "daily_tip_content": "Did you know that recycling one aluminum can saves enough energy to run a television for three hours? Start today!"
   },
-
   "add_process": {
-  "recycling": "Recycling",
-  "request_sent_success": "Request sent successfully",
-
-  "select_material": "Select Material",
-  "paper": "Paper",
-  "plastic": "Plastic",
-  "electronics": "Electronics",
-  "metal": "Metal",
-
-  "center": "Recycling Center",
-  "choose_center": "Choose a center",
-
-  "estimated_weight": "Estimated Weight",
-  "enter_weight": "Enter weight",
-
-  "upload_image": "Upload Image",
-  "upload_here": "Upload here",
-  "image_uploaded_success": "Image uploaded successfully",
-
-  "confirm": "Confirm"
-},
-
-  "statistics":{
+    "recycling": "Recycling",
+    "request_sent_success": "Request sent successfully",
+    "select_material": "Select Material",
+    "paper": "Paper",
+    "plastic": "Plastic",
+    "electronics": "Electronics",
+    "metal": "Metal",
+    "center": "Recycling Center",
+    "choose_center": "Choose a center",
+    "estimated_weight": "Estimated Weight",
+    "enter_weight": "Enter weight",
+    "upload_image": "Upload Image",
+    "upload_here": "Upload here",
+    "image_uploaded_success": "Image uploaded successfully",
+    "confirm": "Confirm"
+  },
+  "statistics": {
     "total_recycled": "Total Recycled",
-  "kg": "kg",
-  "operations_count": "Operations Count",
-  "co2_saved": "CO2 Saved",
-
-  "this_month": "This month",
-
-  "Monthly_progress": "Monthly progress",
-  "Last_months": "Last 6 months",
-  "jan": "Jan",
-  "feb": "Feb",
-  "mar": "Mar",
-  "apr": "Apr",
-  "may": "May",
-  "jun": "Jun",
-  "latest_activity": "Latest Activity",
-  "view_all": "View All",
-
-  "paper_waste": "Paper Waste",
-  "plastic_bottles": "Plastic Bottles",
-  "metal_cans": "Metal Cans"
-
+    "kg": "kg",
+    "operations_count": "Operations Count",
+    "co2_saved": "CO2 Saved",
+    "this_month": "This month",
+    "Monthly_progress": "Monthly progress",
+    "Last_months": "Last 6 months",
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "latest_activity": "Latest Activity",
+    "view_all": "View All",
+    "paper_waste": "Paper Waste",
+    "plastic_bottles": "Plastic Bottles",
+    "metal_cans": "Metal Cans"
   },
   "map": {
     "search_failed": "Failed to search location: {}",
