@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
+import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 import 'package:eco_cycle/features/splash_screen/view/splash_screen.dart';
@@ -26,6 +27,7 @@ void main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(create: (context) => NavBarCubit()),
           BlocProvider(
             create: (context) => ProfileCubit()..getSavedLang(context),
             child: Container(),

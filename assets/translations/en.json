@@ -149,7 +149,11 @@
     "nearby_centers": "Nearby Centers",
     "view_all": "View All",
     "daily_tip_title": "Daily Environmental Tip",
-    "daily_tip_content": "Did you know that recycling one aluminum can saves enough energy to run a television for three hours? Start today!"
+    "daily_tip_1": "Use reusable shopping bags to reduce plastic waste.",
+    "daily_tip_2": "Turn off the tap while brushing your teeth to save liters of water daily.",
+    "daily_tip_3": "Turn off lights in unused rooms to reduce energy consumption.",
+    "daily_tip_4": "Recycle paper and cardboard to save trees and protect the environment.",
+    "daily_tip_5": "Use public transport or walk to reduce your carbon footprint."
   },
 
   "add_process": {

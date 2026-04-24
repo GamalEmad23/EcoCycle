@@ -7,9 +7,12 @@ import 'package:eco_cycle/features/home/view/widgets/custome_header.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_impact_summary.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_level_card.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_nearby_centers_header.dart';
+import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
+import 'package:eco_cycle/core/Data/centers_data.dart' as static_data;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScree extends StatefulWidget {
   const HomeScree({super.key});
@@ -19,10 +22,58 @@ class HomeScree extends StatefulWidget {
 }
 
 class _HomeScreeState extends State<HomeScree> {
+  Position? _currentPosition;
+  List<Map<String, dynamic>> _nearbyCenters = [];
+
   @override
   void initState() {
     super.initState();
     context.read<ProfileCubit>().getUserStats();
+    _determinePosition();
+  }
+
+  Future<void> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+
+    if (permission == LocationPermission.deniedForever) return;
+
+    final position = await Geolocator.getCurrentPosition();
+    if (mounted) {
+      setState(() {
+        _currentPosition = position;
+        _calculateNearbyCenters();
+      });
+    }
+  }
+
+  void _calculateNearbyCenters() {
+    if (_currentPosition == null) return;
+
+    List<Map<String, dynamic>> sortedCenters = List.from(static_data.centers);
+    for (var center in sortedCenters) {
+      double distanceInMeters = Geolocator.distanceBetween(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+        center['lat'],
+        center['lng'],
+      );
+      center['distance_val'] = distanceInMeters / 1000;
+    }
+
+    sortedCenters.sort((a, b) => a['distance_val'].compareTo(b['distance_val']));
+    setState(() {
+      _nearbyCenters = sortedCenters.take(2).toList();
+    });
   }
 
   @override
@@ -97,6 +148,8 @@ class _HomeScreeState extends State<HomeScree> {
                           iconColor: AppColors.textPrimary,
                           h: h,
                           w: w,
+                          onTap: () =>
+                              context.read<NavBarCubit>().changeIndex(1),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -109,6 +162,8 @@ class _HomeScreeState extends State<HomeScree> {
                           iconColor: AppColors.white,
                           h: h,
                           w: w,
+                          onTap: () =>
+                              context.read<NavBarCubit>().changeIndex(2),
                         ),
                       ),
                     ],
@@ -127,37 +182,39 @@ class _HomeScreeState extends State<HomeScree> {
                   SizedBox(height: h * .032),
 
                   /// Near Centers
-                  CustomeNearbyCentersHeader(),
+                  CustomeNearbyCentersHeader(
+                    onViewAllTap: () =>
+                        context.read<NavBarCubit>().changeIndex(1),
+                  ),
                   SizedBox(height: h * .016),
 
                   /// Centers List Nearest
-                  CustomeCenterCard(
-                    name: "مركز تدوير الخليج",
-                    address: "شارع العليا، الرياض",
-                    distance: "0.8",
-                    imgUrl:
-                        "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80",
-                    distanceLable: 'home.kg_unit',
-                    h: h,
-                    w: w,
-                  ),
-                  SizedBox(height: h * .015),
-                  CustomeCenterCard(
-                    name: "إيكو بوينت المروج",
-                    address: "حي المروج، الرياض",
-                    distance: "1.5 ",
-                    imgUrl:
-                        "https://images.unsplash.com/photo-1591193022650-13f9f8c6507a?w=400&q=80",
-                    distanceLable: 'home.kg_unit',
-                    h: h,
-                    w: w,
-                  ),
+                  if (_nearbyCenters.isEmpty)
+                    const Center(child: CircularProgressIndicator())
+                  else
+                    ..._nearbyCenters.map((center) => Padding(
+                          padding: EdgeInsets.only(bottom: h * .015),
+                          child: CustomeCenterCard(
+                            name: center['name'],
+                            address: "${center['address']}, ${center['city']}",
+                            distance:
+                                center['distance_val']?.toStringAsFixed(1) ??
+                                    "...",
+                            imgUrl:
+                                "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80",
+                            distanceLable: 'map.km',
+                            h: h,
+                            w: w,
+                          ),
+                        )),
+
                   SizedBox(height: h * .032),
 
                   /// tip for user
                   CustomeDailyTip(
                     h: h,
                     w: w,
+                    tip: context.read<ProfileCubit>().getDailyTip(),
                   ),
                   SizedBox(height: h * .1),
                 ],

@@ -210,9 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomeText(
-                        text: context.watch<ProfileCubit>().getRank(
+                        text: "home.${context.watch<ProfileCubit>().getRank(
                           context.watch<ProfileCubit>().Tpoints,
-                        ),
+                        )}".tr(),
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),

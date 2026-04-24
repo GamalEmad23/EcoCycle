@@ -151,6 +151,20 @@ class ProfileCubit extends Cubit<ProfileState> {
     return "beginner";
   }
 
+  String getDailyTip() {
+    final tips = [
+      "home.daily_tip_1",
+      "home.daily_tip_2",
+      "home.daily_tip_3",
+      "home.daily_tip_4",
+      "home.daily_tip_5",
+    ];
+    // Use day of the year to pick a tip so it stays the same all day
+    final dayOfYear =
+        DateTime.now().difference(DateTime(DateTime.now().year, 1, 1)).inDays;
+    return tips[dayOfYear % tips.length];
+  }
+
   IconData getRankIcon(double points) {
     if (points >= 100000) return Icons.diamond;
     if (points >= 50000) return Icons.workspace_premium;

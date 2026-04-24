@@ -11,6 +11,7 @@ class CustomeQuickAction extends StatelessWidget {
     required this.iconColor,
     required this.h,
     required this.w,
+    this.onTap,
   });
 
   final String label;
@@ -20,37 +21,41 @@ class CustomeQuickAction extends StatelessWidget {
   final Color iconColor;
   final double h;
   final double w;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: h * .03, horizontal: w * .02),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          if (bgColor == Colors.white)
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: h * .03, horizontal: w * .02),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            if (bgColor == Colors.white)
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: iconColor, size: w * 0.09),
+            const SizedBox(height: 10),
+            CustomeText(
+              text: label,
+              textColor: textColor,
+              fontWeight: FontWeight.bold,
+              fontSize: w * 0.04,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: iconColor, size: w * 0.09),
-          const SizedBox(height: 10),
-          CustomeText(
-            text: label,
-            textColor: textColor,
-            fontWeight: FontWeight.bold,
-            fontSize: w * 0.04,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
