@@ -1,0 +1,4 @@
+0 electronics
+1 metal
+2 paper
+3 plastic

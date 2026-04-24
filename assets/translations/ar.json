@@ -179,25 +179,41 @@
     "kg": "كجم",
     "operations_count": "عدد العمليات",
     "co2_saved": "توفير CO2",
-
     "this_month": "هذا الشهر",
-
+    "progress": "التقدم",
     "Monthly_progress": "التقدم الشهري",
     "Last_months": "آخر 6 أشهر",
-
+    "last_year": "آخر سنة",
+    "last_month": "آخر شهر",
+    "week": "أسبوع",
+    "last_week": "آخر أسبوع",
+    "today": "اليوم",
     "jan": "يناير",
     "feb": "فبراير",
     "mar": "مارس",
     "apr": "أبريل",
     "may": "مايو",
     "jun": "يونيو",
-
     "latest_activity": "النشاط الأخير",
     "view_all": "عرض الكل",
-
+    "show_less": "عرض أقل",
+    "no_activities": "لا توجد نشاطات حديثة",
+    "points": "نقطة",
     "paper_waste": "مخلفات ورقية",
     "plastic_bottles": "زجاجات بلاستيكية",
-    "metal_cans": "علب معدنية"
+    "metal_cans": "علب معدنية",
+    "electronics": "إلكترونيات",
+    "metal": "معدن",
+    "plastic": "بلاستيك",
+    "paper": "ورق",
+    "go_clean_egypt": "جو كلين إيجيبت",
+    "green_recycle": "جرين ريسايكل",
+    "green_recycling_center": "مركز جرين للتدوير",
+    "spirit_of_youth_recycling": "تدوير روح الشباب",
+    "verynile_recycling_hub": "مركز فيري نايل",
+    "recyclobekia_e-waste": "ريسيكلوبيكيا للمخلفات",
+    "bekia_recycling": "بيكيا للتدوير",
+    "ecocycle_alexandria": "إيكوسايكل الإسكندرية"
   },
   "map": {
     "search_failed": "فشل في البحث عن الموقع: {}",
