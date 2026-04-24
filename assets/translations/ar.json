@@ -105,7 +105,17 @@
   "profile": {
     "title": "الملف الشخصي",
     "name": "جمال عماد",
-    "badge": "عضو ذهبي"
+    "badge": "عضو ذهبي",
+    "upload_success": "تم تحديث صورة الملف الشخصي!",
+    "upload_failed": "فشل الرفع: {}",
+    "select_language": "اختر اللغة",
+    "done": "تم",
+    "rank_beginner": "مبتدئ",
+    "rank_bronze": "برونزي",
+    "rank_silver": "فضي",
+    "rank_gold": "ذهبي",
+    "rank_platinum": "بلاتيني",
+    "rank_diamond": "ماسي"
   },
   "stats": {
     "points": "النقاط",

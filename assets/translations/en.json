@@ -106,7 +106,17 @@
    "profile": {
     "title": "Profile",
     "name": "Gamal Emad",
-    "badge": "Gold Member"
+    "badge": "Gold Member",
+    "upload_success": "Profile picture updated!",
+    "upload_failed": "Upload failed: {}",
+    "select_language": "Select Language",
+    "done": "Done",
+    "rank_beginner": "Beginner",
+    "rank_bronze": "Bronze",
+    "rank_silver": "Silver",
+    "rank_gold": "Gold",
+    "rank_platinum": "Platinum",
+    "rank_diamond": "Diamond"
   },
   "stats": {
     "points": "Points",

@@ -33,7 +33,10 @@ class CenterDetailsBottomSheet extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.95),
                 borderRadius: BorderRadius.circular(32),
-                border: Border.all(color: AppColors.white.withValues(alpha: 0.2), width: 1.5),
+                border: Border.all(
+                  color: AppColors.white.withValues(alpha: 0.2),
+                  width: 1.5,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -67,7 +70,9 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         child: IconButton(
                           icon: Icon(
                             isFavorite ? Icons.favorite : Icons.favorite_border,
-                            color: isFavorite ? Colors.red : AppColors.textLight,
+                            color: isFavorite
+                                ? Colors.red
+                                : AppColors.textLight,
                             size: 28,
                           ),
                           onPressed: onFavoriteToggle,
@@ -118,7 +123,7 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                 Text(
+                                Text(
                                   'map.open_now'.tr(),
                                   style: const TextStyle(
                                     fontSize: 12,
@@ -159,7 +164,8 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                             ],
                             const SizedBox(height: 4),
                             Text(
-                              centerData['materials'] ?? "بلاستيك، ورق، معدن، زجاج",
+                              centerData['materials'] ??
+                                  "بلاستيك، ورق، معدن، زجاج",
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
@@ -167,48 +173,61 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'map.distance'.tr(),
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        color: AppColors.textLight,
+                                Flexible(
+                                  flex: 2,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'map.distance'.tr(),
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          color: AppColors.textLight,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                    Text(
-                                      "${centerData['distance']} ${'map.km'.tr()}",
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textPrimary,
+                                      Text(
+                                        "${centerData['distance']} ${'map.km'.tr()}",
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'map.working_hours'.tr(),
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        color: AppColors.textLight,
+                                const SizedBox(width: 12),
+                                Flexible(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'map.working_hours'.tr(),
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          color: AppColors.textLight,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                    Text(
-                                      centerData['hours'] ?? "08:00 ص - 09:00 م",
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textPrimary,
+                                      Text(
+                                        centerData['hours'] ??
+                                            "08:00 ص - 09:00 م",
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                        textDirection: TextDirection.ltr,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      textDirection: TextDirection.ltr,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -246,9 +265,12 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.near_me_rounded, color: AppColors.white),
+                            const Icon(
+                              Icons.near_me_rounded,
+                              color: AppColors.white,
+                            ),
                             const SizedBox(width: 8),
-                             Text(
+                            Text(
                               'map.get_directions'.tr(),
                               style: const TextStyle(
                                 fontSize: 16,

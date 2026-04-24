@@ -70,15 +70,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     if (state is ProfileImageUploadFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Upload failed: ${state.message}'),
+                          content: Text(
+                            'profile.upload_failed'
+                                .tr(args: [state.message]),
+                          ),
                           backgroundColor: Colors.red,
                         ),
                       );
                     }
                     if (state is ProfileImageUploadSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Profile picture updated!'),
+                        SnackBar(
+                          content: Text('profile.upload_success'.tr()),
                           backgroundColor: Colors.green,
                         ),
                       );
@@ -210,9 +213,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomeText(
-                        text: context.watch<ProfileCubit>().getRank(
-                          context.watch<ProfileCubit>().Tpoints,
-                        ),
+                        text:
+                            'profile.rank_${context.watch<ProfileCubit>().getRank(context.watch<ProfileCubit>().Tpoints)}',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -349,7 +351,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     /// Title
                                     Text(
-                                      "Select Language",
+                                      'profile.select_language'.tr(),
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -361,11 +363,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                     /// English
                                     CustomeLangCard(
-                                      title: "English",
+                                      title: 'actions.en'.tr(),
                                       icon: Icons.language,
                                       selected:
                                           context.locale.languageCode ==
-                                          'en', // ✅
+                                          'en',
                                       onTap: () {
                                         context
                                             .read<ProfileCubit>()
@@ -377,11 +379,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                     /// Arabic
                                     CustomeLangCard(
-                                      title: "العربية",
+                                      title: 'actions.ar'.tr(),
                                       icon: Icons.language,
                                       selected:
                                           context.locale.languageCode ==
-                                          'ar', // ✅
+                                          'ar',
                                       onTap: () {
                                         context
                                             .read<ProfileCubit>()
@@ -401,7 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               .read<ProfileCubit>()
                                               .getUserStats();
                                         },
-                                        child: Text("Done"),
+                                        child: Text('profile.done'.tr()),
                                       ),
                                     ),
                                   ],
