@@ -212,14 +212,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomeText(
-<<<<<<< HEAD
                         text: "home.${context.watch<ProfileCubit>().getRank(
                           context.watch<ProfileCubit>().Tpoints,
                         )}".tr(),
-=======
-                        text:
-                            'profile.rank_${context.watch<ProfileCubit>().getRank(context.watch<ProfileCubit>().Tpoints)}',
->>>>>>> 4d7da379a5900c17d7231bdf8ac2809b468c888e
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
