@@ -14,44 +14,52 @@ class AdminCubit extends Cubit<AdminState> {
   int centersCount = 0;
   int ordersCount = 0;
 
+  /// 🔥 مهم: ده الـ Admin الحقيقي بتاعك
+  final String adminDocId = "uxn1Fo5a7tcBiBzzpk7eE4FSLbe2";
+
   Future<void> getAdminData(String userId) async {
     emit(AdminLoading());
 
     try {
-      final doc = await FirebaseFirestore.instance
+      /// 🧠 نحدد انهي ID نستخدمه
+      String docId = userId;
+
+      final userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .get();
 
-      print("USER ID: $userId");
-      print("EXISTS: ${doc.exists}");
-      print("DATA: ${doc.data()}");
+      /// ❌ لو المستخدم الحالي مش هو الأدمن
+      if (!userDoc.exists) {
+        docId = adminDocId;
+      }
+
+      /// 👤 Admin Data
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(docId)
+          .get();
 
       final data = doc.data();
 
       if (data == null) {
-        final fallbackAdmin = AdminModel(
-          name: "Admin",
-          email: "",
-          image: null,
-        );
-
-        emit(AdminSuccess(fallbackAdmin));
+        emit(AdminError("Admin data not found"));
         return;
       }
 
-      final admin = AdminModel(
-        name: data['name'] ?? 'Admin',
-        email: data['email'] ?? '',
-        image: data['image'],
-      );
+      final admin = AdminModel.fromFirestore(data);
 
+      /// 👥 Users Count
       final usersSnapshot =
       await FirebaseFirestore.instance.collection('users').get();
+      usersCount = usersSnapshot.docs.length;
 
+      /// ♻️ Centers Count
       final centersSnapshot =
       await FirebaseFirestore.instance.collection('centers').get();
+      centersCount = centersSnapshot.docs.length;
 
+      /// 📦 Orders Count
       int totalOrders = 0;
 
       for (var user in usersSnapshot.docs) {
@@ -64,8 +72,6 @@ class AdminCubit extends Cubit<AdminState> {
         totalOrders += orders.docs.length;
       }
 
-      usersCount = usersSnapshot.docs.length;
-      centersCount = centersSnapshot.docs.length;
       ordersCount = totalOrders;
 
       emit(AdminSuccess(admin));
@@ -73,6 +79,8 @@ class AdminCubit extends Cubit<AdminState> {
       emit(AdminError(e.toString()));
     }
   }
+
+  /// 🔥 Upload Image
   Future<String?> uploadImage(File file, String userId) async {
     try {
       final ref = FirebaseStorage.instance
@@ -88,10 +96,11 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
+  /// 🔥 Update Image
   Future<void> updateAdminImage(String userId, String imageUrl) async {
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(adminDocId) // 👈 مهم
         .update({
       'image': imageUrl,
     });

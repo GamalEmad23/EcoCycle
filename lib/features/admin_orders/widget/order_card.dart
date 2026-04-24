@@ -38,7 +38,6 @@ class OrderCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -47,73 +46,94 @@ class OrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(order.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: getStatusColor().withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  getStatusText(),
-                  style: TextStyle(color: getStatusColor()),
-                ),
-              ),
-            ],
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(16),
+            ),
+            child: Image.asset(
+              "assets/images/Image+Background.png",
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
           ),
 
-          const SizedBox(height: 8),
-
-          Text("${"admin_orders.material".tr()}: ${order.material}"),
-          Text("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
-
-          const SizedBox(height: 10),
-
-          if (order.status == "pending")
-            Row(
+          Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await cubit.updateOrderStatus(
-                        userId: order.userId,
-                        orderId: order.id,
-                        newStatus: "accepted",
-                      );
 
-                      cubit.getOrders("all");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(order.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: getStatusColor().withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        getStatusText(),
+                        style: TextStyle(color: getStatusColor()),
+                      ),
                     ),
-                    child: Text("admin_orders.accept".tr()),
-                  ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await cubit.updateOrderStatus(
-                        userId: order.userId,
-                        orderId: order.id,
-                        newStatus: "rejected",
-                      );
 
-                      cubit.getOrders("all");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: Text("admin_orders.reject".tr()),
+                const SizedBox(height: 8),
+
+                Text("${"admin_orders.material".tr()}: ${order.material}"),
+                Text("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
+
+                const SizedBox(height: 10),
+
+                if (order.status == "pending")
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await cubit.updateOrderStatus(
+                              userId: order.userId,
+                              orderId: order.id,
+                              newStatus: "accepted",
+                            );
+
+                            cubit.getOrders("all");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                          ),
+                          child: Text("admin_orders.accept".tr()),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await cubit.updateOrderStatus(
+                              userId: order.userId,
+                              orderId: order.id,
+                              newStatus: "rejected",
+                            );
+
+                            cubit.getOrders("all");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          child: Text("admin_orders.reject".tr()),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
               ],
             ),
+          ),
         ],
       ),
     );

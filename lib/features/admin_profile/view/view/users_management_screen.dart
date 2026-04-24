@@ -45,7 +45,6 @@ class _UsersScreenState extends State<UsersScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            /// 🔍 Search
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -188,7 +187,6 @@ class _UsersScreenState extends State<UsersScreen> {
 
                             const SizedBox(width: 8),
 
-                            /// 🗑 delete
                             IconButton(
                               onPressed: () =>
                                   deleteUser(doc.id),
