@@ -62,23 +62,110 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: h * 0.04),
 
                 /// User Profile Image
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: AppColors.lightGreen4,
-                      maxRadius: w * .19,
-                    ),
-                    CircleAvatar(
-                      maxRadius: w * .17,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: w * 0.15,
-                        color: Colors.grey.shade400,
+                BlocConsumer<ProfileCubit, ProfileState>(
+                  listenWhen: (_, current) =>
+                      current is ProfileImageUploadSuccess ||
+                      current is ProfileImageUploadFailure,
+                  listener: (context, state) {
+                    if (state is ProfileImageUploadFailure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Upload failed: ${state.message}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    if (state is ProfileImageUploadSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Profile picture updated!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  },
+                  buildWhen: (_, current) =>
+                      current is ProfileStatsSuccess ||
+                      current is ProfileImageUploadLoading ||
+                      current is ProfileImageUploadSuccess ||
+                      current is ProfileImageUploadFailure,
+                  builder: (context, state) {
+                    // Determine current image URL
+                    String? imageUrl;
+                    if (state is ProfileStatsSuccess) {
+                      imageUrl = state.userImage.isNotEmpty
+                          ? state.userImage
+                          : null;
+                    }
+
+                    final bool isUploading =
+                        state is ProfileImageUploadLoading;
+
+                    return GestureDetector(
+                      onTap: isUploading
+                          ? null
+                          : () => context
+                              .read<ProfileCubit>()
+                              .uploadProfileImage(),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Outer ring
+                          CircleAvatar(
+                            backgroundColor: AppColors.lightGreen4,
+                            maxRadius: w * .19,
+                          ),
+                          // Photo or placeholder
+                          CircleAvatar(
+                            maxRadius: w * .17,
+                            backgroundColor: Colors.white,
+                            backgroundImage: imageUrl != null
+                                ? NetworkImage(imageUrl)
+                                : null,
+                            child: imageUrl == null
+                                ? Icon(
+                                    Icons.person,
+                                    size: w * 0.15,
+                                    color: Colors.grey.shade400,
+                                  )
+                                : null,
+                          ),
+                          // Upload spinner overlay
+                          if (isUploading)
+                            CircleAvatar(
+                              maxRadius: w * .17,
+                              backgroundColor: Colors.black38,
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 3,
+                              ),
+                            ),
+                          // Edit pencil badge
+                          if (!isUploading)
+                            Positioned(
+                              bottom: 2,
+                              right: 2,
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.lightGreen4,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
                 SizedBox(height: h * 0.02),
 
@@ -143,7 +230,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: h * 0.03),
 
-                /// Amountes Cards
                 /// Amountes Cards
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: w * .031),

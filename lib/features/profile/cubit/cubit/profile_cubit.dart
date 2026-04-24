@@ -1,10 +1,14 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/services/cloudinary_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'profile_state.dart';
@@ -181,5 +185,38 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (points >= 10000) return 10000;
     if (points >= 2000) return 2000;
     return 0;
+  }
+
+  // ── Profile picture upload ──────────────────────────────────────────────────
+  Future<void> uploadProfileImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+      maxWidth: 800,
+    );
+
+    if (picked == null) return; // user cancelled
+
+    emit(ProfileImageUploadLoading());
+
+    try {
+      final file = File(picked.path);
+      final imageUrl = await CloudinaryService.uploadImage(file);
+
+      // Persist the URL in Firestore so other screens can read it
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'image': imageUrl});
+
+      emit(ProfileImageUploadSuccess(imageUrl: imageUrl));
+
+      // Refresh the full stats so userImage is up-to-date everywhere
+      await getUserStats();
+    } catch (e) {
+      emit(ProfileImageUploadFailure(message: e.toString()));
+    }
   }
 }

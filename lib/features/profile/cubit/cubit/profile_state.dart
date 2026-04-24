@@ -69,3 +69,16 @@ final class ProfileStatsFailuer extends ProfileState {
 
   ProfileStatsFailuer({required this.message});
 }
+
+// ── Profile image upload states ───────────────────────────────────────────────
+final class ProfileImageUploadLoading extends ProfileState {}
+
+final class ProfileImageUploadSuccess extends ProfileState {
+  final String imageUrl;
+  ProfileImageUploadSuccess({required this.imageUrl});
+}
+
+final class ProfileImageUploadFailure extends ProfileState {
+  final String message;
+  ProfileImageUploadFailure({required this.message});
+}
