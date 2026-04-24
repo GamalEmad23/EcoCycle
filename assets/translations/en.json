@@ -2,12 +2,10 @@
   "onboarding": {
     "title1": "Welcome to EcoCycle",
     "desc1": "Help protect the environment by recycling easily in a smart way.",
-
     "title2": "Find the nearest center",
-    "desc2": "Use the map to locate nearby recycling centers and deliver your waste easily.",
-
+    "desc2": "Use the map to locate nearby recycling centers easily.",
     "title3": "Earn points and rewards",
-    "desc3": "Record your recycling activities and earn points to redeem for eco-friendly rewards."
+    "desc3": "Track recycling activities and earn rewards"
   },
 
   "buttons": {
@@ -18,7 +16,7 @@
 
   "login": {
     "title": "Login",
-    "subtitle": "Sign in to continue and contribute to a better environment",
+    "subtitle": "Sign in to continue",
     "email": "Email",
     "password": "Password",
     "forgot_password": "Forgot password?",
@@ -27,172 +25,146 @@
     "google_login": "Continue with Google",
     "no_account": "Don't have an account?",
     "create_account": "Create Account",
-
     "success_login": "Login successful"
   },
 
-    "login_validation": {
-    "email_required": "Please enter your email",
-    "email_invalid": "Please enter a valid email address",
-
-    "password_required": "Please enter your password",
-    "password_short": "Password must be at least 6 characters",
-
-    "invalid_credentials": "Invalid email or password",
-    "user_not_found": "No account found with this email",
-    "wrong_password": "Incorrect password"
-
+  "login_validation": {
+    "email_required": "Please enter email",
+    "email_invalid": "Invalid email",
+    "password_required": "Please enter password",
+    "password_short": "Minimum 6 characters",
+    "invalid_credentials": "Invalid credentials",
+    "user_not_found": "User not found",
+    "wrong_password": "Wrong password"
   },
 
   "signup": {
     "title": "Sign Up",
-    "subtitle": "Create your account and start your journey toward a cleaner environment",
-
+    "subtitle": "Create your account",
     "name_label": "Name",
-    "name_hint": "Enter your name",
-
+    "name_hint": "Enter name",
     "email_label": "Email",
     "email_hint": "example@email.com",
-
     "password_label": "Password",
-
     "signup_button": "Sign Up",
-
-    "have_account": "Already have an account?",
+    "have_account": "Already have account?",
     "login_now": "Login"
-
   },
 
   "signup_validation": {
-    "name_required": "Please enter your name",
-    "name_short": "Name must be at least 2 characters",
-
-    "email_required": "Please enter your email",
-    "email_invalid": "Please enter a valid email address",
-    "email_already_used": "This email is already in use",
-
-    "password_required": "Please enter your password",
-    "password_short": "Password must be at least 6 characters",
-    "password_weak": "Password is too weak, try using letters and numbers",
-
-    "confirm_password_required": "Please confirm your password",
+    "name_required": "Name required",
+    "name_short": "Min 2 characters",
+    "email_required": "Email required",
+    "email_invalid": "Invalid email",
+    "email_already_used": "Email already used",
+    "password_required": "Password required",
+    "password_short": "Min 6 characters",
+    "password_weak": "Weak password",
+    "confirm_password_required": "Confirm password",
     "passwords_not_match": "Passwords do not match"
   },
 
-  "verification_message" : "Check you Spam messages in you gmail to verify your email",
-  "admin_login_message" : "You are not Admin",
+  "verification_message": "Check spam folder to verify email",
+  "admin_login_message": "Not an admin account",
 
-   "forgot_password": {
+  "forgot_password": {
     "title": "Forgot Password",
-    "subtitle": "Enter your email to reset your password",
+    "subtitle": "Reset your password",
     "email_label": "Email",
     "email_hint": "example@email.com",
-    "reset_button": "Send Reset Link",
-    "info_message": "A password reset link will be sent to your email.",
-    "back_to_login": "Back to Login",
-
-    "success": "Check your email to reset your password 📩",
-    "error": "Something went wrong, please try again"
+    "reset_button": "Send reset link",
+    "info_message": "Reset link will be sent",
+    "back_to_login": "Back to login",
+    "success": "Check your email 📩",
+    "error": "Error occurred"
   },
 
-  "nav_bar":{
-     "home":"home",
-     "map":"map",
-     "add":"add",
-     "statistic":"statistic",
-     "profile":"profile"
+  "nav_bar": {
+    "home": "Home",
+    "map": "Map",
+    "add": "Add",
+    "statistic": "Statistics",
+    "profile": "Profile"
   },
 
-   "profile": {
+  "profile": {
     "title": "Profile",
-    "name": "Gamal Emad",
+    "name": "User",
     "badge": "Gold Member"
   },
+
   "stats": {
     "points": "Points",
     "recycled": "Recycled",
     "rank": "Rank"
   },
+
   "actions": {
     "recycling_history": "Recycling History",
     "language": "Language",
-    "about": "About EcoCycle",
-    "logout": "Log Out",
+    "about": "About",
+    "logout": "Logout",
     "select_language": "Select Language",
-    "en":"English",
-    "ar":"Arabic"
+    "en": "English",
+    "ar": "Arabic"
   },
+
   "home": {
-    "welcome": "Welcome Jamal 👋",
+    "welcome": "Welcome 👋",
     "happy_day": "Happy environmental day!",
     "current_level": "Current Level",
     "golden_member": "Gold Member",
     "excellent_category": "Excellent Category",
     "points_unit": "points",
-    "points_left": "Only {points} points left to reach Diamond Level",
-    "find_center": "Find a Center",
+    "points_left": "{points} points left",
+    "find_center": "Find Center",
     "recycle_now": "Recycle Now",
-    "impact_summary": "Environmental Impact Summary",
-    "total_recycled": "Total Recycling",
+    "impact_summary": "Impact Summary",
+    "total_recycled": "Total Recycled",
     "co2_saved": "CO2 Saved",
     "kg_unit": "kg",
     "nearby_centers": "Nearby Centers",
     "view_all": "View All",
-    "daily_tip_title": "Daily Environmental Tip",
-    "daily_tip_content": "Did you know that recycling one aluminum can saves enough energy to run a television for three hours? Start today!"
+    "daily_tip_title": "Daily Tip",
+    "daily_tip_content": "Recycling saves energy"
   },
 
-  "add_process": {
-  "recycling": "Recycling",
-  "request_sent_success": "Request sent successfully",
-
-  "select_material": "Select Material",
-  "paper": "Paper",
-  "plastic": "Plastic",
-  "electronics": "Electronics",
-  "metal": "Metal",
-
-  "center": "Recycling Center",
-  "choose_center": "Choose a center",
-
-  "estimated_weight": "Estimated Weight",
-  "enter_weight": "Enter weight",
-
-  "upload_image": "Upload Image",
-  "upload_here": "Upload here",
-  "image_uploaded_success": "Image uploaded successfully",
-
-  "confirm": "Confirm"
-},
-
-  "statistics":{
-    "total_recycled": "Total Recycled",
-  "kg": "kg",
-  "operations_count": "Operations Count",
-  "co2_saved": "CO2 Saved",
-
-  "this_month": "This month",
-
-  "Monthly_progress": "Monthly progress",
-  "Last_months": "Last 6 months",
-  "jan": "Jan",
-  "feb": "Feb",
-  "mar": "Mar",
-  "apr": "Apr",
-  "may": "May",
-  "jun": "Jun",
-  "latest_activity": "Latest Activity",
-  "view_all": "View All",
-
-  "paper_waste": "Paper Waste",
-  "plastic_bottles": "Plastic Bottles",
-  "metal_cans": "Metal Cans"
+  "orders": {
+    "title": "Orders",
+    "all": "All",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "no_orders": "No Orders Found"
 
   },
-  "about_app": {
-    "name": "EcoCycle",
-    "version": "v1.0.0",
-    "description": "EcoCycle is your smart companion for a cleaner, greener world. We help you find nearby recycling centers, track your eco-impact, and earn points for saving the environment.\n\nJoin the green revolution and make every day Earth Day!",
-    "done": "Done"
+
+  "admin_profile": {
+    "admin": "System Admin",
+    "system_admin": "System Admin",
+
+    "orders": "Orders",
+    "centers": "Centers",
+    "users": "Users",
+
+    "manage_users": "Manage Users",
+    "users_desc": "Control user accounts",
+
+    "recycling_centers": "Recycling Centers",
+    "centers_desc": "Manage centers",
+
+    "language": "Language",
+    "change_language": "Change language",
+    "select_language": "Select language",
+    "done": "Done",
+
+    "english": "English",
+    "arabic": "Arabic",
+
+    "logout": "Logout",
+    "logout_desc": "Sign out from app",
+
+    "daily_tip": "Daily Tip",
+    "tip_content": "Recycling paper saves trees 🌳"
   }
 }

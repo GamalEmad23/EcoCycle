@@ -1,104 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/themes/app_colors.dart';
-import '../../../core/widgets/custome_text.dart';
+import '../model/order_model.dart';
+import '../order_cubit.dart';
 
 class OrderCard extends StatelessWidget {
-  const OrderCard({super.key});
+  final OrderModel order;
+
+  const OrderCard({super.key, required this.order});
+
+  Color getStatusColor() {
+    switch (order.status) {
+      case "accepted":
+        return Colors.green;
+      case "rejected":
+        return Colors.red;
+      default:
+        return Colors.orange;
+    }
+  }
+
+  String getStatusText() {
+    switch (order.status) {
+      case "accepted":
+        return "Accepted";
+      case "rejected":
+        return "Rejected";
+      default:
+        return "Pending";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<OrderCubit>();
+
     return Container(
-      margin:  EdgeInsets.only(bottom: 15),
-      padding:  EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset("assets/images/Image+Background.png",
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-           SizedBox(height: 10),
-
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-               Expanded(
-                child: CustomeText(text:
-                "أحمد محمد علي",
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
+              Text(order.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               Container(
                 padding:
-                 EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: AppColors.orange.withValues(alpha: 0.1),
+                  color: getStatusColor().withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child:  CustomeText(text:
-                "معلق",
-                  textColor: AppColors.orange,
+                child: Text(
+                  getStatusText(),
+                  style: TextStyle(color: getStatusColor()),
                 ),
-              )
+              ),
             ],
           ),
 
-           SizedBox(height: 5),
+          const SizedBox(height: 8),
 
-           CustomeText(text: "بلاستيك"),
-           SizedBox(height: 5),
-           CustomeText(text: "15.5 كجم"),
-           SizedBox(height: 5),
-           CustomeText(text: "تاريخ الطلب: 27 أكتوبر 2023"),
+          Text("Material: ${order.material}"),
+          Text("Weight: ${order.weight} KG"),
 
-           SizedBox(height: 10),
+          const SizedBox(height: 10),
 
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: AppColors.red,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child:  Center(
-                    child: CustomeText(text:
-                    "رفض الطلب",
-                      textColor:AppColors.white,
+          if (order.status == "pending")
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await cubit.updateOrderStatus(
+                        userId: order.userId,
+                        orderId: order.id,
+                        newStatus: "accepted",
+                      );
+
+                      cubit.getOrders("all");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
                     ),
+                    child: const Text("Accept"),
                   ),
                 ),
-              ),
-               SizedBox(width: 10),
-              Expanded(
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: AppColors.green,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child:  Center(
-                    child: CustomeText(text:
-                    "قبول الطلب",
-                      textColor: AppColors.white,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await cubit.updateOrderStatus(
+                        userId: order.userId,
+                        orderId: order.id,
+                        newStatus: "rejected",
+                      );
+
+                      cubit.getOrders("all");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
                     ),
+                    child: const Text("Reject"),
                   ),
                 ),
-              ),
-            ],
-          )
+              ],
+            ),
         ],
       ),
     );

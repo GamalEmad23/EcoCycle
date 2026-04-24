@@ -1,35 +1,41 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
-import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 import 'package:eco_cycle/features/splash_screen/view/splash_screen.dart';
+import 'package:eco_cycle/features/admin_nav_bar/admin_nav_bar.dart'; // 🔥 مهم
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'features/admin_profile/admin_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthCubit()),
+
           BlocProvider(
             create: (context) => ProfileCubit()..getSavedLang(context),
-            child: Container(),
           ),
+
+          BlocProvider(create: (context) => AdminCubit()),
         ],
-        child: MyApp(),
+        child: const MyApp(),
       ),
     ),
   );
@@ -58,6 +64,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
+
       home: StreamBuilder<User?>(
         stream: _authStream,
         builder: (context, snapshot) {
@@ -68,7 +75,9 @@ class _MyAppState extends State<MyApp> {
           final user = snapshot.data;
 
           if (user != null && user.emailVerified) {
-            return const NavBar();
+
+            /// 🔥 هنا التعديل الحقيقي
+            return const AdminNavBar();
           }
 
           return const SplashScreen();

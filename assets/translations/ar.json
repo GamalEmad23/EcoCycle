@@ -2,10 +2,8 @@
   "onboarding": {
     "title1": "مرحباً بك في EcoCycle",
     "desc1": "ساهم في حماية البيئة من خلال إعادة التدوير بسهولة وبطريقة مبتكرة.",
-
     "title2": "اعثر على أقرب مركز",
     "desc2": "استخدم الخريطة لمعرفة أقرب مراكز إعادة التدوير وتسليم مخلفاتك بسهولة.",
-
     "title3": "اكسِب نقاط ومكافآت",
     "desc3": "قم بتسجيل عمليات إعادة التدوير واحصل على نقاط واستبدلها بخصومات ومكافآت بيئية"
   },
@@ -27,70 +25,57 @@
     "google_login": "تسجيل الدخول باستخدام Google",
     "no_account": "ليس لديك حساب؟",
     "create_account": "إنشاء حساب",
-
-    "success_login": "تم تسجيل الدخول إلى حسابك بنجاح"
+    "success_login": "تم تسجيل الدخول بنجاح"
   },
 
-    "login_validation": {
+  "login_validation": {
     "email_required": "من فضلك أدخل البريد الإلكتروني",
     "email_invalid": "من فضلك أدخل بريد إلكتروني صحيح",
-
     "password_required": "من فضلك أدخل كلمة المرور",
     "password_short": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
-
     "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
     "user_not_found": "لا يوجد حساب بهذا البريد الإلكتروني",
     "wrong_password": "كلمة المرور غير صحيحة"
   },
 
-   "signup": {
+  "signup": {
     "title": "إنشاء حساب",
     "subtitle": "أنشئ حسابك وابدأ رحلتك نحو بيئة أنظف",
-
     "name_label": "الاسم",
     "name_hint": "ادخل اسمك",
-
     "email_label": "البريد الإلكتروني",
     "email_hint": "example@email.com",
-
     "password_label": "كلمة المرور",
-
     "signup_button": "إنشاء حساب",
-
     "have_account": "لديك حساب بالفعل؟",
     "login_now": "سجل الدخول"
-
   },
 
   "signup_validation": {
     "name_required": "من فضلك أدخل الاسم",
     "name_short": "الاسم يجب أن يكون حرفين على الأقل",
-
     "email_required": "من فضلك أدخل البريد الإلكتروني",
     "email_invalid": "من فضلك أدخل بريد إلكتروني صحيح",
     "email_already_used": "هذا البريد الإلكتروني مستخدم بالفعل",
-
     "password_required": "من فضلك أدخل كلمة المرور",
     "password_short": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
     "password_weak": "كلمة المرور ضعيفة، حاول استخدام حروف وأرقام",
-
     "confirm_password_required": "من فضلك أكد كلمة المرور",
     "passwords_not_match": "كلمتا المرور غير متطابقتين"
   },
 
-  "verification_message": "يرجى التحقق من مجلد البريد العشوائي (Spam) في Gmail لإتمام تفعيل البريد الإلكتروني",
-  "admin_login_message" : "صاحب هذا الايميل ليس ادمن",
+  "verification_message": "يرجى التحقق من مجلد البريد العشوائي في Gmail لتفعيل البريد الإلكتروني",
+  "admin_login_message": "هذا الحساب ليس أدمن",
 
   "forgot_password": {
     "title": "نسيت كلمة المرور",
-    "subtitle": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+    "subtitle": "أدخل بريدك الإلكتروني لإعادة التعيين",
     "email_label": "البريد الإلكتروني",
     "email_hint": "example@email.com",
     "reset_button": "إرسال رابط إعادة التعيين",
-    "info_message": "سيتم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
-    "back_to_login": "العودة إلى تسجيل الدخول",
-
-    "success": "تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور 📩",
+    "info_message": "سيتم إرسال رابط إعادة تعيين كلمة المرور",
+    "back_to_login": "العودة لتسجيل الدخول",
+    "success": "تحقق من بريدك الإلكتروني 📩",
     "error": "حدث خطأ، حاول مرة أخرى"
   },
 
@@ -107,92 +92,79 @@
     "name": "جمال عماد",
     "badge": "عضو ذهبي"
   },
+
   "stats": {
     "points": "النقاط",
     "recycled": "تم تدويره",
     "rank": "الترتيب"
   },
+
   "actions": {
     "recycling_history": "سجل التدوير",
-    "language": "اللغه",
-    "about": "حول إيكوسايكل",
+    "language": "اللغة",
+    "about": "حول التطبيق",
     "logout": "تسجيل الخروج",
-    "select_language": "اختار اللغه",
-    "en": "الانجليزيه",
-    "ar": "العربيه"
+    "select_language": "اختار اللغة",
+    "en": "الإنجليزية",
+    "ar": "العربية"
   },
+
   "home": {
-    "welcome": "مرحباً جمال 👋",
+    "welcome": "مرحباً 👋",
     "happy_day": "يوم بيئي سعيد!",
     "current_level": "المستوى الحالي",
     "golden_member": "عضو ذهبي",
     "excellent_category": "الفئة الممتازة",
     "points_unit": "نقطة",
-    "points_left": "تبقى {points} نقطة للوصول للمستوى الماسي",
+    "points_left": "تبقى {points} نقطة",
     "find_center": "العثور على مركز",
     "recycle_now": "إعادة التدوير الآن",
-    "impact_summary": "ملخص تأثيرك البيئي",
+    "impact_summary": "ملخص التأثير البيئي",
     "total_recycled": "إجمالي التدوير",
     "co2_saved": "توفير CO2",
     "kg_unit": "كجم",
-    "nearby_centers": "مراكز قريبة منك",
+    "nearby_centers": "مراكز قريبة",
     "view_all": "عرض الكل",
-    "daily_tip_title": "نصيحة اليوم البيئية",
-    "daily_tip_content": "هل تعلم أن إعادة تدوير علبة ألومنيوم واحدة توفر طاقة كافية لتشغيل جهاز تلفزيون لمدة ثلاث ساعات؟ ابدأ اليوم!"
-  } ,
-
-  "add_process": {
-  "recycling": "إعادة التدوير",
-  "request_sent_success": "تم إرسال الطلب بنجاح",
-
-  "select_material": "اختر المادة",
-  "paper": "ورق",
-  "plastic": "بلاستيك",
-  "electronics": "إلكترونيات",
-  "metal": "معدن",
-
-  "center": "مركز التدوير",
-  "choose_center": "اختر المركز",
-
-  "estimated_weight": "الوزن المتوقع",
-  "enter_weight": "أدخل الوزن",
-
-  "upload_image": "رفع صورة",
-  "upload_here": "ارفع هنا",
-  "image_uploaded_success": "تم رفع الصورة بنجاح",
-
-  "confirm": "تأكيد"
-},
-  
-  "statistics": {
-    "total_recycled": "إجمالي المعاد تدويره",
-    "kg": "كجم",
-    "operations_count": "عدد العمليات",
-    "co2_saved": "توفير CO2",
-
-    "this_month": "هذا الشهر",
-
-    "Monthly_progress": "التقدم الشهري",
-    "Last_months": "آخر 6 أشهر",
-
-    "jan": "يناير",
-    "feb": "فبراير",
-    "mar": "مارس",
-    "apr": "أبريل",
-    "may": "مايو",
-    "jun": "يونيو",
-
-    "latest_activity": "النشاط الأخير",
-    "view_all": "عرض الكل",
-
-    "paper_waste": "مخلفات ورقية",
-    "plastic_bottles": "زجاجات بلاستيكية",
-    "metal_cans": "علب معدنية"
+    "daily_tip_title": "نصيحة يومية",
+    "daily_tip_content": "إعادة تدوير علبة واحدة توفر طاقة كبيرة"
   },
-  "about_app": {
-    "name": "إيكوسايكل",
-    "version": "الإصدار 1.0.0",
-    "description": "إيكوسايكل هو رفيقك الذكي لعالم أنظف وأكثر خضرة. نساعدك في العثور على مراكز إعادة التدوير القريبة، وتتبع تأثيرك البيئي، وكسب النقاط لإنقاذ البيئة.\n\nانضم إلى الثورة الخضراء واجعل كل يوم يوم الأرض!",
-    "done": "تم"
+
+  "orders": {
+    "title": "الطلبات",
+    "all": "الكل",
+    "pending": "قيد الانتظار",
+    "accepted": "مقبول",
+    "rejected": "مرفوض",
+    "no_orders": "لا توجد طلبات"
+
+  },
+
+  "admin_profile": {
+    "admin": "مسؤول النظام",
+    "system_admin": "مسؤول النظام",
+
+    "orders": "الطلبات",
+    "centers": "المراكز",
+    "users": "المستخدمين",
+
+    "manage_users": "إدارة المستخدمين",
+    "users_desc": "التحكم في حسابات المستخدمين",
+
+    "recycling_centers": "مراكز إعادة التدوير",
+    "centers_desc": "إدارة المراكز",
+
+    "language": "اللغة",
+    "change_language": "تغيير اللغة",
+    "select_language": "اختار اللغة",
+    "done": "تم",
+
+    "english": "الإنجليزية",
+    "arabic": "العربية",
+
+    "logout": "تسجيل الخروج",
+    "logout_desc": "تسجيل الخروج من التطبيق",
+
+    "daily_tip": "نصيحة يومية",
+    "tip_content": "إعادة تدوير الورق يحافظ على الأشجار 🌳"
   }
 }

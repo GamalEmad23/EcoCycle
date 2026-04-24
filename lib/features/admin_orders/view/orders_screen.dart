@@ -1,8 +1,8 @@
-import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
-import 'package:eco_cycle/core/themes/app_colors.dart';
-import 'package:eco_cycle/core/widgets/custome_text.dart';
-import 'package:eco_cycle/features/admin_profile/view/admin_profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../order_cubit.dart';
 import '../widget/order_card.dart';
 
 class OrdersScreen extends StatelessWidget {
@@ -10,92 +10,82 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        backgroundColor:AppColors.white,
-        body: SafeArea(
-          child: Column(
-            children: [
-
-              Padding(
-                padding:  EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                     Icon(Icons.search),
-                     CustomeText(text:
-                      "صفحة الطلبات",
-                     fontSize: 24,
-                    fontWeight: FontWeight.bold,),
-
-
-                    InkWell(
-                      onTap: (){
-                        NavigateHelper.push(context,AdminProfileScreen());
-                      },
-                        child:  Icon(Icons.arrow_forward_ios, size: 20)),
-                  ],
-                ),
-              ),
-
-               TabBar(
-                labelColor: AppColors.primary,
-                unselectedLabelColor: AppColors.textGrey,
-                indicatorColor: AppColors.primary,
-                tabs: [
-                  Tab(text: "الكل"),
-                  Tab(text: "معلق"),
-                  Tab(text: "مقبول"),
-                  Tab(text: "مرفوض"),
-                ],
-              ),
-
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    orders(),
-                    orders(),
-                    orders(),
-                    orders(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
-
-          onTap: (index) {
-            if (index == 1) {
-              NavigateHelper.push(context,AdminProfileScreen());
-            }
-          },
-
-          items:  [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: "الطلبات",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "الحساب",
-            ),
-          ],
-        ),
-      ),
+    return BlocProvider(
+      create: (context) => OrderCubit()..getOrders("all"),
+      child: const _OrdersView(),
     );
   }
 }
 
-Widget orders() {
-  return ListView(
-    padding:  EdgeInsets.all(16),
-    children:  [
-      OrderCard(),
-      OrderCard(),
-    ],
-  );
+class _OrdersView extends StatefulWidget {
+  const _OrdersView();
+
+  @override
+  State<_OrdersView> createState() => _OrdersViewState();
 }
 
+class _OrdersViewState extends State<_OrdersView>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+
+  final tabs = ["all", "pending", "accepted", "rejected"];
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabController = TabController(length: tabs.length, vsync: this);
+
+    tabController.addListener(() {
+      context
+          .read<OrderCubit>()
+          .getOrders(tabs[tabController.index]);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("orders.title".tr()),
+        bottom: TabBar(
+          controller: tabController,
+          tabs: [
+            Tab(text: "orders.all".tr()),
+            Tab(text: "orders.pending".tr()),
+            Tab(text: "orders.accepted".tr()),
+            Tab(text: "orders.rejected".tr()),
+          ],
+        ),
+      ),
+      body: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state is OrderLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state is OrderSuccess) {
+            if (state.orders.isEmpty) {
+              return Center(
+                child: Text("orders.no_orders".tr()),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: state.orders.length,
+              itemBuilder: (context, index) {
+                return OrderCard(order: state.orders[index]);
+              },
+            );
+          }
+
+          if (state is OrderError) {
+            return Center(child: Text(state.message));
+          }
+
+          return const SizedBox();
+        },
+      ),
+    );
+  }
+}
