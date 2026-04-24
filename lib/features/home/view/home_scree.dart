@@ -70,7 +70,9 @@ class _HomeScreeState extends State<HomeScree> {
       center['distance_val'] = distanceInMeters / 1000;
     }
 
-    sortedCenters.sort((a, b) => a['distance_val'].compareTo(b['distance_val']));
+    sortedCenters.sort(
+      (a, b) => a['distance_val'].compareTo(b['distance_val']),
+    );
     setState(() {
       _nearbyCenters = sortedCenters.take(2).toList();
     });
@@ -108,8 +110,9 @@ class _HomeScreeState extends State<HomeScree> {
               userImage = state.userImage;
               rankName = context.read<ProfileCubit>().getRank(points);
               rankColor = context.read<ProfileCubit>().getRankColor(points);
-              nextLevelPoints =
-                  context.read<ProfileCubit>().getNextLevelPoints(points);
+              nextLevelPoints = context.read<ProfileCubit>().getNextLevelPoints(
+                points,
+              );
             }
 
             return SingleChildScrollView(
@@ -159,7 +162,7 @@ class _HomeScreeState extends State<HomeScree> {
                         child: CustomeQuickAction(
                           label: "home.recycle_now".tr(),
                           icon: Icons.recycling_rounded,
-                          bgColor: AppColors.lightGreen,
+                          bgColor: AppColors.levelCardEnd,
                           textColor: AppColors.white,
                           iconColor: AppColors.white,
                           h: h,
@@ -194,21 +197,23 @@ class _HomeScreeState extends State<HomeScree> {
                   if (_nearbyCenters.isEmpty)
                     const Center(child: CircularProgressIndicator())
                   else
-                    ..._nearbyCenters.map((center) => Padding(
-                          padding: EdgeInsets.only(bottom: h * .015),
-                          child: CustomeCenterCard(
-                            name: center['name'],
-                            address: "${center['address']}, ${center['city']}",
-                            distance:
-                                center['distance_val']?.toStringAsFixed(1) ??
-                                    "...",
-                            imgUrl:
-                                "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80",
-                            distanceLable: 'map.km',
-                            h: h,
-                            w: w,
-                          ),
-                        )),
+                    ..._nearbyCenters.map(
+                      (center) => Padding(
+                        padding: EdgeInsets.only(bottom: h * .015),
+                        child: CustomeCenterCard(
+                          name: center['name'],
+                          address: "${center['address']}, ${center['city']}",
+                          distance:
+                              center['distance_val']?.toStringAsFixed(1) ??
+                              "...",
+                          imgUrl:
+                              "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80",
+                          distanceLable: 'map.km',
+                          h: h,
+                          w: w,
+                        ),
+                      ),
+                    ),
 
                   SizedBox(height: h * .032),
 

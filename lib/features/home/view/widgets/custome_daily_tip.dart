@@ -17,7 +17,7 @@ class CustomeDailyTip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(h * .01),
+      padding: EdgeInsets.all(h * .02),
       decoration: BoxDecoration(
         color: AppColors.lightGreen3,
         borderRadius: BorderRadius.circular(32),
@@ -55,7 +55,7 @@ class CustomeDailyTip extends StatelessWidget {
             fontSize: 15,
             fontWeight: FontWeight.w500,
             textColor: AppColors.levelCardEnd,
-          )
+          ),
         ],
       ),
     );

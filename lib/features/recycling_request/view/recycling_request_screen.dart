@@ -13,8 +13,7 @@ class RecyclingRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          RecyclingRequestCubit()..getCenters(),
+      create: (context) => RecyclingRequestCubit()..getCenters(),
       child: const _RecyclingRequestView(),
     );
   }
@@ -28,6 +27,7 @@ class _RecyclingRequestView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        forceMaterialTransparency: true,
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
