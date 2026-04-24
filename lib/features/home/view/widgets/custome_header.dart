@@ -1,16 +1,25 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomeHeader extends StatelessWidget {
-  const CustomeHeader({super.key, required this.h, required this.w, required this.imagePath});
+  const CustomeHeader({
+    super.key,
+    required this.h,
+    required this.w,
+    required this.imagePath,
+    required this.userName,
+  });
 
-final double h;
-final double w;
-final String imagePath;
+  final double h;
+  final double w;
+  final String imagePath;
+  final String userName;
+
   @override
   Widget build(BuildContext context) {
-     return Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
@@ -36,44 +45,55 @@ final String imagePath;
             ),
           ),
         ),
-        Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                 CustomeText(
-                  text: "home.welcome",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                 CustomeText(
-                  text: "home.happy_day",
-                  fontSize: 15,
-                  textColor: AppColors.textGrey,
-                ),
-              ],
-            ),
-            const SizedBox(width: 14),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: CircleAvatar(
-                radius: w*.07,
-                backgroundImage: NetworkImage(
-                  imagePath
+        const SizedBox(width: 8),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    CustomeText(
+                      text: "home.welcome".tr(args: [userName]),
+                      fontSize: w * 0.045, // Responsive font size
+                      fontWeight: FontWeight.bold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    CustomeText(
+                      text: "home.happy_day",
+                      fontSize: w * 0.035, // Responsive font size
+                      textColor: AppColors.textGrey,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  radius: w * .065,
+                  backgroundImage: imagePath.isNotEmpty
+                      ? NetworkImage(imagePath)
+                      : const AssetImage("assets/images/Margin.png")
+                          as ImageProvider,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

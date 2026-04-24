@@ -1,15 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eco_cycle/features/recycling_request/repository/recycling_request_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eco_cycle/features/recycling_request/model/recycling_request_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 part 'recycling_request_state.dart';
 
 class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
-  final RecyclingRequestRepo _recyclingRepo;
-
-  RecyclingRequestCubit(this._recyclingRepo) : super(RecyclingRequestInitial());
+  RecyclingRequestCubit() : super(RecyclingRequestInitial());
 
   String selectedMaterial = 'بلاستيك';
   String? selectedCenter;
@@ -18,21 +19,20 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
   final ImagePicker _picker = ImagePicker();
 
-  // 🔥 centers
+  final String cloudName = "diwhgxyls";
+  final String uploadPreset = "eco_cycle_upload";
+
   List<String> centers = [];
   bool isLoadingCenters = false;
 
-  // ✅ FIXED
   Future<void> getCenters() async {
     try {
       isLoadingCenters = true;
-      emit(RecyclingRequestUpdated()); // 👈 بدل loading
+      emit(RecyclingRequestUpdated());
 
       final snapshot = await FirebaseFirestore.instance
           .collection('centers')
           .get();
-
-      print("Centers count: ${snapshot.docs.length}"); // 🔍 debug
 
       centers = snapshot.docs.map((doc) => doc['name'] as String).toList();
 
@@ -40,7 +40,6 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       emit(RecyclingRequestUpdated());
     } catch (e) {
       isLoadingCenters = false;
-      print(e); // 🔍 مهم
       emit(RecyclingRequestError('Failed to load centers'));
     }
   }
@@ -75,6 +74,29 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
     }
   }
 
+  Future<String?> uploadImageToCloudinary(File file) async {
+    try {
+      final url = Uri.parse(
+        "https://api.cloudinary.com/v1_1/$cloudName/image/upload",
+      );
+
+      final request = http.MultipartRequest('POST', url);
+      request.fields['upload_preset'] = uploadPreset;
+
+      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+      final response = await request.send();
+      final responseData = await response.stream.bytesToString();
+
+      final data = json.decode(responseData);
+
+      return data['secure_url'];
+    } catch (e) {
+      print("Cloudinary error: $e");
+      return null;
+    }
+  }
+
   Future<void> submitRequest() async {
     if (selectedCenter == null || weight.isEmpty) {
       emit(RecyclingRequestError('يرجى تعبئة جميع الحقول المطلوبة'));
@@ -84,12 +106,30 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
     emit(RecyclingRequestLoading());
 
     try {
-      await _recyclingRepo.submitRecyclingRequest(
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User must be logged in to create a request');
+      }
+
+      String? imageUrl;
+
+      if (image != null) {
+        imageUrl = await uploadImageToCloudinary(image!);
+      }
+
+      final model = RecyclingRequestModel(
         material: selectedMaterial,
         center: selectedCenter,
-        weight: weight,
-        image: image,
+        weight: double.tryParse(weight) ?? 0.0,
+        userId: user.uid,
+        imageUrl: imageUrl, // 👈 الجديد
       );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('recycling_requests')
+          .add(model.toMap());
 
       selectedMaterial = 'بلاستيك';
       selectedCenter = null;

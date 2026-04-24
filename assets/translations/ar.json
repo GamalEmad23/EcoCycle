@@ -90,13 +90,23 @@
   "profile": {
     "title": "الملف الشخصي",
     "name": "جمال عماد",
-    "badge": "عضو ذهبي"
+    "badge": "عضو ذهبي",
+    "upload_success": "تم تحديث صورة الملف الشخصي!",
+    "upload_failed": "فشل الرفع: {}",
+    "select_language": "اختر اللغة",
+    "done": "تم",
+    "rank_beginner": "مبتدئ",
+    "rank_bronze": "برونزي",
+    "rank_silver": "فضي",
+    "rank_gold": "ذهبي",
+    "rank_platinum": "بلاتيني",
+    "rank_diamond": "ماسي"
   },
 
   "stats": {
     "points": "النقاط",
     "recycled": "تم تدويره",
-    "rank": "الترتيب"
+    "rank": "العمليات"
   },
 
   "actions": {
@@ -110,19 +120,37 @@
   },
 
   "home": {
+<<<<<<< HEAD
     "welcome": "مرحباً 👋",
+=======
+    "welcome": "مرحباً {} 👋",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "happy_day": "يوم بيئي سعيد!",
     "current_level": "المستوى الحالي",
     "golden_member": "عضو ذهبي",
     "excellent_category": "الفئة الممتازة",
     "points_unit": "نقطة",
+<<<<<<< HEAD
     "points_left": "تبقى {points} نقطة",
+=======
+    "points_left": "نقطة متبقية للمستوى التالي",
+    "points_left_to": "تبقى {} نقطة للوصول للمستوى {}",
+    "beginner": "مبتدئ",
+    "bronze": "عضو برونزي",
+    "silver": "عضو فضي",
+    "gold": "عضو ذهبي",
+    "platinum": "عضو بلاتيني",
+    "diamond": "عضو ماسي",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "find_center": "العثور على مركز",
     "recycle_now": "إعادة التدوير الآن",
     "impact_summary": "ملخص التأثير البيئي",
     "total_recycled": "إجمالي التدوير",
     "co2_saved": "توفير CO2",
+    "energy_saved": "توفير الطاقة",
+    "water_saved": "توفير المياه",
     "kg_unit": "كجم",
+<<<<<<< HEAD
     "nearby_centers": "مراكز قريبة",
     "view_all": "عرض الكل",
     "daily_tip_title": "نصيحة يومية",
@@ -166,5 +194,101 @@
 
     "daily_tip": "نصيحة يومية",
     "tip_content": "إعادة تدوير الورق يحافظ على الأشجار 🌳"
+=======
+    "liter_unit": "لتر",
+    "kwh_unit": "كيلو واط",
+    "nearby_centers": "مراكز قريبة منك",
+    "view_all": "عرض الكل",
+    "daily_tip_title": "نصيحة اليوم البيئية",
+    "daily_tip_1": "استخدم حقائب التسوق القابلة لإعادة الاستخدام لتقليل النفايات البلاستيكية.",
+    "daily_tip_2": "أغلق صنبور المياه أثناء غسل أسنانك لتوفير لترات من الماء يومياً.",
+    "daily_tip_3": "أطفئ الأضواء في الغرف غير المستخدمة لتقليل استهلاك الطاقة.",
+    "daily_tip_4": "أعد تدوير الورق والكرتون لإنقاذ الأشجار والحفاظ على البيئة.",
+    "daily_tip_5": "استخدم المواصلات العامة أو المشي لتقليل انبعاثات الكربون."
+  } ,
+
+  "add_process": {
+  "recycling": "إعادة التدوير",
+  "request_sent_success": "تم إرسال الطلب بنجاح",
+
+  "select_material": "اختر المادة",
+  "paper": "ورق",
+  "plastic": "بلاستيك",
+  "electronics": "إلكترونيات",
+  "metal": "معدن",
+
+  "center": "مركز التدوير",
+  "choose_center": "اختر المركز",
+
+  "estimated_weight": "الوزن المتوقع",
+  "enter_weight": "أدخل الوزن",
+
+  "upload_image": "رفع صورة",
+  "upload_here": "ارفع هنا",
+  "image_uploaded_success": "تم رفع الصورة بنجاح",
+
+  "confirm": "تأكيد"
+},
+  
+  "statistics": {
+    "total_recycled": "إجمالي المعاد تدويره",
+    "kg": "كجم",
+    "operations_count": "عدد العمليات",
+    "co2_saved": "توفير CO2",
+
+    "this_month": "هذا الشهر",
+
+    "Monthly_progress": "التقدم الشهري",
+    "Last_months": "آخر 6 أشهر",
+
+    "jan": "يناير",
+    "feb": "فبراير",
+    "mar": "مارس",
+    "apr": "أبريل",
+    "may": "مايو",
+    "jun": "يونيو",
+
+    "latest_activity": "النشاط الأخير",
+    "view_all": "عرض الكل",
+
+    "paper_waste": "مخلفات ورقية",
+    "plastic_bottles": "زجاجات بلاستيكية",
+    "metal_cans": "علب معدنية"
+  },
+  "map": {
+    "search_failed": "فشل في البحث عن الموقع: {}",
+    "filter_all": "الكل",
+    "filter_plastic": "بلاستيك",
+    "filter_paper": "ورق",
+    "filter_glass": "زجاج",
+    "filter_metal": "معدن",
+    "fetch_centers_failed": "فشل في جلب المراكز: {}",
+    "destination_coords_unavailable": "إحداثيات الوجهة غير متوفرة.",
+    "cannot_open_maps": "لا يمكن فتح الخرائط أو المتصفح.",
+    "error_opening_maps": "حدث خطأ أثناء فتح الخرائط.",
+    "center_coords_unavailable": "إحداثيات المركز غير متوفرة.",
+    "choose_transport_mode": "اختر وسيلة التنقل",
+    "driving": "قيادة (سيارة)",
+    "walking": "مشي",
+    "centers_map": "خريطة المراكز",
+    "enter_your_location": "أدخل موقعك...",
+    "searching_nearby_centers": "جاري البحث عن مراكز قريبة...",
+    "no_centers_in_range": "لا توجد مراكز إعادة تدوير في هذا النطاق",
+    "open_now": "مفتوح الآن",
+    "distance": "المسافة",
+    "km": "كم",
+    "working_hours": "ساعات العمل",
+    "get_directions": "الحصول على الاتجاهات",
+    "enable_location": "تفعيل الوصول للموقع",
+    "location_reason": "نحتاج إلى الوصول لموقعك الجغرافي لنتمكن من عرض مراكز إعادة التدوير القريبة منك وتسهيل وصولك إليها.",
+    "allow_location": "السماح بالوصول للموقع",
+    "not_now": "ليس الآن"
+  },
+  "about_app": {
+    "name": "إيكوسايكل",
+    "version": "الإصدار 1.0.0",
+    "description": "إيكوسايكل هو رفيقك الذكي لعالم أنظف وأكثر خضرة. نساعدك في العثور على مراكز إعادة التدوير القريبة، وتتبع تأثيرك البيئي، وكسب النقاط لإنقاذ البيئة.\n\nانضم إلى الثورة الخضراء واجعل كل يوم يوم الأرض!",
+    "done": "تم"
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
   }
 }

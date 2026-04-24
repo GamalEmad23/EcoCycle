@@ -1,16 +1,22 @@
+// ignore_for_file: unused_field
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart' hide Marker;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/services/geocoding_service.dart';
 import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dart';
 import 'package:eco_cycle/features/map/view/widgets/center_details_bottom_sheet.dart';
 import 'package:eco_cycle/core/services/overpass_service.dart';
+import 'package:eco_cycle/core/services/favorites_service.dart';
+import 'package:eco_cycle/core/Data/centers_data.dart' as static_data;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -36,11 +42,28 @@ class _MapScreenState extends State<MapScreen> {
   final OverpassService _overpassService = OverpassService();
   bool _isSearchExpanded = false;
   Map<String, dynamic>? _selectedCenter;
+  StreamSubscription<Position>? _positionStreamSubscription;
+  Timer? _emptyStateTimer;
+  bool _showEmptyStateMessage = false;
+  bool _isTrackingLocation = true;
+  bool _isInitialLoad = true;
+
+  String _selectedFilter = 'الكل';
+  final List<String> _filters = ['الكل', 'بلاستيك', 'ورق', 'زجاج', 'معدن'];
+
+  List<String> _favoriteIds = [];
+  final FavoritesService _favoritesService = FavoritesService();
+  StreamSubscription<List<String>>? _favoritesSubscription;
 
   @override
   void initState() {
     super.initState();
     _checkInitialPermission();
+    _favoritesSubscription = _favoritesService.getFavoritesStream().listen((
+      favs,
+    ) {
+      if (mounted) setState(() => _favoriteIds = favs);
+    });
   }
 
   @override
@@ -48,7 +71,25 @@ class _MapScreenState extends State<MapScreen> {
     _searchController.dispose();
     _searchFocusNode.dispose();
     _debounce?.cancel();
+    _emptyStateTimer?.cancel();
+    _positionStreamSubscription?.cancel();
+    _favoritesSubscription?.cancel();
     super.dispose();
+  }
+
+  List<Map<String, dynamic>> get _filteredCenters {
+    if (_selectedFilter == 'الكل') return _centers;
+    return _centers.where((center) {
+      final materials = (center['materials'] as String?)?.toLowerCase() ?? '';
+      String searchKeyword = '';
+      if (_selectedFilter == 'بلاستيك') searchKeyword = 'plastic';
+      if (_selectedFilter == 'ورق') searchKeyword = 'paper';
+      if (_selectedFilter == 'زجاج') searchKeyword = 'glass';
+      if (_selectedFilter == 'معدن') searchKeyword = 'metal';
+
+      return materials.contains(searchKeyword) ||
+          materials.contains(_selectedFilter);
+    }).toList();
   }
 
   void _onSearchChanged(String query) {
@@ -79,9 +120,11 @@ class _MapScreenState extends State<MapScreen> {
             _searchResults = [];
             _isSearching = false;
           });
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('فشل في البحث عن الموقع: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('map.search_failed'.tr(args: [e.toString()])),
+            ),
+          );
         }
       }
     });
@@ -93,6 +136,7 @@ class _MapScreenState extends State<MapScreen> {
     setState(() {
       _searchResults.clear();
       currentLocation = result.location;
+      _isTrackingLocation = false;
     });
 
     _fetchCentersAround(result.location);
@@ -147,6 +191,24 @@ class _MapScreenState extends State<MapScreen> {
       _fetchCentersAround(LatLng(position.latitude, position.longitude));
 
       _mapController.move(currentLocation!, 15);
+
+      _positionStreamSubscription ??=
+          Geolocator.getPositionStream(
+            locationSettings: const LocationSettings(
+              accuracy: LocationAccuracy.medium,
+              distanceFilter: 500,
+            ),
+          ).listen((Position newPosition) {
+            if (mounted && _isTrackingLocation) {
+              setState(() {
+                currentLocation = LatLng(
+                  newPosition.latitude,
+                  newPosition.longitude,
+                );
+              });
+              _fetchCentersAround(currentLocation!);
+            }
+          });
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -155,31 +217,105 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  List<Map<String, dynamic>> _getStaticCenters(LatLng? currentLoc) {
+    return static_data.centers.map((c) {
+      final lat = c['lat'] as double;
+      final lng = c['lng'] as double;
+      final location = LatLng(lat, lng);
+
+      double distanceInMeters = 0.0;
+      if (currentLoc != null) {
+        distanceInMeters = Geolocator.distanceBetween(
+          currentLoc.latitude,
+          currentLoc.longitude,
+          lat,
+          lng,
+        );
+      }
+
+      return {
+        "id": "static_${c['name']}",
+        "name": c['name'],
+        "materials": "بلاستيك، ورق، معدن، زجاج",
+        "hours": "08:00 ص - 09:00 م",
+        "distance": (distanceInMeters / 1000).toStringAsFixed(1),
+        "imgUrl":
+            "https://images.unsplash.com/photo-1532996122724-e3c354a0b15f?w=400&q=80",
+        "location": location,
+        "city": c['city'],
+      };
+    }).toList();
+  }
+
+  void _fitBoundsToCenters() {
+    if (_filteredCenters.isEmpty) return;
+
+    final points = _filteredCenters
+        .map((c) => c['location'] as LatLng)
+        .toList();
+    if (currentLocation != null) {
+      points.add(currentLocation!);
+    }
+
+    if (points.length > 1) {
+      final bounds = LatLngBounds.fromPoints(points);
+      _mapController.fitCamera(
+        CameraFit.bounds(bounds: bounds, padding: const EdgeInsets.all(50.0)),
+      );
+    } else if (points.isNotEmpty) {
+      _mapController.move(points.first, 14);
+    }
+  }
+
   Future<void> _fetchCentersAround(LatLng location) async {
     if (!mounted) return;
     setState(() {
       _isLoadingCenters = true;
+      _showEmptyStateMessage = false;
     });
 
     try {
-      final centers = await _overpassService.fetchNearbyRecyclingCenters(
-        location.latitude,
-        location.longitude,
+      final overpassCenters = await _overpassService
+          .fetchNearbyRecyclingCenters(location.latitude, location.longitude);
+
+      final staticCenters = _getStaticCenters(currentLocation);
+      final List<Map<String, dynamic>> allCenters = [...staticCenters];
+      for (var oc in overpassCenters) {
+        if (!allCenters.any((sc) => sc['name'] == oc['name'])) {
+          allCenters.add(oc);
+        }
+      }
+      allCenters.sort(
+        (a, b) =>
+            double.parse(a['distance']).compareTo(double.parse(b['distance'])),
       );
+
       if (mounted) {
         setState(() {
-          _centers = centers;
+          _centers = allCenters;
           _isLoadingCenters = false;
         });
+        if (_isInitialLoad) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted) {
+              _fitBoundsToCenters();
+              setState(() {
+                _isInitialLoad = false;
+              });
+            }
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _isLoadingCenters = false;
         });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('فشل في جلب المراكز: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('map.fetch_centers_failed'.tr(args: [e.toString()])),
+          ),
+        );
       }
     }
   }
@@ -191,23 +327,160 @@ class _MapScreenState extends State<MapScreen> {
     _mapController.move(center['location'] as LatLng, 15);
   }
 
-  Future<void> _launchGoogleMaps(LatLng destination) async {
-    final url = Uri.parse(
-      'https://www.google.com/maps/search/?api=1&query=${destination.latitude},${destination.longitude}',
-    );
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+  Future<void> _launchNavigation(LatLng? destination, String mode) async {
+    if (destination == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('map.destination_coords_unavailable'.tr())),
+        );
+      }
+      return;
+    }
+
+    String urlString =
+        'https://www.google.com/maps/dir/?api=1&destination=${destination.latitude},${destination.longitude}&travelmode=$mode';
+    if (currentLocation != null) {
+      urlString +=
+          '&origin=${currentLocation!.latitude},${currentLocation!.longitude}';
+    }
+
+    debugPrint('Final Navigation URL: $urlString');
+    final url = Uri.parse(urlString);
+
+    try {
+      bool launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        launched = await launchUrl(url, mode: LaunchMode.platformDefault);
+        if (!launched) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('map.cannot_open_maps'.tr())),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching map URL: $e');
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('لا يمكن فتح الخرائط.')));
+        ).showSnackBar(SnackBar(content: Text('map.error_opening_maps'.tr())));
       }
     }
   }
 
+  void _showNavigationOptions(LatLng? destination) {
+    if (destination == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('map.center_coords_unavailable'.tr())),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetCtx) {
+        final bsW = MediaQuery.sizeOf(sheetCtx).width;
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: bsW * 0.06,
+              vertical: bsW * 0.05,
+            ),
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: bsW * 0.10,
+                  height: 4,
+                  margin: EdgeInsets.only(bottom: bsW * 0.05),
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Text(
+                  'map.choose_transport_mode'.tr(),
+                  style: TextStyle(
+                    fontSize: bsW * 0.045,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: bsW * 0.05),
+                ListTile(
+                  leading: Container(
+                    padding: EdgeInsets.all(bsW * 0.025),
+                    decoration: const BoxDecoration(
+                      color: AppColors.lightGreen2,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.directions_car,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  title: Text(
+                    'map.driving'.tr(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: bsW * 0.04,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    _launchNavigation(destination, 'driving');
+                  },
+                ),
+                SizedBox(height: bsW * 0.025),
+                ListTile(
+                  leading: Container(
+                    padding: EdgeInsets.all(bsW * 0.025),
+                    decoration: const BoxDecoration(
+                      color: AppColors.lightGreen2,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.directions_walk,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  title: Text(
+                    'map.walking'.tr(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: bsW * 0.04,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    _launchNavigation(destination, 'walking');
+                  },
+                ),
+                SizedBox(height: bsW * 0.05),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final double h = size.height;
+    final double w = size.width;
+    final double topPad = MediaQuery.of(context).padding.top;
+
     if (hasPermission == null) {
       return Scaffold(
         backgroundColor: AppColors.white,
@@ -254,61 +527,94 @@ class _MapScreenState extends State<MapScreen> {
                       userAgentPackageName: 'com.ecocycle.app',
                     ),
 
-                    MarkerLayer(
-                      markers: [
-                        ..._centers.map((center) {
+                    MarkerClusterLayerWidget(
+                      options: MarkerClusterLayerOptions(
+                        maxClusterRadius: 45,
+                        size: const Size(40, 40),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(50),
+                        maxZoom: 15,
+                        markers: _filteredCenters.map((center) {
+                          final isSelected = _selectedCenter == center;
                           return Marker(
                             point: center['location'] as LatLng,
                             width: 60,
-                            height: 60,
+                            height: 70,
+                            alignment: Alignment.topCenter,
                             child: GestureDetector(
                               onTap: () => _onCenterTapped(center),
-                              child: FadeInUp(
-                                duration: const Duration(milliseconds: 400),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AppColors.white,
-                                      width: 3,
-                                    ),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black38,
-                                        blurRadius: 8,
-                                        offset: Offset(0, 4),
+                              child: isSelected
+                                  ? Pulse(
+                                      infinite: true,
+                                      child: _buildPin(isSelected),
+                                    )
+                                  : FadeInUp(
+                                      duration: const Duration(
+                                        milliseconds: 400,
                                       ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.recycling_rounded,
-                                    color: AppColors.white,
-                                    size: 30,
-                                  ),
+                                      child: _buildPin(isSelected),
+                                    ),
+                            ),
+                          );
+                        }).toList(),
+                        builder: (context, markers) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: AppColors.primary,
+                            ),
+                            child: Center(
+                              child: Text(
+                                markers.length.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                           );
-                        }).toList(),
+                        },
+                      ),
+                    ),
+                    MarkerLayer(
+                      markers: [
                         Marker(
                           point: currentLocation!,
-                          width: 40,
-                          height: 40,
-                          child: const Icon(
-                            Icons.my_location,
-                            color: Colors.blue,
-                            size: 30,
+                          width: 80,
+                          height: 80,
+                          child: Pulse(
+                            infinite: true,
+                            child: Center(
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.white,
+                                    width: 4,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blue.withValues(alpha: 0.5),
+                                      blurRadius: 12,
+                                      spreadRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                // Zoom & Location Controls (Left Side)
+
                 Positioned(
-                  left: 20,
-                  top: MediaQuery.of(context).size.height * 0.4,
+                  left: w * 0.05,
+                  top: h * 0.38,
                   child: Column(
                     children: [
                       Container(
@@ -360,21 +666,21 @@ class _MapScreenState extends State<MapScreen> {
                         foregroundColor: AppColors.primary,
                         elevation: 4,
                         onPressed: () {
-                          if (currentLocation != null) {
-                            _mapController.move(currentLocation!, 15);
-                          }
+                          setState(() {
+                            _isTrackingLocation = true;
+                            _searchController.clear();
+                          });
+                          _fetchCurrentLocation();
                         },
                         child: const Icon(Icons.my_location),
                       ),
                     ],
                   ),
                 ),
-
-                // Top Header / Search
                 Positioned(
-                  top: 50,
-                  left: 20,
-                  right: 20,
+                  top: topPad + 12,
+                  left: w * 0.05,
+                  right: w * 0.05,
                   child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: Column(
@@ -420,10 +726,10 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                   ],
                                 ),
-                                child: const Text(
-                                  "خريطة المراكز",
+                                child: Text(
+                                  'map.centers_map'.tr(),
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: w * 0.045,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.textPrimary,
                                   ),
@@ -456,7 +762,7 @@ class _MapScreenState extends State<MapScreen> {
                           )
                         else
                           Container(
-                            height: 50,
+                            height: h * 0.065,
                             decoration: BoxDecoration(
                               color: AppColors.white,
                               borderRadius: BorderRadius.circular(25),
@@ -489,8 +795,8 @@ class _MapScreenState extends State<MapScreen> {
                                     controller: _searchController,
                                     focusNode: _searchFocusNode,
                                     onChanged: _onSearchChanged,
-                                    decoration: const InputDecoration(
-                                      hintText: "أدخل موقعك...",
+                                    decoration: InputDecoration(
+                                      hintText: 'map.enter_your_location'.tr(),
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -523,36 +829,7 @@ class _MapScreenState extends State<MapScreen> {
                               ],
                             ),
                           ),
-                        if (_isSearchExpanded &&
-                            !_isSearching &&
-                            _searchController.text.isNotEmpty &&
-                            _searchResults.isEmpty)
-                          Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Column(
-                              children: [
-                                Icon(
-                                  Icons.location_off,
-                                  color: AppColors.textLight,
-                                  size: 32,
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "لم يتم العثور على مواقع مطابقة",
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+
                         if (_isSearchExpanded && _searchResults.isNotEmpty)
                           Container(
                             margin: const EdgeInsets.only(top: 8),
@@ -560,7 +837,7 @@ class _MapScreenState extends State<MapScreen> {
                               color: AppColors.white,
                               borderRadius: BorderRadius.circular(16),
                             ),
-                            constraints: const BoxConstraints(maxHeight: 280),
+                            constraints: BoxConstraints(maxHeight: h * 0.35),
                             child: ListView.separated(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               shrinkWrap: true,
@@ -588,33 +865,170 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                   ),
                 ),
-
-                // Selected Center Floating Card
                 if (_selectedCenter != null)
                   Positioned(
-                    bottom: 110,
-                    left: 20,
-                    right: 20,
+                    bottom: h * 0.13,
+                    left: w * 0.05,
+                    right: w * 0.05,
                     child: CenterDetailsBottomSheet(
                       centerData: _selectedCenter!,
+                      isFavorite: _favoriteIds.contains(_selectedCenter!['id']),
+                      onFavoriteToggle: () {
+                        final isFav = _favoriteIds.contains(
+                          _selectedCenter!['id'],
+                        );
+                        _favoritesService.toggleFavorite(
+                          _selectedCenter!['id'],
+                          isFav,
+                        );
+                      },
                       onGetDirections: () {
-                        _launchGoogleMaps(
+                        _showNavigationOptions(
                           _selectedCenter!['location'] as LatLng,
                         );
                       },
                     ),
                   ),
                 if (_isLoadingCenters)
-                  const Positioned(
-                    top: 120,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                  Positioned(
+                    top: h * 0.16,
+                    left: w * 0.05,
+                    right: w * 0.05,
+                    child: FadeInDown(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 20,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.95),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                                strokeWidth: 2.5,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'map.searching_nearby_centers'.tr(),
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                else if (_showEmptyStateMessage && currentLocation != null)
+                  Positioned(
+                    top: h * 0.16,
+                    left: w * 0.05,
+                    right: w * 0.05,
+                    child: FadeInDown(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 20,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.95),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.info_outline,
+                              color: AppColors.textSecondary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'map.no_centers_in_range'.tr(),
+                              style: const TextStyle(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
               ],
             ),
+    );
+  }
+
+  Widget _buildPin(bool isSelected) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.white : AppColors.primary,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: isSelected ? AppColors.primary : AppColors.white,
+              width: 2.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.4)
+                    : Colors.black26,
+                blurRadius: isSelected ? 12 : 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.recycling_rounded,
+            color: isSelected ? AppColors.primary : AppColors.white,
+            size: isSelected ? 24 : 20,
+          ),
+        ),
+        Container(
+          width: 3,
+          height: 10,
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primary : AppColors.white,
+            borderRadius: BorderRadius.circular(2),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

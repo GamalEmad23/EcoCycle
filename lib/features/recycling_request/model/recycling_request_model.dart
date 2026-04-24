@@ -9,6 +9,8 @@ class RecyclingRequestModel {
   final String status;
   final DateTime? createdAt;
 
+  final String? imageUrl;
+
   RecyclingRequestModel({
     this.id,
     required this.material,
@@ -17,6 +19,7 @@ class RecyclingRequestModel {
     this.userId,
     this.status = 'pending',
     this.createdAt,
+    this.imageUrl,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,11 +29,17 @@ class RecyclingRequestModel {
       'weight': weight,
       'userId': userId,
       'status': status,
-      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
+      'imageUrl': imageUrl,
+      'createdAt': createdAt != null
+          ? Timestamp.fromDate(createdAt!)
+          : FieldValue.serverTimestamp(),
     };
   }
 
-  factory RecyclingRequestModel.fromMap(Map<String, dynamic> map, String documentId) {
+  factory RecyclingRequestModel.fromMap(
+    Map<String, dynamic> map,
+    String documentId,
+  ) {
     return RecyclingRequestModel(
       id: documentId,
       material: map['material'] ?? '',
@@ -38,6 +47,7 @@ class RecyclingRequestModel {
       weight: (map['weight'] ?? 0).toDouble(),
       userId: map['userId'],
       status: map['status'] ?? 'pending',
+      imageUrl: map['imageUrl'], // 👈 الجديد
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
     );
   }

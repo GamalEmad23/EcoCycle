@@ -1,41 +1,54 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomeLevelCard extends StatelessWidget {
-  const CustomeLevelCard({super.key});
+  const CustomeLevelCard({
+    super.key,
+    required this.points,
+    required this.nextLevelPoints,
+    required this.rankName,
+    required this.nextRankName,
+    required this.rankColor,
+  });
+
+  final double points;
+  final double nextLevelPoints;
+  final String rankName;
+  final String nextRankName;
+  final Color rankColor;
 
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.sizeOf(context).width;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(w * 0.05),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF00E676), Color(0xFF00C853)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+          colors: [AppColors.levelCardStart, AppColors.levelCardEnd],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00E676).withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: AppColors.levelCardStart.withValues(alpha: 0.4),
+            blurRadius: 25,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          /// Top Row: Category and Level Title
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
@@ -43,68 +56,73 @@ class CustomeLevelCard extends StatelessWidget {
                 child: CustomeText(
                   text: "home.excellent_category",
                   textColor: AppColors.white,
-                  fontSize: 12,
+                  fontSize: w * 0.03,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               CustomeText(
                 text: "home.current_level",
-                textColor: AppColors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
+                textColor: AppColors.white.withValues(alpha: 0.9),
+                fontSize: w * 0.035,
+                fontWeight: FontWeight.w500,
               ),
             ],
           ),
-          const SizedBox(height: 6),
-          const Align(
-            alignment: Alignment.centerRight,
-            child: CustomeText(
-              text: "home.golden_member",
-              textColor: AppColors.white,
-              fontWeight: FontWeight.bold,
-            ),
+
+          const SizedBox(height: 8),
+
+          /// Main Rank Name
+          CustomeText(
+            text: rankName,
+            textColor: AppColors.white,
+            fontSize: w * 0.07,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: 20),
+
+          const SizedBox(height: 12),
+
+          /// Points Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   CustomeText(
-                    text: " 3000 ",
+                    text: "${nextLevelPoints.toInt()}",
                     textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontSize: w * 0.035,
+                    fontWeight: FontWeight.bold,
                   ),
+                  const SizedBox(width: 4),
                   CustomeText(
                     text: "home.points_unit",
                     textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontSize: w * 0.035,
                   ),
                 ],
               ),
-
               Row(
                 children: [
                   CustomeText(
-                    text: " 3000 ",
+                    text: "${points.toInt()}",
                     textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontSize: w * 0.035,
+                    fontWeight: FontWeight.bold,
                   ),
+                  const SizedBox(width: 4),
                   CustomeText(
                     text: "home.points_unit",
                     textColor: AppColors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontSize: w * 0.035,
                   ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 10),
+
+          const SizedBox(height: 8),
+
+          /// Progress Bar
           Stack(
             children: [
               Container(
@@ -117,29 +135,34 @@ class CustomeLevelCard extends StatelessWidget {
               ),
               FractionallySizedBox(
                 alignment: Alignment.centerRight,
-                widthFactor: 2450 / 3000,
+                widthFactor: (points / nextLevelPoints).clamp(0.0, 1.0),
                 child: Container(
                   height: 12,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 4,
-                      ),
-                    ],
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          CustomeText(
-            text: "home.points_left",
-            textColor: AppColors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
+
+          const SizedBox(height: 12),
+
+          /// Remaining Points Text
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomeText(
+                text: "home.points_left_to".tr(args: [
+                  (nextLevelPoints - points).toInt().toString(),
+                  nextRankName.tr()
+                ]),
+                textColor: AppColors.white.withValues(alpha: 0.9),
+                fontSize: w * 0.03,
+                fontWeight: FontWeight.w500,
+              ),
+            ],
           ),
         ],
       ),

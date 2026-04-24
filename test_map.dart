@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; import 'package:flutter_map/flutter_map.dart'; import 'package:latlong2/latlong.dart'; void main() { MapController c = MapController(); c.fitCamera(CameraFit.bounds(bounds: LatLngBounds.fromPoints([LatLng(0,0), LatLng(1,1)]), padding: EdgeInsets.all(50))); }

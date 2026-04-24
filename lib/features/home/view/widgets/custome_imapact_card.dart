@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +15,16 @@ class CustomeImapactCard extends StatelessWidget {
   final Color iconColor;
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.sizeOf(context).width;
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(w * 0.04),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: const Color(0xFFF1F5F9)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -35,20 +35,46 @@ class CustomeImapactCard extends StatelessWidget {
         children: [
           Expanded(
             child: Column(
-              mainAxisAlignment: .spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomeText(text: amount.tr() ,fontSize: 22,fontWeight: FontWeight.bold,textColor: AppColors.textPrimary,),
-                CustomeText(text: value.tr() ,fontSize: 22,fontWeight: FontWeight.bold,textColor: AppColors.textPrimary,),
-                CustomeText(text: label.tr() ,fontSize: 12,textColor: AppColors.textGrey,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomeText(
+                      text: amount,
+                      fontSize: w * 0.045,
+                      fontWeight: FontWeight.bold,
+                      textColor: AppColors.textPrimary,
+                    ),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: CustomeText(
+                        text: value,
+                        fontSize: w * 0.035,
+                        fontWeight: FontWeight.bold,
+                        textColor: AppColors.textPrimary,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                CustomeText(
+                  text: label,
+                  fontSize: w * 0.028,
+                  textColor: AppColors.textGrey,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: w * 0.02),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(w * 0.025),
             decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-            child: Icon(icon, color: iconColor, size: 26),
+            child: Icon(icon, color: iconColor, size: w * 0.06),
           ),
         ],
       ),

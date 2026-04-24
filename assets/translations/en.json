@@ -3,17 +3,19 @@
     "title1": "Welcome to EcoCycle",
     "desc1": "Help protect the environment by recycling easily in a smart way.",
     "title2": "Find the nearest center",
+<<<<<<< HEAD
     "desc2": "Use the map to locate nearby recycling centers easily.",
+=======
+    "desc2": "Use the map to locate nearby recycling centers and deliver your waste easily.",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "title3": "Earn points and rewards",
     "desc3": "Track recycling activities and earn rewards"
   },
-
   "buttons": {
     "skip": "Skip",
     "next": "Next",
     "finish": "Finish"
   },
-
   "login": {
     "title": "Login",
     "subtitle": "Sign in to continue",
@@ -27,6 +29,7 @@
     "create_account": "Create Account",
     "success_login": "Login successful"
   },
+<<<<<<< HEAD
 
   "login_validation": {
     "email_required": "Please enter email",
@@ -36,22 +39,41 @@
     "invalid_credentials": "Invalid credentials",
     "user_not_found": "User not found",
     "wrong_password": "Wrong password"
+=======
+  "login_validation": {
+    "email_required": "Please enter your email",
+    "email_invalid": "Please enter a valid email address",
+    "password_required": "Please enter your password",
+    "password_short": "Password must be at least 6 characters",
+    "invalid_credentials": "Invalid email or password",
+    "user_not_found": "No account found with this email",
+    "wrong_password": "Incorrect password"
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
   },
-
   "signup": {
     "title": "Sign Up",
+<<<<<<< HEAD
     "subtitle": "Create your account",
     "name_label": "Name",
     "name_hint": "Enter name",
+=======
+    "subtitle": "Create your account and start your journey toward a cleaner environment",
+    "name_label": "Name",
+    "name_hint": "Enter your name",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "email_label": "Email",
     "email_hint": "example@email.com",
     "password_label": "Password",
     "signup_button": "Sign Up",
+<<<<<<< HEAD
     "have_account": "Already have account?",
+=======
+    "have_account": "Already have an account?",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "login_now": "Login"
   },
-
   "signup_validation": {
+<<<<<<< HEAD
     "name_required": "Name required",
     "name_short": "Min 2 characters",
     "email_required": "Email required",
@@ -67,11 +89,27 @@
   "verification_message": "Check spam folder to verify email",
   "admin_login_message": "Not an admin account",
 
+=======
+    "name_required": "Please enter your name",
+    "name_short": "Name must be at least 2 characters",
+    "email_required": "Please enter your email",
+    "email_invalid": "Please enter a valid email address",
+    "email_already_used": "This email is already in use",
+    "password_required": "Please enter your password",
+    "password_short": "Password must be at least 6 characters",
+    "password_weak": "Password is too weak, try using letters and numbers",
+    "confirm_password_required": "Please confirm your password",
+    "passwords_not_match": "Passwords do not match"
+  },
+  "verification_message": "Check you Spam messages in you gmail to verify your email",
+  "admin_login_message": "You are not Admin",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
   "forgot_password": {
     "title": "Forgot Password",
     "subtitle": "Reset your password",
     "email_label": "Email",
     "email_hint": "example@email.com",
+<<<<<<< HEAD
     "reset_button": "Send reset link",
     "info_message": "Reset link will be sent",
     "back_to_login": "Back to login",
@@ -91,12 +129,41 @@
     "title": "Profile",
     "name": "User",
     "badge": "Gold Member"
+=======
+    "reset_button": "Send Reset Link",
+    "info_message": "A password reset link will be sent to your email.",
+    "back_to_login": "Back to Login",
+    "success": "Check your email to reset your password 📩",
+    "error": "Something went wrong, please try again"
+  },
+  "nav_bar": {
+    "home": "home",
+    "map": "map",
+    "add": "add",
+    "statistic": "statistic",
+    "profile": "profile"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Gamal Emad",
+    "badge": "Gold Member",
+    "upload_success": "Profile picture updated!",
+    "upload_failed": "Upload failed: {}",
+    "select_language": "Select Language",
+    "done": "Done",
+    "rank_beginner": "Beginner",
+    "rank_bronze": "Bronze",
+    "rank_silver": "Silver",
+    "rank_gold": "Gold",
+    "rank_platinum": "Platinum",
+    "rank_diamond": "Diamond"
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
   },
 
   "stats": {
     "points": "Points",
     "recycled": "Recycled",
-    "rank": "Rank"
+    "rank": "Processes"
   },
 
   "actions": {
@@ -110,21 +177,42 @@
   },
 
   "home": {
+<<<<<<< HEAD
     "welcome": "Welcome 👋",
+=======
+    "welcome": "Welcome {} 👋",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "happy_day": "Happy environmental day!",
     "current_level": "Current Level",
     "golden_member": "Gold Member",
     "excellent_category": "Excellent Category",
     "points_unit": "points",
+<<<<<<< HEAD
     "points_left": "{points} points left",
     "find_center": "Find Center",
+=======
+    "points_left": "points left to next level",
+    "points_left_to": "{} points left to reach {}",
+    "beginner": "Beginner",
+    "bronze": "Bronze Member",
+    "silver": "Silver Member",
+    "gold": "Gold Member",
+    "platinum": "Platinum Member",
+    "diamond": "Diamond Member",
+    "find_center": "Find a Center",
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
     "recycle_now": "Recycle Now",
     "impact_summary": "Impact Summary",
     "total_recycled": "Total Recycled",
     "co2_saved": "CO2 Saved",
+    "energy_saved": "Energy Saved",
+    "water_saved": "Water Saved",
     "kg_unit": "kg",
+    "liter_unit": "Liters",
+    "kwh_unit": "kWh",
     "nearby_centers": "Nearby Centers",
     "view_all": "View All",
+<<<<<<< HEAD
     "daily_tip_title": "Daily Tip",
     "daily_tip_content": "Recycling saves energy"
   },
@@ -137,6 +225,80 @@
     "rejected": "Rejected",
     "no_orders": "No Orders Found"
 
+=======
+    "daily_tip_title": "Daily Environmental Tip",
+    "daily_tip_1": "Use reusable shopping bags to reduce plastic waste.",
+    "daily_tip_2": "Turn off the tap while brushing your teeth to save liters of water daily.",
+    "daily_tip_3": "Turn off lights in unused rooms to reduce energy consumption.",
+    "daily_tip_4": "Recycle paper and cardboard to save trees and protect the environment.",
+    "daily_tip_5": "Use public transport or walk to reduce your carbon footprint."
+  },
+  "add_process": {
+    "recycling": "Recycling",
+    "request_sent_success": "Request sent successfully",
+    "select_material": "Select Material",
+    "paper": "Paper",
+    "plastic": "Plastic",
+    "electronics": "Electronics",
+    "metal": "Metal",
+    "center": "Recycling Center",
+    "choose_center": "Choose a center",
+    "estimated_weight": "Estimated Weight",
+    "enter_weight": "Enter weight",
+    "upload_image": "Upload Image",
+    "upload_here": "Upload here",
+    "image_uploaded_success": "Image uploaded successfully",
+    "confirm": "Confirm"
+  },
+  "statistics": {
+    "total_recycled": "Total Recycled",
+    "kg": "kg",
+    "operations_count": "Operations Count",
+    "co2_saved": "CO2 Saved",
+    "this_month": "This month",
+    "Monthly_progress": "Monthly progress",
+    "Last_months": "Last 6 months",
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "latest_activity": "Latest Activity",
+    "view_all": "View All",
+    "paper_waste": "Paper Waste",
+    "plastic_bottles": "Plastic Bottles",
+    "metal_cans": "Metal Cans"
+  },
+  "map": {
+    "search_failed": "Failed to search location: {}",
+    "filter_all": "All",
+    "filter_plastic": "Plastic",
+    "filter_paper": "Paper",
+    "filter_glass": "Glass",
+    "filter_metal": "Metal",
+    "fetch_centers_failed": "Failed to fetch centers: {}",
+    "destination_coords_unavailable": "Destination coordinates not available.",
+    "cannot_open_maps": "Cannot open maps or browser.",
+    "error_opening_maps": "Error opening maps.",
+    "center_coords_unavailable": "Center coordinates not available.",
+    "choose_transport_mode": "Choose transport mode",
+    "driving": "Driving (Car)",
+    "walking": "Walking",
+    "centers_map": "Centers Map",
+    "enter_your_location": "Enter your location...",
+    "searching_nearby_centers": "Searching for nearby centers...",
+    "no_centers_in_range": "No recycling centers in this range",
+    "open_now": "Open Now",
+    "distance": "Distance",
+    "km": "km",
+    "working_hours": "Working Hours",
+    "get_directions": "Get Directions",
+    "enable_location": "Enable Location Access",
+    "location_reason": "We need access to your location to show nearby recycling centers and help you reach them easily.",
+    "allow_location": "Allow Location Access",
+    "not_now": "Not Now"
+>>>>>>> 5c49e9723e158b4fb57c2dc7b19e7fdcf98fda9c
   },
 
   "admin_profile": {
