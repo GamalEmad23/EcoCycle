@@ -130,7 +130,9 @@ class _HomeScreeState extends State<HomeScree> {
                   CustomeLevelCard(
                     points: points,
                     nextLevelPoints: nextLevelPoints,
-                    rankName: "home.$rankName".tr(),
+                    rankName: "home.$rankName",
+                    nextRankName:
+                        "home.${context.read<ProfileCubit>().getNextRank(points)}",
                     rankColor: rankColor,
                   ),
                   SizedBox(height: h * .025),

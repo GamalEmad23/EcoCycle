@@ -151,6 +151,15 @@ class ProfileCubit extends Cubit<ProfileState> {
     return "beginner";
   }
 
+  String getNextRank(double points) {
+    if (points >= 100000) return "diamond"; // Already max
+    if (points >= 50000) return "diamond";
+    if (points >= 20000) return "platinum";
+    if (points >= 10000) return "gold";
+    if (points >= 2000) return "silver";
+    return "bronze";
+  }
+
   String getDailyTip() {
     final tips = [
       "home.daily_tip_1",
