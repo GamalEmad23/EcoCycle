@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -118,9 +120,11 @@ class _MapScreenState extends State<MapScreen> {
             _searchResults = [];
             _isSearching = false;
           });
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('map.search_failed'.tr(args: [e.toString()]))));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('map.search_failed'.tr(args: [e.toString()])),
+            ),
+          );
         }
       }
     });
@@ -307,9 +311,11 @@ class _MapScreenState extends State<MapScreen> {
         setState(() {
           _isLoadingCenters = false;
         });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('map.fetch_centers_failed'.tr(args: [e.toString()]))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('map.fetch_centers_failed'.tr(args: [e.toString()])),
+          ),
+        );
       }
     }
   }
@@ -325,7 +331,7 @@ class _MapScreenState extends State<MapScreen> {
     if (destination == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text('map.destination_coords_unavailable'.tr())),
+          SnackBar(content: Text('map.destination_coords_unavailable'.tr())),
         );
       }
       return;
@@ -351,7 +357,7 @@ class _MapScreenState extends State<MapScreen> {
         if (!launched) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text('map.cannot_open_maps'.tr())),
+              SnackBar(content: Text('map.cannot_open_maps'.tr())),
             );
           }
         }
@@ -359,9 +365,9 @@ class _MapScreenState extends State<MapScreen> {
     } catch (e) {
       debugPrint('Error launching map URL: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text('map.error_opening_maps'.tr())),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('map.error_opening_maps'.tr())));
       }
     }
   }
@@ -369,7 +375,7 @@ class _MapScreenState extends State<MapScreen> {
   void _showNavigationOptions(LatLng? destination) {
     if (destination == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text('map.center_coords_unavailable'.tr())),
+        SnackBar(content: Text('map.center_coords_unavailable'.tr())),
       );
       return;
     }
@@ -377,84 +383,104 @@ class _MapScreenState extends State<MapScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      builder: (sheetCtx) {
+        final bsW = MediaQuery.sizeOf(sheetCtx).width;
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: bsW * 0.06,
+              vertical: bsW * 0.05,
+            ),
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: bsW * 0.10,
+                  height: 4,
+                  margin: EdgeInsets.only(bottom: bsW * 0.05),
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Text(
+                  'map.choose_transport_mode'.tr(),
+                  style: TextStyle(
+                    fontSize: bsW * 0.045,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: bsW * 0.05),
+                ListTile(
+                  leading: Container(
+                    padding: EdgeInsets.all(bsW * 0.025),
+                    decoration: const BoxDecoration(
+                      color: AppColors.lightGreen2,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.directions_car,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  title: Text(
+                    'map.driving'.tr(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: bsW * 0.04,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    _launchNavigation(destination, 'driving');
+                  },
+                ),
+                SizedBox(height: bsW * 0.025),
+                ListTile(
+                  leading: Container(
+                    padding: EdgeInsets.all(bsW * 0.025),
+                    decoration: const BoxDecoration(
+                      color: AppColors.lightGreen2,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.directions_walk,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  title: Text(
+                    'map.walking'.tr(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: bsW * 0.04,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    _launchNavigation(destination, 'walking');
+                  },
+                ),
+                SizedBox(height: bsW * 0.05),
+              ],
+            ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-               Text(
-                'map.choose_transport_mode'.tr(),
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                    color: AppColors.lightGreen2,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.directions_car,
-                    color: AppColors.primary,
-                  ),
-                ),
-                title:  Text(
-                  'map.driving'.tr(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _launchNavigation(destination, 'driving');
-                },
-              ),
-              const SizedBox(height: 10),
-              ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                    color: AppColors.lightGreen2,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.directions_walk,
-                    color: AppColors.primary,
-                  ),
-                ),
-                title:  Text(
-                  'map.walking'.tr(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _launchNavigation(destination, 'walking');
-                },
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final double h = size.height;
+    final double w = size.width;
+    final double topPad = MediaQuery.of(context).padding.top;
+
     if (hasPermission == null) {
       return Scaffold(
         backgroundColor: AppColors.white,
@@ -587,8 +613,8 @@ class _MapScreenState extends State<MapScreen> {
                 ),
 
                 Positioned(
-                  left: 20,
-                  top: MediaQuery.of(context).size.height * 0.4,
+                  left: w * 0.05,
+                  top: h * 0.38,
                   child: Column(
                     children: [
                       Container(
@@ -652,9 +678,9 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 50,
-                  left: 20,
-                  right: 20,
+                  top: topPad + 12,
+                  left: w * 0.05,
+                  right: w * 0.05,
                   child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: Column(
@@ -700,10 +726,10 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                   ],
                                 ),
-                                child:  Text(
+                                child: Text(
                                   'map.centers_map'.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: w * 0.045,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.textPrimary,
                                   ),
@@ -736,7 +762,7 @@ class _MapScreenState extends State<MapScreen> {
                           )
                         else
                           Container(
-                            height: 50,
+                            height: h * 0.065,
                             decoration: BoxDecoration(
                               color: AppColors.white,
                               borderRadius: BorderRadius.circular(25),
@@ -769,7 +795,7 @@ class _MapScreenState extends State<MapScreen> {
                                     controller: _searchController,
                                     focusNode: _searchFocusNode,
                                     onChanged: _onSearchChanged,
-                                    decoration:  InputDecoration(
+                                    decoration: InputDecoration(
                                       hintText: 'map.enter_your_location'.tr(),
                                       border: InputBorder.none,
                                     ),
@@ -811,7 +837,7 @@ class _MapScreenState extends State<MapScreen> {
                               color: AppColors.white,
                               borderRadius: BorderRadius.circular(16),
                             ),
-                            constraints: const BoxConstraints(maxHeight: 280),
+                            constraints: BoxConstraints(maxHeight: h * 0.35),
                             child: ListView.separated(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               shrinkWrap: true,
@@ -841,9 +867,9 @@ class _MapScreenState extends State<MapScreen> {
                 ),
                 if (_selectedCenter != null)
                   Positioned(
-                    bottom: 110,
-                    left: 20,
-                    right: 20,
+                    bottom: h * 0.13,
+                    left: w * 0.05,
+                    right: w * 0.05,
                     child: CenterDetailsBottomSheet(
                       centerData: _selectedCenter!,
                       isFavorite: _favoriteIds.contains(_selectedCenter!['id']),
@@ -865,9 +891,9 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 if (_isLoadingCenters)
                   Positioned(
-                    top: 130,
-                    left: 20,
-                    right: 20,
+                    top: h * 0.16,
+                    left: w * 0.05,
+                    right: w * 0.05,
                     child: FadeInDown(
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -897,7 +923,7 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             ),
                             const SizedBox(width: 12),
-                             Text(
+                            Text(
                               'map.searching_nearby_centers'.tr(),
                               style: const TextStyle(
                                 color: AppColors.primary,
@@ -912,9 +938,9 @@ class _MapScreenState extends State<MapScreen> {
                   )
                 else if (_showEmptyStateMessage && currentLocation != null)
                   Positioned(
-                    top: 130,
-                    left: 20,
-                    right: 20,
+                    top: h * 0.16,
+                    left: w * 0.05,
+                    right: w * 0.05,
                     child: FadeInDown(
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -940,7 +966,7 @@ class _MapScreenState extends State<MapScreen> {
                               color: AppColors.textSecondary,
                             ),
                             const SizedBox(width: 8),
-                             Text(
+                            Text(
                               'map.no_centers_in_range'.tr(),
                               style: const TextStyle(
                                 color: AppColors.textSecondary,
