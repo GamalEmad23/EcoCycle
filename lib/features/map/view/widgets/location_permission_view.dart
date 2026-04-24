@@ -1,5 +1,6 @@
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 
 class LocationPermissionView extends StatelessWidget {
   final VoidCallback onAllowPressed;
@@ -36,19 +37,19 @@ class LocationPermissionView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 48),
-            const Text(
-              "تفعيل الوصول للموقع",
-              style: TextStyle(
+             Text(
+              'map.enable_location'.tr(),
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              "نحتاج إلى الوصول لموقعك الجغرافي لنتمكن من عرض مراكز إعادة التدوير القريبة منك وتسهيل وصولك إليها.",
+             Text(
+              'map.location_reason'.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: AppColors.textSecondary,
@@ -68,9 +69,9 @@ class LocationPermissionView extends StatelessWidget {
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  "السماح بالوصول للموقع",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                child:  Text(
+                  'map.allow_location'.tr(),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -86,9 +87,9 @@ class LocationPermissionView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  "ليس الآن",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                child:  Text(
+                  'map.not_now'.tr(),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),

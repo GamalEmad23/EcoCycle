@@ -1,7 +1,7 @@
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'dart:ui';
 
 class CenterDetailsBottomSheet extends StatelessWidget {
@@ -91,19 +91,13 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            centerData['imgUrl'],
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 600),
+                            child: Image.asset(
+                              'assets/images/card.png',
                               width: 100,
                               height: 100,
-                              color: AppColors.lightGreen2,
-                              child: const Icon(
-                                Icons.recycling,
-                                color: AppColors.primary,
-                              ),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -124,9 +118,9 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                const Text(
-                                  "مفتوح الآن",
-                                  style: TextStyle(
+                                 Text(
+                                  'map.open_now'.tr(),
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: AppColors.primary,
                                     fontWeight: FontWeight.w600,
@@ -178,15 +172,15 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "المسافة",
-                                      style: TextStyle(
+                                    Text(
+                                      'map.distance'.tr(),
+                                      style: const TextStyle(
                                         fontSize: 11,
                                         color: AppColors.textLight,
                                       ),
                                     ),
                                     Text(
-                                      "${centerData['distance']} كم",
+                                      "${centerData['distance']} ${'map.km'.tr()}",
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,
@@ -198,9 +192,9 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "ساعات العمل",
-                                      style: TextStyle(
+                                    Text(
+                                      'map.working_hours'.tr(),
+                                      style: const TextStyle(
                                         fontSize: 11,
                                         color: AppColors.textLight,
                                       ),
@@ -251,12 +245,12 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         highlightColor: AppColors.white.withValues(alpha: 0.1),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.near_me_rounded, color: AppColors.white),
-                            SizedBox(width: 8),
-                            Text(
-                              "الحصول على الاتجاهات",
-                              style: TextStyle(
+                          children: [
+                            const Icon(Icons.near_me_rounded, color: AppColors.white),
+                            const SizedBox(width: 8),
+                             Text(
+                              'map.get_directions'.tr(),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.white,
