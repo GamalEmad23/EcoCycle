@@ -1,16 +1,28 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eco_cycle/features/recycling_request/model/recycling_request_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:image/image.dart' as img;
 
 part 'recycling_request_state.dart';
 
 class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
-  RecyclingRequestCubit() : super(RecyclingRequestInitial());
+  RecyclingRequestCubit() : super(RecyclingRequestInitial()) {
+    loadModel();
+  }
+
+  String predictionResult = '';
+  double confidence = 0.0;
+  bool isModelLoaded = false;
+  Interpreter? _interpreter;
+  List<String>? _labels;
 
   String selectedMaterial = 'بلاستيك';
   String? selectedCenter;
@@ -44,6 +56,154 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
     }
   }
 
+  Future<void> loadModel() async {
+    print("DEBUG: Loading model...");
+    try {
+      _interpreter = await Interpreter.fromAsset(
+        'assets/model/ecocycle.tflite',
+      );
+      print(
+        "DEBUG: Interpreter loaded. Input shape: ${_interpreter?.getInputTensor(0).shape}",
+      );
+      final labelData = await rootBundle.loadString('assets/model/labels.txt');
+      _labels = labelData
+          .split('\n')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+      print("DEBUG: Labels loaded: $_labels");
+      isModelLoaded = true;
+    } catch (e) {
+      print("DEBUG: Failed to load model: $e");
+    }
+  }
+
+  Future<void> runModelOnImage(File file) async {
+    if (!isModelLoaded || _interpreter == null || _labels == null) {
+      print("Model not loaded or labels missing");
+      return;
+    }
+
+    try {
+      var inputTensor = _interpreter!.getInputTensor(0);
+      var outputTensor = _interpreter!.getOutputTensor(0);
+
+      print("Input type: ${inputTensor.type}");
+      print("Output type: ${outputTensor.type}");
+
+      var inputShape = inputTensor.shape;
+      int height = inputShape[1];
+      int width = inputShape[2];
+
+      final imageBytes = await file.readAsBytes();
+      img.Image? oriImage = img.decodeImage(imageBytes);
+
+      if (oriImage == null) {
+        print("Failed to decode image");
+        return;
+      }
+
+      img.Image resizedImage = img.copyResize(
+        oriImage,
+        width: width,
+        height: height,
+        interpolation: img.Interpolation.linear,
+      );
+
+      bool isQuantized = inputTensor.type == TensorType.uint8;
+
+      var bufferIndex = 0;
+
+      // Use List type to ensure []= operator and reshape are available
+      final List inputFlat = isQuantized
+          ? Uint8List(height * width * 3)
+          : Float32List(height * width * 3);
+
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          final pixel = resizedImage.getPixel(x, y);
+
+          if (isQuantized) {
+            // uint8 model
+            inputFlat[bufferIndex++] = pixel.r.toInt();
+            inputFlat[bufferIndex++] = pixel.g.toInt();
+            inputFlat[bufferIndex++] = pixel.b.toInt();
+          } else {
+            // MobileNetV2 preprocessing [-1,1]
+            inputFlat[bufferIndex++] = (pixel.r.toDouble() / 127.5) - 1;
+            inputFlat[bufferIndex++] = (pixel.g.toDouble() / 127.5) - 1;
+            inputFlat[bufferIndex++] = (pixel.b.toDouble() / 127.5) - 1;
+          }
+        }
+      }
+
+      var input = inputFlat.reshape([1, height, width, 3]);
+
+      int numClasses = outputTensor.shape[1];
+
+      var output = Float32List(numClasses).reshape([1, numClasses]);
+
+      if (outputTensor.type == TensorType.uint8) {
+        var outputUint8 = Uint8List(numClasses).reshape([1, numClasses]);
+
+        _interpreter!.run(input, outputUint8);
+
+        // 🔥 فك الـ quantization صح
+        var scale = outputTensor.params.scale;
+        var zeroPoint = outputTensor.params.zeroPoint;
+
+        for (int i = 0; i < numClasses; i++) {
+          output[0][i] = (outputUint8[0][i] - zeroPoint) * scale;
+        }
+      } else {
+        _interpreter!.run(input, output);
+      }
+
+      print("Model Output Scores: ${output[0]}");
+
+      // 🔥 اختيار أعلى قيمة
+      double maxConfidence = -1;
+      int maxIndex = -1;
+
+      for (int i = 0; i < numClasses; i++) {
+        if (output[0][i] > maxConfidence) {
+          maxConfidence = output[0][i];
+          maxIndex = i;
+        }
+      }
+
+      if (maxIndex != -1) {
+        String rawLabel = _labels![maxIndex].toLowerCase();
+        String label = rawLabel.split(' ').last;
+
+        print("Predicted Label: $label");
+        print("Confidence: $maxConfidence");
+
+        confidence = maxConfidence * 100;
+
+        if (label.contains('paper')) {
+          predictionResult = 'ورق';
+          selectMaterial('ورق');
+        } else if (label.contains('plastic')) {
+          predictionResult = 'بلاستيك';
+          selectMaterial('بلاستيك');
+        } else if (label.contains('metal')) {
+          predictionResult = 'معدن';
+          selectMaterial('معدن');
+        } else if (label.contains('electronics')) {
+          predictionResult = 'إلكترونيات';
+          selectMaterial('إلكترونيات');
+        } else {
+          predictionResult = label;
+        }
+
+        emit(RecyclingRequestUpdated());
+      }
+    } catch (e) {
+      print("Inference error: $e");
+    }
+  }
+
   void selectMaterial(String material) {
     selectedMaterial = material;
     emit(RecyclingRequestUpdated());
@@ -68,6 +228,7 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       if (pickedFile != null) {
         image = File(pickedFile.path);
         emit(RecyclingRequestUpdated());
+        await runModelOnImage(image!);
       }
     } catch (e) {
       emit(RecyclingRequestError('حدث خطأ أثناء اختيار الصورة'));
@@ -107,8 +268,12 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
     try {
       final user = FirebaseAuth.instance.currentUser;
+      print("DEBUG: submitRequest - Current User: ${user?.uid}");
+
       if (user == null) {
-        throw Exception('User must be logged in to create a request');
+        throw Exception(
+          'User must be logged in to create a request (User is null)',
+        );
       }
 
       String? imageUrl;
@@ -140,5 +305,11 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
     } catch (e) {
       emit(RecyclingRequestError('حدث خطأ أثناء تقديم الطلب: ${e.toString()}'));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _interpreter?.close();
+    return super.close();
   }
 }

@@ -214,6 +214,40 @@ class _RecyclingRequestView extends StatelessWidget {
                   ),
                 ),
 
+                if (cubit.image != null && cubit.predictionResult.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.shade200),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'تم التعرف على: ${cubit.predictionResult}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'نسبة الدقة: ${cubit.confidence.toStringAsFixed(1)}%',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.green.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                 const SizedBox(height: 40),
 
                 /// BUTTON
