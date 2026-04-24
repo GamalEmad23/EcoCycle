@@ -6,7 +6,7 @@ import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_button.dart';
 import 'package:eco_cycle/core/widgets/custome_snak_bar.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
-import 'package:eco_cycle/features/admin_orders/view/orders_screen.dart';
+import 'package:eco_cycle/features/admin_nav_bar/admin_nav_bar.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/sign_up_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
@@ -55,10 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadiusGeometry.circular(15),
-                          child: Image.asset("assets/authImages/login.png", height: h*.18,width: double.infinity, fit: BoxFit.cover,),
+                          child: Image.asset(
+                            "assets/authImages/login.png",
+                            height: h * .18,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-          
+
                       /// Login Text
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: w * .04),
@@ -68,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-          
+
                       /// Login Subtitle
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -81,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-          
+
                       /// Email Text
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -94,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-          
+
                       /// Email TextFormField
                       CustomeTextFormField(
                         controller: _email,
@@ -114,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           FocusScope.of(context).nextFocus();
                         },
                       ),
-          
+
                       /// Password Text
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -127,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-          
+
                       /// Password lTextFormField
                       CustomeTextFormField(
                         controller: _password,
@@ -159,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           FocusScope.of(context).nextFocus();
                         },
                       ),
-          
+
                       /// forget password text
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: w * .025),
@@ -180,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: h * .025),
-          
+
                       /// Login Button
                       BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
@@ -196,11 +201,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               message: "login.success_login".tr(),
                               backgroundColor: AppColors.primary,
                             );
-          
+
                             if (state.isAdmin) {
                               NavigateHelper.pushAndRemoveUntil(
                                 context,
-                                OrdersScreen(),
+                                AdminNavBar(),
                               );
                             } else {
                               NavigateHelper.pushAndRemoveUntil(
@@ -233,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       SizedBox(height: h * .02),
-          
+
                       /// or text
                       Row(
                         mainAxisAlignment: .spaceEvenly,
@@ -252,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       SizedBox(height: h * .025),
-          
+
                       /// Google button
                       BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
@@ -268,6 +273,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               message: "login.success_login".tr(),
                               backgroundColor: AppColors.primary,
                             );
+
+                            if (state.isAdmin) {
+                              NavigateHelper.pushAndRemoveUntil(
+                                context,
+                                const AdminNavBar(),
+                              );
+                            } else {
+                              NavigateHelper.pushAndRemoveUntil(
+                                context,
+                                const NavBar(),
+                              );
+                            }
                           }
                         },
                         builder: (context, state) {
@@ -280,10 +297,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   await context
                                       .read<AuthCubit>()
                                       .signInWithGoogle();
-                                  NavigateHelper.pushAndRemoveUntil(
-                                    context,
-                                    NavBar(),
-                                  );
                                 },
                                 btnText: (state is googleLoginLoading)
                                     ? CircularProgressIndicator(
@@ -309,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       SizedBox(height: h * .019),
-          
+
                       /// Don't have account
                       Row(
                         mainAxisAlignment: .center,

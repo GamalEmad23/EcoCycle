@@ -48,8 +48,14 @@ class _MapScreenState extends State<MapScreen> {
   bool _isTrackingLocation = true;
   bool _isInitialLoad = true;
 
-  String _selectedFilter = 'الكل';
-  final List<String> _filters = ['الكل', 'بلاستيك', 'ورق', 'زجاج', 'معدن'];
+  String _selectedFilter = 'map.filter_all';
+  final List<String> _filters = [
+    'map.filter_all',
+    'map.filter_plastic',
+    'map.filter_paper',
+    'map.filter_glass',
+    'map.filter_metal',
+  ];
 
   List<String> _favoriteIds = [];
   final FavoritesService _favoritesService = FavoritesService();
@@ -78,17 +84,16 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   List<Map<String, dynamic>> get _filteredCenters {
-    if (_selectedFilter == 'الكل') return _centers;
+    if (_selectedFilter == 'map.filter_all') return _centers;
     return _centers.where((center) {
       final materials = (center['materials'] as String?)?.toLowerCase() ?? '';
       String searchKeyword = '';
-      if (_selectedFilter == 'بلاستيك') searchKeyword = 'plastic';
-      if (_selectedFilter == 'ورق') searchKeyword = 'paper';
-      if (_selectedFilter == 'زجاج') searchKeyword = 'glass';
-      if (_selectedFilter == 'معدن') searchKeyword = 'metal';
+      if (_selectedFilter == 'map.filter_plastic') searchKeyword = 'plastic';
+      if (_selectedFilter == 'map.filter_paper') searchKeyword = 'paper';
+      if (_selectedFilter == 'map.filter_glass') searchKeyword = 'glass';
+      if (_selectedFilter == 'map.filter_metal') searchKeyword = 'metal';
 
-      return materials.contains(searchKeyword) ||
-          materials.contains(_selectedFilter);
+      return materials.contains(searchKeyword);
     }).toList();
   }
 

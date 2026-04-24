@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class UsersScreen extends StatefulWidget {
@@ -62,7 +63,7 @@ class _UsersScreenState extends State<UsersScreen> {
       backgroundColor: const Color(0xffF5F6F8),
 
       appBar: AppBar(
-        title: const Text("إدارة المستخدمين"),
+        title: Text("admin_profile.manage_users_title".tr()),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -81,9 +82,9 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
               child: TextField(
                 onChanged: search,
-                decoration: const InputDecoration(
-                  hintText: "ابحث عن مستخدم...",
-                  prefixIcon: Icon(Icons.search),
+                decoration: InputDecoration(
+                  hintText: "admin_profile.search_user".tr(),
+                  prefixIcon: const Icon(Icons.search),
                   border: InputBorder.none,
                 ),
               ),
@@ -140,7 +141,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              user["isActive"] ? "نشط" : "محظور",
+                              user["isActive"] ? "admin_profile.active".tr() : "admin_profile.blocked".tr(),
                               style: TextStyle(
                                 color: user["isActive"]
                                     ? Colors.green

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../admin_orders/view/orders_screen.dart';
 import '../admin_profile/view/view/admin_profile_screen.dart';
@@ -29,14 +30,14 @@ class _AdminNavBarState extends State<AdminNavBar> {
             currentIndex = index;
           });
         },
-        items: const [
+        items:  [
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
+            icon:  Icon(Icons.person),
+            label: "nav_bar.profile".tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: "Orders",
+            icon:  Icon(Icons.list),
+            label: "orders.title".tr(),
           ),
         ],
       ),

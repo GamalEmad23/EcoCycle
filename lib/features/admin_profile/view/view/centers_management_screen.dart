@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class RecyclingCentersScreen extends StatelessWidget {
       backgroundColor: const Color(0xffF5F6F8),
 
       appBar: AppBar(
-        title: const Text("إدارة مراكز إعادة التدوير"),
+        title: Text("admin_profile.manage_centers_title".tr()),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -27,10 +28,10 @@ class RecyclingCentersScreen extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const TextField(
+              child: TextField(
                 decoration: InputDecoration(
-                  hintText: "ابحث عن مركز...",
-                  prefixIcon: Icon(Icons.search),
+                  hintText: "admin_profile.search_center".tr(),
+                  prefixIcon: const Icon(Icons.search),
                   border: InputBorder.none,
                 ),
               ),
@@ -52,8 +53,8 @@ class RecyclingCentersScreen extends StatelessWidget {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text("لا يوجد مراكز حالياً"),
+                    return Center(
+                      child: Text("admin_profile.no_centers_found".tr()),
                     );
                   }
 

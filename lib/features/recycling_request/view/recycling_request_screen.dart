@@ -128,7 +128,7 @@ class _RecyclingRequestView extends StatelessWidget {
                 if (cubit.isLoadingCenters)
                   const Center(child: CircularProgressIndicator())
                 else if (cubit.centers.isEmpty)
-                  const Center(child: Text("No centers available"))
+                  Center(child: Text("common.no_centers".tr()))
                 else
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

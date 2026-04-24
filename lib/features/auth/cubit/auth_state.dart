@@ -41,7 +41,10 @@ final class ResetPasswordFailure extends AuthState {
 
 final class googleLoginInitial extends AuthState {}
 final class googleLoginLoading extends AuthState {}
-final class googleLoginSuccess extends AuthState {}
+final class googleLoginSuccess extends AuthState {
+  final bool isAdmin;
+  googleLoginSuccess({required this.isAdmin});
+}
 final class googleLoginFailure extends AuthState {
   final String message;
 

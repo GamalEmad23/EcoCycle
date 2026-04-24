@@ -116,7 +116,10 @@ class AuthCubit extends Cubit<AuthState> {
         "image": userCredential.user!.photoURL,
       }, SetOptions(merge: true));
 
-      emit(googleLoginSuccess());
+      final isAdmin = userCredential.user?.email == "emadg6139@gmail.com" ||
+          userCredential.user?.email == "ahmedsorour628@gmail.com";
+
+      emit(googleLoginSuccess(isAdmin: isAdmin));
     } catch (e) {
       emit(googleLoginFailure(message: e.toString()));
     }

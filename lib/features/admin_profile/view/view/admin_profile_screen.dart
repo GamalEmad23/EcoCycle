@@ -46,7 +46,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
       body: SafeArea(
         child: BlocBuilder<AdminCubit, AdminState>(
           builder: (context, state) {
-
             if (state is AdminLoading) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -63,7 +62,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: const BoxDecoration(
@@ -75,8 +73,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       ),
                       child: Column(
                         children: [
-
-
                           const SizedBox(height: 10),
 
                           GestureDetector(
@@ -85,26 +81,31 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
                               final picker = ImagePicker();
                               final picked = await picker.pickImage(
-                                  source: ImageSource.gallery);
+                                source: ImageSource.gallery,
+                              );
 
                               if (picked != null) {
                                 final file = File(picked.path);
 
                                 final url = await cubit.uploadImage(
-                                    file, user.uid);
+                                  file,
+                                  user.uid,
+                                );
 
                                 if (url != null) {
-                                  await cubit.updateAdminImage(
-                                      user.uid, url);
+                                  await cubit.updateAdminImage(user.uid, url);
                                 }
                               }
                             },
                             child: CircleAvatar(
                               radius: 40,
-                              backgroundImage: (admin.image != null && admin.image!.isNotEmpty)
+                              backgroundImage:
+                                  (admin.image != null &&
+                                      admin.image!.isNotEmpty)
                                   ? NetworkImage(admin.image!)
                                   : null,
-                              child: (admin.image == null || admin.image!.isEmpty)
+                              child:
+                                  (admin.image == null || admin.image!.isEmpty)
                                   ? const Icon(Icons.person)
                                   : null,
                             ),
@@ -123,7 +124,9 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 5),
+                              horizontal: 12,
+                              vertical: 5,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green.shade100,
                               borderRadius: BorderRadius.circular(20),
@@ -170,8 +173,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
                     sectionWidget(
                       onTap: () {
-                        NavigateHelper.push(
-                            context, const UsersScreen());
+                        NavigateHelper.push(context, const UsersScreen());
                       },
                       icon: Icons.people,
                       title: "admin_profile.manage_users".tr(),
@@ -181,7 +183,9 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                     sectionWidget(
                       onTap: () {
                         NavigateHelper.push(
-                            context, const RecyclingCentersScreen());
+                          context,
+                          const RecyclingCentersScreen(),
+                        );
                       },
                       icon: Icons.recycling,
                       title: "admin_profile.recycling_centers".tr(),
@@ -201,58 +205,46 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(20),
-                              child: BlocBuilder<ProfileCubit, ProfileState>(
-                                builder: (context, state) {
-                                  if (state is ProfileLanguageState) {
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-
-                                        Text(
-                                          "admin_profile.select_language".tr(),
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-
-                                        const SizedBox(height: 20),
-
-                                        CustomeLangCard(
-                                          title: "admin_profile.english".tr(),
-                                          icon: Icons.language,
-                                          selected: state.langCode == "en",
-                                          onTap: () {
-                                            context
-                                                .read<ProfileCubit>()
-                                                .changeLanguage(context, "en");
-                                          },
-                                        ),
-
-                                        const SizedBox(height: 10),
-
-                                        CustomeLangCard(
-                                          title: "admin_profile.arabic".tr(),
-                                          icon: Icons.language,
-                                          selected: state.langCode == "ar",
-                                          onTap: () {
-                                            context
-                                                .read<ProfileCubit>()
-                                                .changeLanguage(context, "ar");
-                                          },
-                                        ),
-
-                                        const SizedBox(height: 20),
-
-                                        ElevatedButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: Text("admin_profile.done".tr()),
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                  return const SizedBox();
-                                },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "admin_profile.select_language".tr(),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  CustomeLangCard(
+                                    title: "actions.en".tr(),
+                                    icon: Icons.language,
+                                    selected:
+                                        context.locale.languageCode == "en",
+                                    onTap: () async {
+                                      await context
+                                          .read<ProfileCubit>()
+                                          .changeLanguage(context, "en");
+                                    },
+                                  ),
+                                  const SizedBox(height: 10),
+                                  CustomeLangCard(
+                                    title: "actions.ar".tr(),
+                                    icon: Icons.language,
+                                    selected:
+                                        context.locale.languageCode == "ar",
+                                    onTap: () async {
+                                      await context
+                                          .read<ProfileCubit>()
+                                          .changeLanguage(context, "ar");
+                                    },
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("admin_profile.done".tr()),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -266,7 +258,9 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       onTap: () async {
                         await context.read<AuthCubit>().Signout();
                         NavigateHelper.pushAndRemoveUntil(
-                            context, const LoginScreen());
+                          context,
+                          const LoginScreen(),
+                        );
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 16),

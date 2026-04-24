@@ -1,10 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/features/admin_nav_bar/admin_nav_bar.dart';
+import 'package:eco_cycle/features/admin_profile/admin_cubit.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
+import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 import 'package:eco_cycle/features/splash_screen/view/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'firebase_options.dart';
@@ -14,6 +18,7 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   runApp(
     EasyLocalization(
@@ -24,6 +29,8 @@ void main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(create: (context) => NavBarCubit()),
+          BlocProvider(create: (context) => AdminCubit()),
           BlocProvider(
             create: (context) => ProfileCubit()..getSavedLang(context),
             child: Container(),
@@ -68,7 +75,9 @@ class _MyAppState extends State<MyApp> {
           final user = snapshot.data;
 
           if (user != null && user.emailVerified) {
-            return const NavBar();
+            final isAdmin = user.email == "emadg6139@gmail.com" ||
+                user.email == "ahmedsorour628@gmail.com";
+            return isAdmin ? const AdminNavBar() : const NavBar();
           }
 
           return const SplashScreen();

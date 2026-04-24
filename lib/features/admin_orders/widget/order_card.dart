@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,11 +24,11 @@ class OrderCard extends StatelessWidget {
   String getStatusText() {
     switch (order.status) {
       case "accepted":
-        return "Accepted";
+        return "orders.accepted".tr();
       case "rejected":
-        return "Rejected";
+        return "orders.rejected".tr();
       default:
-        return "Pending";
+        return "orders.pending".tr();
     }
   }
 
@@ -68,8 +69,8 @@ class OrderCard extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          Text("Material: ${order.material}"),
-          Text("Weight: ${order.weight} KG"),
+          Text("${"admin_orders.material".tr()}: ${order.material}"),
+          Text("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
 
           const SizedBox(height: 10),
 
@@ -90,7 +91,7 @@ class OrderCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    child: const Text("Accept"),
+                    child: Text("admin_orders.accept".tr()),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -108,7 +109,7 @@ class OrderCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
-                    child: const Text("Reject"),
+                    child: Text("admin_orders.reject".tr()),
                   ),
                 ),
               ],
