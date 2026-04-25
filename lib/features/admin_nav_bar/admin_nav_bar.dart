@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../admin_orders/view/orders_screen.dart';
-import '../admin_profile/view/view/admin_profile_screen.dart';
+import '../admin_profile/view/admin_profile_screen.dart';
 
 class AdminNavBar extends StatefulWidget {
   const AdminNavBar({super.key});

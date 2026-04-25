@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/admin_nav_bar/admin_nav_bar.dart';
-import 'package:eco_cycle/features/admin_profile/admin_cubit.dart';
+import 'package:eco_cycle/features/admin_profile/cubit/admin_cubit.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';

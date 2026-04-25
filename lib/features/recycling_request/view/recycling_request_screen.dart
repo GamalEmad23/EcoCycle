@@ -3,9 +3,9 @@ import 'package:eco_cycle/features/recycling_request/cubit/recycling_request_cub
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../widgets/material_card_widget.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_input_field.dart';
+import 'widgets/material_card_widget.dart';
+import 'widgets/custom_button.dart';
+import 'widgets/custom_input_field.dart';
 
 class RecyclingRequestScreen extends StatelessWidget {
   const RecyclingRequestScreen({super.key});

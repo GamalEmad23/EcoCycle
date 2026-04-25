@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../order_cubit.dart';
-import '../widget/order_card.dart';
+import '../cubit/order_cubit.dart';
+import 'widget/order_card.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});

@@ -55,7 +55,8 @@ class CustomeHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     CustomeText(
-                      text: "home.welcome".tr(args: [userName]),
+                      text:
+                          "${"home.welcome".tr().replaceAll("👋", "").trim()} $userName 👋",
                       fontSize: w * 0.045, // Responsive font size
                       fontWeight: FontWeight.bold,
                       maxLines: 1,
@@ -89,7 +90,7 @@ class CustomeHeader extends StatelessWidget {
                   backgroundImage: imagePath.isNotEmpty
                       ? NetworkImage(imagePath)
                       : const AssetImage("assets/images/Margin.png")
-                          as ImageProvider,
+                            as ImageProvider,
                 ),
               ),
             ],

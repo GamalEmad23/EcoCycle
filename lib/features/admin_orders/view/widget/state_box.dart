@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/themes/app_colors.dart';
-import '../../../core/widgets/custome_text.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../../../core/widgets/custome_text.dart';
 
 class StatBox extends StatelessWidget {
   final String title;

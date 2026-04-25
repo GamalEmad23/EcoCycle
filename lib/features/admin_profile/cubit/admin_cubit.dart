@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'model/admin_model.dart';
+import '../model/admin_model.dart';
 
 part 'admin_state.dart';
 

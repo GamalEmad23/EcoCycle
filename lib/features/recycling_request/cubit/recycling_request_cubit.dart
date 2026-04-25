@@ -148,7 +148,6 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
         _interpreter!.run(input, outputUint8);
 
-        // 🔥 فك الـ quantization صح
         var scale = outputTensor.params.scale;
         var zeroPoint = outputTensor.params.zeroPoint;
 
@@ -161,7 +160,6 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
       print("Model Output Scores: ${output[0]}");
 
-      // 🔥 اختيار أعلى قيمة
       double maxConfidence = -1;
       int maxIndex = -1;
 
@@ -287,7 +285,7 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
         center: selectedCenter,
         weight: double.tryParse(weight) ?? 0.0,
         userId: user.uid,
-        imageUrl: imageUrl, // 👈 الجديد
+        imageUrl: imageUrl, 
       );
 
       await FirebaseFirestore.instance

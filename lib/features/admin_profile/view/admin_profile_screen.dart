@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:eco_cycle/core/widgets/custome_button.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
-import 'package:eco_cycle/features/admin_profile/view/view/centers_management_screen.dart';
-import 'package:eco_cycle/features/admin_profile/view/view/users_management_screen.dart';
+import 'package:eco_cycle/features/admin_profile/view/centers_management_screen.dart';
+import 'package:eco_cycle/features/admin_profile/view/users_management_screen.dart';
 import 'package:eco_cycle/features/admin_profile/view/widgets/section_widget.dart';
-import 'package:eco_cycle/features/admin_orders/widget/state_box.dart';
+import 'package:eco_cycle/features/admin_orders/view/widget/state_box.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:eco_cycle/features/profile/view/widgets/custome_lang_card.dart';
@@ -14,10 +15,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../../../../core/helper/navigate_helper/navigate_helper.dart';
-import '../../../../core/themes/app_colors.dart';
-import '../../../profile/cubit/cubit/profile_cubit.dart';
-import '../../admin_cubit.dart';
+import '../../../core/helper/navigate_helper/navigate_helper.dart';
+import '../../../core/themes/app_colors.dart';
+import '../../profile/cubit/cubit/profile_cubit.dart';
+import '../cubit/admin_cubit.dart';
 
 class AdminProfileScreen extends StatefulWidget {
   const AdminProfileScreen({super.key});
@@ -34,7 +35,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      context.read<AdminCubit>().getAdminData(user?.uid ?? "");    }
+      context.read<AdminCubit>().getAdminData(user?.uid ?? "");
+    }
   }
 
   @override
@@ -196,54 +198,82 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       title: "admin_profile.language".tr(),
                       subtitle: "admin_profile.change_language".tr(),
                       onTap: () {
+                        final profileCubit = context.read<ProfileCubit>();
                         showDialog(
                           context: context,
-                          builder: (context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "admin_profile.select_language".tr(),
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                          builder: (dialogContext) => StatefulBuilder(
+                            builder: (dialogContext, setDialogState) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              backgroundColor: Colors.grey.shade100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    /// Title
+                                    Text(
+                                      'admin_profile.select_language'.tr(),
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade800,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  CustomeLangCard(
-                                    title: "actions.en".tr(),
-                                    icon: Icons.language,
-                                    selected:
-                                        context.locale.languageCode == "en",
-                                    onTap: () async {
-                                      await context
-                                          .read<ProfileCubit>()
-                                          .changeLanguage(context, "en");
-                                    },
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CustomeLangCard(
-                                    title: "actions.ar".tr(),
-                                    icon: Icons.language,
-                                    selected:
-                                        context.locale.languageCode == "ar",
-                                    onTap: () async {
-                                      await context
-                                          .read<ProfileCubit>()
-                                          .changeLanguage(context, "ar");
-                                    },
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text("admin_profile.done".tr()),
-                                  ),
-                                ],
+
+                                    const SizedBox(height: 20),
+
+                                    /// English
+                                    CustomeLangCard(
+                                      title: 'actions.en'.tr(),
+                                      icon: Icons.language,
+                                      selected:
+                                          context.locale.languageCode == 'en',
+                                      onTap: () async {
+                                        await profileCubit.changeLanguage(
+                                          context,
+                                          "en",
+                                        );
+                                        setDialogState(() {});
+                                      },
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    /// Arabic
+                                    CustomeLangCard(
+                                      title: 'actions.ar'.tr(),
+                                      icon: Icons.language,
+                                      selected:
+                                          context.locale.languageCode == 'ar',
+                                      onTap: () async {
+                                        await profileCubit.changeLanguage(
+                                          context,
+                                          "ar",
+                                        );
+                                        setDialogState(() {});
+                                      },
+                                    ),
+
+                                    const SizedBox(height: 20),
+
+                                    /// Done Button
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: CustomeButton(
+                                        btnColor: AppColors.green,
+                                        btnText: CustomeText(
+                                          textColor: AppColors.white,
+                                          text: 'admin_profile.done'.tr(),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(dialogContext);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

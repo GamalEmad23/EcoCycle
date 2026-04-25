@@ -6,7 +6,7 @@ import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-import '../widget/intro_widget.dart';
+import 'widget/intro_widget.dart';
 
 class OnbordingScreen extends StatelessWidget {
   const OnbordingScreen({super.key});

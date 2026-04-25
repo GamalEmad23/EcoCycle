@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../model/order_model.dart';
-import '../order_cubit.dart';
+import '../../model/order_model.dart';
+import '../../cubit/order_cubit.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderModel order;
