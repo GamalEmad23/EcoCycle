@@ -2,7 +2,7 @@ import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eco_cycle/features/home/view/home_scree.dart';
+import 'package:eco_cycle/features/home/view/home_screen.dart';
 import 'package:eco_cycle/features/map/view/map_screen.dart';
 import 'package:eco_cycle/features/profile/view/profile_screen.dart';
 import 'package:eco_cycle/features/recycling_request/view/recycling_request_screen.dart';
@@ -18,7 +18,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   final List<Widget> pages = [
-    const HomeScree(),
+    const HomeScreen(),
     const MapScreen(),
     const RecyclingRequestScreen(),
     const StatisticsScreen(),

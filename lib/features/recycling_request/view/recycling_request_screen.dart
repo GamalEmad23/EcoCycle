@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/recycling_request/cubit/recycling_request_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import 'widgets/material_card_widget.dart';
 import 'widgets/custom_button.dart';
@@ -112,7 +113,7 @@ class _RecyclingRequestView extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 1),
 
                 /// CENTER
                 Text(
@@ -126,7 +127,12 @@ class _RecyclingRequestView extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 if (cubit.isLoadingCenters)
-                  const Center(child: CircularProgressIndicator())
+                  Center(
+                    child: LottieBuilder.asset(
+                      "assets/lotties/Green eco earth animation.json",
+                      height: 100,
+                    ),
+                  )
                 else if (cubit.centers.isEmpty)
                   Center(child: Text("common.no_centers".tr()))
                 else

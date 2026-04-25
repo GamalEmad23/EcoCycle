@@ -48,11 +48,10 @@ class CustomeHeader extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomeText(
                       text:

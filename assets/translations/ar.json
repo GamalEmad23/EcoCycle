@@ -107,6 +107,7 @@
     "excellent_category": "الفئة الممتازة",
     "points_unit": "نقطة",
     "points_left": "تبقى {points} نقطة فقط للوصول للمستوى التالي",
+    "points_left_to": "باقي {} نقطة للوصول إلى {}",
     "find_center": "العثور على مركز",
     "recycle_now": "إعادة التدوير الآن",
     "impact_summary": "ملخص التأثير البيئي",

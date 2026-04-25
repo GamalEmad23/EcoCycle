@@ -25,12 +25,10 @@ class CustomeImpactSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
-          alignment: context.locale.countryCode == "en"
-              ? AlignmentGeometry.topLeft
-              : AlignmentGeometry.centerRight,
+          alignment: AlignmentDirectional.topStart,
           child: CustomeText(
             text: "home.impact_summary",
             fontSize: 20,

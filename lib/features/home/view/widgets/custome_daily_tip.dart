@@ -23,18 +23,10 @@ class CustomeDailyTip extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              CustomeText(
-                text: "home.daily_tip_title",
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                textColor: AppColors.lightGreen,
-              ),
-              const SizedBox(width: 12),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
@@ -45,6 +37,15 @@ class CustomeDailyTip extends StatelessWidget {
                   Icons.lightbulb_rounded,
                   color: Colors.white,
                   size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: CustomeText(
+                  text: "home.daily_tip_title",
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  textColor: AppColors.lightGreen,
                 ),
               ),
             ],

@@ -41,7 +41,7 @@ class CustomeLevelCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// Top Row: Category and Level Title
           Row(
@@ -134,7 +134,7 @@ class CustomeLevelCard extends StatelessWidget {
                 ),
               ),
               FractionallySizedBox(
-                alignment: Alignment.centerRight,
+                alignment: AlignmentDirectional.centerStart,
                 widthFactor: (points / nextLevelPoints).clamp(0.0, 1.0),
                 child: Container(
                   height: 12,

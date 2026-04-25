@@ -16,7 +16,7 @@ import 'package:eco_cycle/features/map/view/widgets/location_permission_view.dar
 import 'package:eco_cycle/features/map/view/widgets/center_details_bottom_sheet.dart';
 import 'package:eco_cycle/core/services/overpass_service.dart';
 import 'package:eco_cycle/core/services/favorites_service.dart';
-import 'package:eco_cycle/core/Data/centers_data.dart' as static_data;
+import 'package:eco_cycle/core/data/centers_data.dart' as static_data;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});

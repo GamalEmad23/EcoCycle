@@ -31,15 +31,19 @@ class CustomeImapactCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Container(
+            padding: EdgeInsets.all(w * 0.025),
+            decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
+            child: Icon(icon, color: iconColor, size: w * 0.06),
+          ),
+          SizedBox(width: w * 0.02),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomeText(
                       text: amount,
@@ -69,12 +73,6 @@ class CustomeImapactCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(width: w * 0.02),
-          Container(
-            padding: EdgeInsets.all(w * 0.025),
-            decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-            child: Icon(icon, color: iconColor, size: w * 0.06),
           ),
         ],
       ),
