@@ -273,5 +273,8 @@
     "kg": "KG",
     "accept": "Accept",
     "reject": "Reject"
+  },
+  "auth": {
+    "google_config_error": "Configuration Error (Error 10): Ensure SHA-1 and google-services.json are added to Firebase"
   }
 }

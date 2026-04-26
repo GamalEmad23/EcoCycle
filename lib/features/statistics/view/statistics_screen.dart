@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
 
@@ -98,6 +99,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
       body: RefreshIndicator(
         color: AppColors.levelCardEnd,
+
         onRefresh: () async {
           await context.read<StatisticsCubit>().getStatisticsData();
         },
@@ -117,7 +119,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       ),
                     ),
                   );
+                    ),
+                  );
                 }
+
 
                 if (state is StatisticsFailure) {
                   return Center(
@@ -132,6 +137,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 int operationsCount = 0;
                 double co2Saved = 0;
                 List<RecyclingRequestModel> recentActivities = [];
+
 
                 // Trends and chart data from state
                 String weightTrend = "+0%";
@@ -156,10 +162,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 final now = DateTime.now();
 
                 if (_selectedRange == "statistics.last_week") {
-                  chartLabels = List.generate(7, (i) {
-                    final day = now.subtract(Duration(days: 6 - i));
                     return DateFormat('E').format(day);
                   });
+
 
                   // Calculate spots for last week based on operations count
                   List<double> dailyOps = List.filled(7, 0.0);
@@ -176,6 +181,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .entries
                       .map((e) => FlSpot(e.key.toDouble(), e.value))
                       .toList();
+
                 } else if (_selectedRange == "statistics.today") {
                   // Every 3 hours: 12AM, 3AM, 6AM, 9AM, 12PM, 3PM, 6PM, 9PM
                   chartLabels = List.generate(8, (i) {
@@ -186,6 +192,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       'ha',
                       context.locale.languageCode,
                     ).format(time);
+
                   });
 
                   // Calculate spots for today based on operations count
@@ -195,6 +202,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       // Check if it's the same day
                       if (activity.createdAt!.year == now.year &&
                           activity.createdAt!.month == now.month &&
+
                           activity.createdAt!.day == now.day) {
                         int hour = activity.createdAt!.hour;
                         int slot = hour ~/ 3;
@@ -209,6 +217,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .entries
                       .map((e) => FlSpot(e.key.toDouble(), e.value))
                       .toList();
+
                 } else if (_selectedRange == "statistics.last_month") {
                   chartLabels = List.generate(4, (i) {
                     return "${"statistics.week".tr()} ${i + 1}";
@@ -221,6 +230,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       final diffDays = now
                           .difference(activity.createdAt!)
                           .inDays;
+
                       if (diffDays >= 0 && diffDays < 28) {
                         int slot = diffDays ~/ 7;
                         if (slot >= 0 && slot < 4) {
@@ -242,6 +252,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       now.month - (5 - i),
                       1,
                     );
+
                     return DateFormat('MMM').format(monthDate);
                   });
 
@@ -253,6 +264,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           (now.year - activity.createdAt!.year) * 12 +
                           now.month -
                           activity.createdAt!.month;
+
                       if (diffMonths >= 0 && diffMonths < 6) {
                         monthlyOps[5 - diffMonths] += 1;
                       }
@@ -273,6 +285,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .map((e) => FlSpot(e.key.toDouble(), 0.1))
                       .toList();
                 }
+
+                }
+
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,6 +378,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               value: co2Saved.toStringAsFixed(1),
                               subtitle:
                                   "$co2Trend ${"statistics.this_month".tr()}",
+
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -373,6 +389,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               value: operationsCount.toString(),
                               subtitle:
                                   "$operationsTrend ${"statistics.this_month".tr()}",
+
                             ),
                           ),
                         ],
@@ -407,6 +424,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 PopupMenuButton<String>(
+
                                   onSelected: (value) {
                                     setState(() {
                                       _selectedRange = value;
@@ -431,6 +449,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         "statistics.Last_months".tr(),
                                       ),
                                     ),
+
                                   ],
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -469,6 +488,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         show: true,
                                         color: AppColors.primaryLight
                                             .withValues(alpha: 0.1),
+
                                       ),
                                     ),
                                   ],
@@ -481,6 +501,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               children: chartLabels
                                   .map((label) => MonthText(label))
                                   .toList(),
+
                             ),
                           ],
                         ),
@@ -576,6 +597,7 @@ class RecentActivityList extends StatelessWidget {
         String subtitle = activity.center ?? "";
         String weight = activity.weight.toString();
 
+
         String imagePath = "assets/images/plastic.png";
         Color iconBg = const Color(0xFFDDF5F0);
         Color iconColor = Colors.teal;
@@ -584,12 +606,12 @@ class RecentActivityList extends StatelessWidget {
         // Generalized translation logic: try to find a key for any subtitle
         String centerKey = subtitle.toLowerCase().trim().replaceAll(' ', '_');
 
+
         // Check if there's a specific translation key for this center name
         if ("statistics.$centerKey".tr() != "statistics.$centerKey") {
           subtitle = "statistics.$centerKey".tr();
         } else if ("add_process.$centerKey".tr() != "add_process.$centerKey") {
           subtitle = "add_process.$centerKey".tr();
-        } else if ("map.$centerKey".tr() != "map.$centerKey") {
           subtitle = "map.$centerKey".tr();
         } else {
           // Check for common variations or manual overrides
@@ -599,6 +621,7 @@ class RecentActivityList extends StatelessWidget {
             subtitle = "statistics.green_recycle".tr();
           }
         }
+
 
         if (title.contains("ورق") || title.toLowerCase().contains("paper")) {
           translatedTitle = "statistics.paper".tr();
@@ -624,6 +647,7 @@ class RecentActivityList extends StatelessWidget {
               "assets/images/description.png"; // Fallback to description icon
           iconBg = const Color(0xFFF3E5F5);
           iconColor = Colors.purple;
+
         }
 
         return Padding(
@@ -634,6 +658,7 @@ class RecentActivityList extends StatelessWidget {
             weight: weight,
             points:
                 "+${(activity.weight * 5).toInt()} ${"statistics.points".tr()}",
+
             imagePath: imagePath,
             iconBg: iconBg,
             iconColor: iconColor,
