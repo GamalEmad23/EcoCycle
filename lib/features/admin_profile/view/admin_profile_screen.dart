@@ -35,7 +35,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      context.read<AdminCubit>().getAdminData(user?.uid ?? "");
+      context.read<AdminCubit>().getAdminData(user.uid);
     }
   }
 
