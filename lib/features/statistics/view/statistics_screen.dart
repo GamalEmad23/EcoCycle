@@ -119,9 +119,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       ),
                     ),
                   );
-                    ),
-                  );
                 }
+
 
 
                 if (state is StatisticsFailure) {
@@ -162,8 +161,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 final now = DateTime.now();
 
                 if (_selectedRange == "statistics.last_week") {
+                  chartLabels = List.generate(7, (i) {
+                    final day = now.subtract(Duration(days: 6 - i));
                     return DateFormat('E').format(day);
                   });
+
 
 
                   // Calculate spots for last week based on operations count
@@ -286,7 +288,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .toList();
                 }
 
-                }
+
+
 
 
                 return Column(
