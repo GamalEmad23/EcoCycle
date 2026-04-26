@@ -246,7 +246,7 @@
     "centers_map": "خريطة المراكز",
     "enter_your_location": "أدخل موقعك...",
     "searching_nearby_centers": "جاري البحث عن مراكز قريبة...",
-    "no_centers_in_range": "لا توجد مراكز إعادة تدوير في هذا النطاق",
+    "no_centers_in_range": "لا توجد مراكز إعادة تدوير في هذا ناطاق",
     "open_now": "مفتوح الآن",
     "distance": "المسافة",
     "km": "كم",
@@ -273,5 +273,8 @@
     "kg": "كجم",
     "accept": "قبول",
     "reject": "رفض"
+  },
+  "auth": {
+    "google_config_error": "خطأ في الإعدادات (Error 10): تأكد من إضافة SHA-1 وملف google-services.json في Firebase"
   }
 }

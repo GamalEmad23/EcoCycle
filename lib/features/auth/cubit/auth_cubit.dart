@@ -6,6 +6,7 @@ import 'package:eco_cycle/features/auth/model/user_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_state.dart';
@@ -120,6 +121,13 @@ class AuthCubit extends Cubit<AuthState> {
           userCredential.user?.email == "ahmedsorour628@gmail.com";
 
       emit(googleLoginSuccess(isAdmin: isAdmin));
+    } on PlatformException catch (e) {
+      // ApiException 10 is usually configuration related
+      String errorMsg = e.message ?? e.toString();
+      if (e.code == 'sign_in_failed' && errorMsg.contains('10')) {
+        errorMsg = "auth.google_config_error";
+      }
+      emit(googleLoginFailure(message: errorMsg));
     } catch (e) {
       emit(googleLoginFailure(message: e.toString()));
     }

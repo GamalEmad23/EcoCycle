@@ -129,10 +129,11 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
             inputFlat[bufferIndex++] = pixel.g.toInt();
             inputFlat[bufferIndex++] = pixel.b.toInt();
           } else {
-            // MobileNetV2 preprocessing [-1,1]
-            inputFlat[bufferIndex++] = (pixel.r.toDouble() / 127.5) - 1;
-            inputFlat[bufferIndex++] = (pixel.g.toDouble() / 127.5) - 1;
-            inputFlat[bufferIndex++] = (pixel.b.toDouble() / 127.5) - 1;
+            // Raw pixel values (0-255) because the model has built-in TrueDivide and Subtract layers
+            inputFlat[bufferIndex++] = pixel.r.toDouble();
+            inputFlat[bufferIndex++] = pixel.g.toDouble();
+            inputFlat[bufferIndex++] = pixel.b.toDouble();
+
           }
         }
       }
@@ -148,6 +149,8 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
 
         _interpreter!.run(input, outputUint8);
 
+        // 🔥 فك الـ quantization صح
+
         var scale = outputTensor.params.scale;
         var zeroPoint = outputTensor.params.zeroPoint;
 
@@ -159,6 +162,8 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       }
 
       print("Model Output Scores: ${output[0]}");
+
+      // 🔥 اختيار أعلى قيمة
 
       double maxConfidence = -1;
       int maxIndex = -1;
