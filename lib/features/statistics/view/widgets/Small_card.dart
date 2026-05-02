@@ -53,7 +53,7 @@ class SmallCard extends StatelessWidget {
                 if (showUnit)
                   Padding(
                     padding: const EdgeInsets.only(top: 12.0),
-                    child: const CustomeText(
+                    child:  CustomeText(
                       text: "statistics.kg",
                       fontSize: 12,
                       textColor: AppColors.textGrey,

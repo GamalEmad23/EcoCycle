@@ -206,7 +206,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              backgroundColor: Colors.grey.shade100,
+                              backgroundColor: AppColors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
                                 child: Column(
@@ -218,7 +218,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.grey.shade800,
+                                        color: AppColors.black,
                                       ),
                                     ),
 

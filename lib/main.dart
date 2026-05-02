@@ -11,6 +11,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -31,6 +33,7 @@ void main() async {
           BlocProvider(create: (context) => AuthCubit()),
           BlocProvider(create: (context) => NavBarCubit()),
           BlocProvider(create: (context) => AdminCubit()),
+          BlocProvider(create: (context) => ThemeCubit()..loadTheme()),
           BlocProvider(
             create: (context) => ProfileCubit()..getSavedLang(context),
             child: Container(),
@@ -61,11 +64,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      debugShowCheckedModeBanner: false,
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        AppColors.isDarkMode = themeMode == ThemeMode.dark;
+        return MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          themeMode: themeMode,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          debugShowCheckedModeBanner: false,
       home: StreamBuilder<User?>(
         stream: _authStream,
         builder: (context, snapshot) {
@@ -84,6 +93,8 @@ class _MyAppState extends State<MyApp> {
           return const SplashScreen();
         },
       ),
+        );
+      },
     );
   }
 }

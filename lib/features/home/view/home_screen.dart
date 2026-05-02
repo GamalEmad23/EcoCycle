@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/features/home/view/widgets/custom_quick_action.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_center_card.dart';
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double h = MediaQuery.sizeOf(context).height;
     double w = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
@@ -164,8 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           label: "home.recycle_now".tr(),
                           icon: Icons.recycling_rounded,
                           bgColor: AppColors.levelCardEnd,
-                          textColor: AppColors.white,
-                          iconColor: AppColors.white,
+                          textColor: Colors.white,
+                          iconColor: Colors.white,
                           h: h,
                           w: w,
                           onTap: () =>
@@ -239,3 +239,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+

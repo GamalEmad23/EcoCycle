@@ -1,4 +1,4 @@
-import 'package:eco_cycle/core/themes/app_colors.dart';
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +28,7 @@ class ActivityItem extends StatelessWidget {
       height: 85,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -52,7 +52,7 @@ class ActivityItem extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          /// النص
+          /// Ø§Ù„Ù†Øµ
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +91,7 @@ class ActivityItem extends StatelessWidget {
 
                   const SizedBox(width: 4),
 
-                  const CustomeText(
+                  CustomeText(
                     text: "statistics.kg",
 
                     fontSize: 16,
@@ -113,3 +113,4 @@ class ActivityItem extends StatelessWidget {
     );
   }
 }
+

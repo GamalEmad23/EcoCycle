@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class CustomeCenterCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: const Color(0xFFF1F5F9)),
       ),
@@ -44,7 +44,7 @@ class CustomeCenterCard extends StatelessWidget {
                       child: CustomeText(text: address , fontSize: 12,textColor: AppColors.textGrey,maxLines: 1,overflow: TextOverflow.ellipsis,),
                     ),
                     const SizedBox(width: 4),
-                    const Icon(
+                    Icon(
                       Icons.location_on_outlined,
                       size: 14,
                       color: AppColors.textGrey,
@@ -67,7 +67,7 @@ class CustomeCenterCard extends StatelessWidget {
                   width: 75,
                   height: 75,
                   color: AppColors.backgroundLight,
-                  child: const Icon(
+                  child: Icon(
                     Icons.broken_image_outlined,
                     color: AppColors.textLight,
                   ),

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+﻿// ignore_for_file: unused_field
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -241,8 +241,8 @@ class _MapScreenState extends State<MapScreen> {
       return {
         "id": "static_${c['name']}",
         "name": c['name'],
-        "materials": "بلاستيك، ورق، معدن، زجاج",
-        "hours": "08:00 ص - 09:00 م",
+        "materials": "Ã˜Â¨Ã™â€žÃ˜Â§Ã˜Â³Ã˜ÂªÃ™Å Ã™Æ’Ã˜Å’ Ã™Ë†Ã˜Â±Ã™â€šÃ˜Å’ Ã™â€¦Ã˜Â¹Ã˜Â¯Ã™â€ Ã˜Å’ Ã˜Â²Ã˜Â¬Ã˜Â§Ã˜Â¬",
+        "hours": "08:00 Ã˜Âµ - 09:00 Ã™â€¦",
         "distance": (distanceInMeters / 1000).toStringAsFixed(1),
         "imgUrl":
             "https://images.unsplash.com/photo-1532996122724-e3c354a0b15f?w=400&q=80",
@@ -397,7 +397,7 @@ class _MapScreenState extends State<MapScreen> {
               horizontal: bsW * 0.06,
               vertical: bsW * 0.05,
             ),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
             ),
@@ -424,11 +424,11 @@ class _MapScreenState extends State<MapScreen> {
                 ListTile(
                   leading: Container(
                     padding: EdgeInsets.all(bsW * 0.025),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.lightGreen2,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.directions_car,
                       color: AppColors.primary,
                     ),
@@ -449,11 +449,11 @@ class _MapScreenState extends State<MapScreen> {
                 ListTile(
                   leading: Container(
                     padding: EdgeInsets.all(bsW * 0.025),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.lightGreen2,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.directions_walk,
                       color: AppColors.primary,
                     ),
@@ -488,13 +488,13 @@ class _MapScreenState extends State<MapScreen> {
 
     if (hasPermission == null) {
       return Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
         body: Center(child: Lottie.asset('assets/lotties/map_search.json')),
       );
     }
     if (hasPermission == false) {
       return Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
         body: LocationPermissionView(
           onAllowPressed: _requestPermission,
           onNotNowPressed: () {
@@ -571,8 +571,8 @@ class _MapScreenState extends State<MapScreen> {
                             child: Center(
                               child: Text(
                                 markers.length.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: AppColors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -641,7 +641,7 @@ class _MapScreenState extends State<MapScreen> {
                                 _mapController.camera.center,
                                 _mapController.camera.zoom + 1,
                               ),
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.add,
                                 color: AppColors.textPrimary,
                               ),
@@ -656,7 +656,7 @@ class _MapScreenState extends State<MapScreen> {
                                 _mapController.camera.center,
                                 _mapController.camera.zoom - 1,
                               ),
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.remove,
                                 color: AppColors.textPrimary,
                               ),
@@ -677,7 +677,7 @@ class _MapScreenState extends State<MapScreen> {
                           });
                           _fetchCurrentLocation();
                         },
-                        child: const Icon(Icons.my_location),
+                        child: Icon(Icons.my_location),
                       ),
                     ],
                   ),
@@ -696,7 +696,7 @@ class _MapScreenState extends State<MapScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppColors.white,
                                   shape: BoxShape.circle,
                                   boxShadow: [
@@ -708,7 +708,7 @@ class _MapScreenState extends State<MapScreen> {
                                   ],
                                 ),
                                 child: IconButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.tune,
                                     color: AppColors.textSecondary,
                                   ),
@@ -741,7 +741,7 @@ class _MapScreenState extends State<MapScreen> {
                                 ),
                               ),
                               Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppColors.white,
                                   shape: BoxShape.circle,
                                   boxShadow: [
@@ -753,7 +753,7 @@ class _MapScreenState extends State<MapScreen> {
                                   ],
                                 ),
                                 child: IconButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.search,
                                     color: AppColors.textPrimary,
                                   ),
@@ -783,7 +783,7 @@ class _MapScreenState extends State<MapScreen> {
                               children: [
                                 const SizedBox(width: 8),
                                 IconButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.arrow_back,
                                     color: AppColors.textSecondary,
                                   ),
@@ -821,7 +821,7 @@ class _MapScreenState extends State<MapScreen> {
                                   )
                                 else if (_searchController.text.isNotEmpty)
                                   IconButton(
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.clear,
                                       color: AppColors.textSecondary,
                                       size: 20,
@@ -848,11 +848,11 @@ class _MapScreenState extends State<MapScreen> {
                               shrinkWrap: true,
                               itemCount: _searchResults.length,
                               separatorBuilder: (context, index) =>
-                                  const Divider(height: 1),
+                                  Divider(height: 1),
                               itemBuilder: (context, index) {
                                 final result = _searchResults[index];
                                 return ListTile(
-                                  leading: const Icon(
+                                  leading: Icon(
                                     Icons.location_on,
                                     color: AppColors.primary,
                                   ),
@@ -919,7 +919,7 @@ class _MapScreenState extends State<MapScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(
+                            SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -930,7 +930,7 @@ class _MapScreenState extends State<MapScreen> {
                             const SizedBox(width: 12),
                             Text(
                               'map.searching_nearby_centers'.tr(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -966,14 +966,14 @@ class _MapScreenState extends State<MapScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.info_outline,
                               color: AppColors.textSecondary,
                             ),
                             const SizedBox(width: 8),
                             Text(
                               'map.no_centers_in_range'.tr(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -996,10 +996,10 @@ class _MapScreenState extends State<MapScreen> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.white : AppColors.primary,
+            color: isSelected ? Colors.white : AppColors.primary,
             shape: BoxShape.circle,
             border: Border.all(
-              color: isSelected ? AppColors.primary : AppColors.white,
+              color: isSelected ? AppColors.primary : Colors.white,
               width: 2.5,
             ),
             boxShadow: [
@@ -1014,7 +1014,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           child: Icon(
             Icons.recycling_rounded,
-            color: isSelected ? AppColors.primary : AppColors.white,
+            color: isSelected ? AppColors.primary : Colors.white,
             size: isSelected ? 24 : 20,
           ),
         ),
@@ -1022,7 +1022,7 @@ class _MapScreenState extends State<MapScreen> {
           width: 3,
           height: 10,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : AppColors.white,
+            color: isSelected ? AppColors.primary : Colors.white,
             borderRadius: BorderRadius.circular(2),
             boxShadow: const [
               BoxShadow(
@@ -1037,3 +1037,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
+
+
+
+

@@ -15,6 +15,7 @@ import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/profile/view/widgets/about_bottom_sheet.dart';
 import 'package:eco_cycle/features/profile/view/widgets/custome_profile_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -39,7 +40,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
         forceMaterialTransparency: true,
         title: CustomeText(
           text: "profile.title",
@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           // Photo or placeholder
                           CircleAvatar(
                             maxRadius: w * .17,
-                            backgroundColor: Colors.white,
+                            backgroundColor: AppColors.white,
                             backgroundImage: imageUrl != null
                                 ? NetworkImage(imageUrl)
                                 : null,
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CircleAvatar(
                               maxRadius: w * .17,
                               backgroundColor: Colors.black38,
-                              child: const CircularProgressIndicator(
+                              child:  CircularProgressIndicator(
                                 color: Colors.white,
                                 strokeWidth: 3,
                               ),
@@ -153,11 +153,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: AppColors.lightGreen4,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     width: 2,
                                   ),
                                 ),
-                                child: const Icon(
+                                child:  Icon(
                                   Icons.edit,
                                   size: 16,
                                   color: Colors.white,
@@ -187,7 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         text: state.userName,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        textColor: AppColors.black,
                       );
                     }
 
@@ -325,6 +324,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Theme
+                    BlocBuilder<ThemeCubit, ThemeMode>(
+                      builder: (context, themeMode) {
+                        bool isDark = themeMode == ThemeMode.dark;
+                        return customeLongProfileCard(
+                          h: h,
+                          w: w,
+                          icon: isDark ? Icons.dark_mode : Icons.light_mode,
+                          text: CustomeText(
+                            text: isDark ? "Dark Mode" : "Light Mode",
+                            fontWeight: FontWeight.bold,
+                          ),
+                          onTap: () {
+                            context.read<ThemeCubit>().toggleTheme();
+                          },
+                        );
+                      },
+                    ),
+
                     // Language
                     customeLongProfileCard(
                       h: h,
@@ -342,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              backgroundColor: Colors.grey.shade100,
+                              backgroundColor: AppColors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
                                 child: Column(
@@ -354,7 +372,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.grey.shade800,
+                                        color: AppColors.black,
                                       ),
                                     ),
 
@@ -396,7 +414,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: CustomeButton(
                                         btnColor: AppColors.green,
                                         btnText: CustomeText(
-                                          textColor: AppColors.white,
+                                          textColor: Colors.white,
                                           text: 'profile.done'.tr(),
                                         ),
                                         onPressed: () {
@@ -465,3 +483,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+
+

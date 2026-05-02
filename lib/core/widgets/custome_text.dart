@@ -27,7 +27,7 @@ class CustomeText extends StatelessWidget {
       maxLines: maxLines,
       overflow: overflow,
       style: TextStyle(
-        color: textColor ?? AppColors.textPrimary,
+        color: textColor ?? Theme.of(context).textTheme.bodyLarge?.color,
         fontSize: fontSize ?? 18,
         fontWeight: fontWeight ?? FontWeight.w700,
       ),

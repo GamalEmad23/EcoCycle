@@ -54,14 +54,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           Row(
             children: [
               IconButton(
-                icon: const Icon(
+                icon:  Icon(
                   Icons.notifications_none,
                   color: AppColors.textSecondary,
                 ),
                 onPressed: () {},
               ),
               IconButton(
-                icon: const Icon(
+                icon:  Icon(
                   Icons.settings_outlined,
                   color: AppColors.textSecondary,
                 ),

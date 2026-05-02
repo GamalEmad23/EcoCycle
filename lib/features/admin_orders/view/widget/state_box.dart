@@ -1,3 +1,4 @@
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -15,7 +16,7 @@ class StatBox extends StatelessWidget {
       width: 90,
       padding:  EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(

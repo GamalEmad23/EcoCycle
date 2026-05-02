@@ -26,7 +26,7 @@ class CustomeHeader extends StatelessWidget {
           height: 48,
           width: 48,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -38,7 +38,7 @@ class CustomeHeader extends StatelessWidget {
           ),
           child: IconButton(
             onPressed: () {},
-            icon: const Icon(
+            icon: Icon(
               Icons.notifications_none_rounded,
               color: AppColors.textPrimary,
               size: 28,
@@ -54,8 +54,7 @@ class CustomeHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomeText(
-                      text:
-                          "${"home.welcome".tr().replaceAll("👋", "").trim()} $userName 👋",
+                      text: "${"home.welcome".tr().replaceAll("👋", "").trim()} $userName 👋",
                       fontSize: w * 0.045, // Responsive font size
                       fontWeight: FontWeight.bold,
                       maxLines: 1,
@@ -75,7 +74,7 @@ class CustomeHeader extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: AppColors.white, width: 2),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -99,3 +98,4 @@ class CustomeHeader extends StatelessWidget {
     );
   }
 }
+

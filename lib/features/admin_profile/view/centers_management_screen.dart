@@ -1,3 +1,4 @@
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +23,9 @@ class _RecyclingCentersScreenState
       appBar: AppBar(
         title: Text("admin_profile.manage_centers_title".tr()),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppColors.black,
       ),
 
       body: Padding(
@@ -33,7 +34,7 @@ class _RecyclingCentersScreenState
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: TextField(
@@ -107,7 +108,7 @@ class _RecyclingCentersScreenState
                         const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius:
                           BorderRadius.circular(16),
                         ),
@@ -160,3 +161,4 @@ class _RecyclingCentersScreenState
     );
   }
 }
+

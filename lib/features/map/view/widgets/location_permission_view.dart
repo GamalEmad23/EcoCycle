@@ -1,4 +1,4 @@
-import 'package:eco_cycle/core/themes/app_colors.dart';
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 
@@ -30,7 +30,7 @@ class LocationPermissionView extends StatelessWidget {
                 color: AppColors.lightGreen3,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.location_on_rounded,
                 size: 80,
                 color: AppColors.primary,
@@ -39,7 +39,7 @@ class LocationPermissionView extends StatelessWidget {
             const SizedBox(height: 48),
              Text(
               'map.enable_location'.tr(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
@@ -49,7 +49,7 @@ class LocationPermissionView extends StatelessWidget {
              Text(
               'map.location_reason'.tr(),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: AppColors.textSecondary,
@@ -71,7 +71,7 @@ class LocationPermissionView extends StatelessWidget {
                 ),
                 child:  Text(
                   'map.allow_location'.tr(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -89,7 +89,7 @@ class LocationPermissionView extends StatelessWidget {
                 ),
                 child:  Text(
                   'map.not_now'.tr(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -99,3 +99,4 @@ class LocationPermissionView extends StatelessWidget {
     );
   }
 }
+
