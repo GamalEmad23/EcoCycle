@@ -27,10 +27,10 @@ class _RecyclingRequestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -74,6 +74,7 @@ class _RecyclingRequestView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -122,6 +123,7 @@ class _RecyclingRequestView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -140,14 +142,21 @@ class _RecyclingRequestView extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: cubit.selectedCenter,
-                        hint: Text('add_process.choose_center'.tr()),
+                        hint: Text(
+                          'add_process.choose_center'.tr(),
+                          style: TextStyle(color: AppColors.textGrey),
+                        ),
                         isExpanded: true,
+                        dropdownColor: AppColors.white,
+                        style: TextStyle(color: AppColors.textPrimary),
+                        iconEnabledColor: AppColors.textPrimary,
                         items: cubit.centers.map((center) {
                           return DropdownMenuItem<String>(
                             value: center,
@@ -167,6 +176,7 @@ class _RecyclingRequestView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -185,6 +195,7 @@ class _RecyclingRequestView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -196,8 +207,9 @@ class _RecyclingRequestView extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 32),
                     decoration: BoxDecoration(
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade300),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Column(
                       children: [
@@ -215,6 +227,7 @@ class _RecyclingRequestView extends StatelessWidget {
                           cubit.image != null
                               ? 'add_process.image_uploaded_success'.tr()
                               : 'add_process.upload_here'.tr(),
+                          style: TextStyle(color: AppColors.textPrimary),
                         ),
                       ],
                     ),
@@ -228,9 +241,9 @@ class _RecyclingRequestView extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.green.shade50,
+                        color: AppColors.lightGreen3,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green.shade200),
+                        border: Border.all(color: AppColors.green),
                       ),
                       child: Column(
                         children: [
@@ -239,7 +252,7 @@ class _RecyclingRequestView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: AppColors.primary,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -247,7 +260,7 @@ class _RecyclingRequestView extends StatelessWidget {
                             'Ù†Ø³Ø¨Ø© Ø§Ù„Ø¯Ù‚Ø©: ${cubit.confidence.toStringAsFixed(1)}%',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green.shade700,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],

@@ -211,8 +211,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }
                           },
                           btnText: state is AuthLoading
-                              ? CircularProgressIndicator(
-                                  color: AppColors.white,
+                              ? SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.white,
+                                    strokeWidth: 2.5,
+                                  ),
                                 )
                               : CustomeText(
                                   text: "signup.signup_button",

@@ -128,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ? Icon(
                                     Icons.person,
                                     size: w * 0.15,
-                                    color: Colors.grey.shade400,
+                                    color: AppColors.textLight,
                                   )
                                 : null,
                           ),
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CircleAvatar(
                               maxRadius: w * .17,
                               backgroundColor: Colors.black38,
-                              child:  CircularProgressIndicator(
+                              child: const CircularProgressIndicator(
                                 color: Colors.white,
                                 strokeWidth: 3,
                               ),
@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: 2,
                                   ),
                                 ),
-                                child:  Icon(
+                                child: const Icon(
                                   Icons.edit,
                                   size: 16,
                                   color: Colors.white,
@@ -211,9 +211,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomeText(
-                        text: "home.${context.watch<ProfileCubit>().getRank(
-                          context.watch<ProfileCubit>().Tpoints,
-                        )}".tr(),
+                        text:
+                            "home.${context.watch<ProfileCubit>().getRank(context.watch<ProfileCubit>().Tpoints)}"
+                                .tr(),
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -455,7 +455,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       w: w,
                       icon: context.locale.languageCode == "en"
                           ? Icons.logout
-                          : Icons.login_outlined,
+                          : Icons.logout,
                       text: CustomeText(text: "actions.logout"),
                       iconColor: AppColors.red,
                       backGroung: AppColors.lightRed,
@@ -483,6 +483,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
-
-

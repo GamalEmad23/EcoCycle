@@ -11,21 +11,20 @@ class RecyclingCentersScreen extends StatefulWidget {
       _RecyclingCentersScreenState();
 }
 
-class _RecyclingCentersScreenState
-    extends State<RecyclingCentersScreen> {
+class _RecyclingCentersScreenState extends State<RecyclingCentersScreen> {
   String searchText = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5F6F8),
+      backgroundColor: AppColors.background,
 
       appBar: AppBar(
         title: Text("admin_profile.manage_centers_title".tr()),
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
-        foregroundColor: AppColors.black,
+        foregroundColor: AppColors.textPrimary,
       ),
 
       body: Padding(
@@ -38,6 +37,8 @@ class _RecyclingCentersScreenState
                 borderRadius: BorderRadius.circular(14),
               ),
               child: TextField(
+                cursorColor: AppColors.green,
+                style: TextStyle(color: AppColors.textPrimary),
                 onChanged: (value) {
                   setState(() {
                     searchText = value;
@@ -45,7 +46,8 @@ class _RecyclingCentersScreenState
                 },
                 decoration: InputDecoration(
                   hintText: "admin_profile.search_center".tr(),
-                  prefixIcon: const Icon(Icons.search),
+                  hintStyle: TextStyle(color: AppColors.textGrey),
+                  prefixIcon: Icon(Icons.search, color: AppColors.textGrey),
                   border: InputBorder.none,
                 ),
               ),
@@ -59,24 +61,20 @@ class _RecyclingCentersScreenState
                     .collection('centers')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
 
-                  if (!snapshot.hasData ||
-                      snapshot.data!.docs.isEmpty) {
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Center(
-                      child: Text(
-                          "admin_profile.no_centers_found".tr()),
+                      child: Text("admin_profile.no_centers_found".tr()),
                     );
                   }
 
                   final centers = snapshot.data!.docs.where((doc) {
-                    final data =
-                    doc.data() as Map<String, dynamic>;
+                    final data = doc.data() as Map<String, dynamic>;
 
                     final name = data['name'] ?? "";
                     final city = data['city'] ?? "";
@@ -104,19 +102,16 @@ class _RecyclingCentersScreenState
                       center.data() as Map<String, dynamic>;
 
                       return Container(
-                        margin:
-                        const EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius:
-                          BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundColor:
-                              Colors.green.shade100,
+                              backgroundColor: AppColors.lightGreen3,
                               child: const Icon(
                                 Icons.recycling,
                                 color: Colors.green,
@@ -127,21 +122,20 @@ class _RecyclingCentersScreenState
 
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     data['name'] ?? "",
-                                    style: const TextStyle(
-                                      fontWeight:
-                                      FontWeight.bold,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     "${data['city'] ?? ""} - ${data['address'] ?? ""}",
-                                    style: const TextStyle(
-                                      color: Colors.grey,
+                                    style: TextStyle(
+                                      color: AppColors.textGrey,
                                     ),
                                   ),
                                 ],

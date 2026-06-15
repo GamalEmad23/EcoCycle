@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../../core/themes/app_colors.dart';
 import '../cubit/order_cubit.dart';
 import 'widget/order_card.dart';
 
@@ -46,6 +47,7 @@ class _OrdersViewState extends State<_OrdersView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text("orders.title".tr()),
         bottom: TabBar(

@@ -39,6 +39,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           },
           icon: Icon(Icons.language),
         ),
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              NavigateHelper.pushAndRemoveUntil(context, LoginScreen());
+            },
+            icon: context.locale == "en"
+                ? Icon(Icons.arrow_back_ios_new_outlined)
+                : Icon(Icons.arrow_forward_ios_rounded),
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -135,23 +146,30 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       context: context,
                       message: "forgot_password.success".tr(),
                     );
-                      NavigateHelper.pushReplacement(context, LoginScreen());
+                    NavigateHelper.pushReplacement(context, LoginScreen());
                   }
                 },
                 builder: (context, state) {
                   return CustomeButton(
                     onPressed: () {
-                     if (_globalKey.currentState!.validate()) {
-                      context.read<AuthCubit>().resetPassword(_email.text);
-                     }
+                      if (_globalKey.currentState!.validate()) {
+                        context.read<AuthCubit>().resetPassword(_email.text);
+                      }
                     },
                     btnWidth: w * .9,
-                    btnText: 
-                    (state is ResetPasswordLoading)? CircularProgressIndicator(color: AppColors.white,)
-                    : CustomeText(
-                      text: "forgot_password.reset_button",
-                      textColor: AppColors.white,
-                    ),
+                    btnText: (state is ResetPasswordLoading)
+                        ? SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: AppColors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : CustomeText(
+                            text: "forgot_password.reset_button",
+                            textColor: AppColors.white,
+                          ),
                     btnColor: AppColors.green,
                   );
                 },
@@ -160,11 +178,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
               /// under button text
               Center(
-                child: CustomeText(
-                  text: "forgot_password.info_message",
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  textColor: AppColors.textGrey,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * .1),
+                  child: CustomeText(
+                    centerAlign: true,
+                    text: "forgot_password.info_message",
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    textColor: AppColors.textGrey,
+                  ),
                 ),
               ),
             ],

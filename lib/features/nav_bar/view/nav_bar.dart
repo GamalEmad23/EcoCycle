@@ -60,12 +60,14 @@ class _NavBarState extends State<NavBar> {
                   hoverColor: Colors.transparent,
                 ),
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black12,
+                        color: AppColors.isDarkMode
+                            ? Colors.black.withValues(alpha: 0.35)
+                            : Colors.black12,
                         blurRadius: 10,
-                        offset: Offset(0, -2),
+                        offset: const Offset(0, -2),
                       ),
                     ],
                   ),

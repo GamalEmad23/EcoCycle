@@ -66,7 +66,7 @@ class ActivityItem extends StatelessWidget {
                 const SizedBox(height: 4),
                 CustomeText(
                   text: subtitle,
-                  textColor: Colors.grey.shade600,
+                  textColor: AppColors.textGrey,
                   fontSize: 12,
                 ),
               ],

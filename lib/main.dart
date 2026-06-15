@@ -72,29 +72,92 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           themeMode: themeMode,
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          theme: _buildTheme(Brightness.light),
+          darkTheme: _buildTheme(Brightness.dark),
           debugShowCheckedModeBanner: false,
-      home: StreamBuilder<User?>(
-        stream: _authStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen();
-          }
+          home: StreamBuilder<User?>(
+            stream: _authStream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SplashScreen();
+              }
 
-          final user = snapshot.data;
+              final user = snapshot.data;
 
-          if (user != null && user.emailVerified) {
-            final isAdmin = user.email == "emadg6139@gmail.com" ||
-                user.email == "ahmedsorour628@gmail.com";
-            return isAdmin ? const AdminNavBar() : const NavBar();
-          }
+              if (user != null && user.emailVerified) {
+                final isAdmin =
+                    user.email == "emadg6139@gmail.com" ||
+                    user.email == "ahmedsorour628@gmail.com";
+                return isAdmin ? const AdminNavBar() : const NavBar();
+              }
 
-          return const SplashScreen();
-        },
-      ),
+              return const SplashScreen();
+            },
+          ),
         );
       },
+    );
+  }
+
+  ThemeData _buildTheme(Brightness brightness) {
+    final baseTheme = ThemeData(brightness: brightness);
+
+    return baseTheme.copyWith(
+      scaffoldBackgroundColor: AppColors.background,
+      colorScheme: baseTheme.colorScheme.copyWith(
+        primary: AppColors.green,
+        secondary: AppColors.primary,
+        surface: AppColors.white,
+        onSurface: AppColors.textPrimary,
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.textPrimary,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        titleTextStyle: TextStyle(
+          color: AppColors.textPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      textTheme: baseTheme.textTheme.apply(
+        bodyColor: AppColors.textPrimary,
+        displayColor: AppColors.textPrimary,
+      ),
+      iconTheme: IconThemeData(color: AppColors.textPrimary),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: AppColors.green,
+      ),
+      dividerColor: AppColors.border,
+      cardColor: AppColors.white,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.white,
+        hintStyle: TextStyle(color: AppColors.textGrey),
+        prefixIconColor: AppColors.textGrey,
+        suffixIconColor: AppColors.textGrey,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: AppColors.green, width: 2),
+        ),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: AppColors.white,
+        selectedItemColor: AppColors.green,
+        unselectedItemColor: AppColors.textGrey,
+      ),
+      tabBarTheme: TabBarThemeData(
+        labelColor: AppColors.green,
+        unselectedLabelColor: AppColors.textGrey,
+        indicatorColor: AppColors.green,
+      ),
     );
   }
 }

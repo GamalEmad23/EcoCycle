@@ -9,7 +9,7 @@ class sectionWidget extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-     this.onTap
+    this.onTap,
   });
 
   final IconData icon;
@@ -22,16 +22,20 @@ class sectionWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin:  EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color:AppColors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
         ),
         child: ListTile(
-          leading: Icon(icon, color: Colors.green),
-          title: CustomeText(text:title),
-          subtitle: CustomeText(text:subtitle,fontSize: 12,textColor: AppColors.textGrey,),
-          trailing:  Icon(Icons.arrow_forward_ios),
+          leading: Icon(icon, color: AppColors.green),
+          title: CustomeText(text: title),
+          subtitle: CustomeText(
+            text: subtitle,
+            fontSize: 12,
+            textColor: AppColors.textGrey,
+          ),
+          trailing: Icon(Icons.arrow_forward_ios, color: AppColors.textGrey),
         ),
       ),
     );

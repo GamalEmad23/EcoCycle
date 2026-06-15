@@ -26,7 +26,9 @@ class SmallCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.12),
+            color: AppColors.isDarkMode
+                ? Colors.black.withValues(alpha: 0.22)
+                : Colors.grey.withValues(alpha: 0.12),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -53,7 +55,7 @@ class SmallCard extends StatelessWidget {
                 if (showUnit)
                   Padding(
                     padding: const EdgeInsets.only(top: 12.0),
-                    child:  CustomeText(
+                    child: CustomeText(
                       text: "statistics.kg",
                       fontSize: 12,
                       textColor: AppColors.textGrey,

@@ -68,8 +68,13 @@ class OrderCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(order.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      order.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
@@ -87,8 +92,14 @@ class OrderCard extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                Text("${"admin_orders.material".tr()}: ${order.material}"),
-                Text("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
+                Text(
+                  "${"admin_orders.material".tr()}: ${order.material}",
+                  style: TextStyle(color: AppColors.textPrimary),
+                ),
+                Text(
+                  "${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}",
+                  style: TextStyle(color: AppColors.textPrimary),
+                ),
 
                 const SizedBox(height: 10),
 
@@ -108,6 +119,7 @@ class OrderCard extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
                           ),
                           child: Text("admin_orders.accept".tr()),
                         ),
@@ -126,6 +138,7 @@ class OrderCard extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
                           ),
                           child: Text("admin_orders.reject".tr()),
                         ),

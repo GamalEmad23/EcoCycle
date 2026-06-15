@@ -42,7 +42,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5F7F6),
+      backgroundColor: AppColors.background,
 
       body: SafeArea(
         child: BlocBuilder<AdminCubit, AdminState>(
@@ -65,9 +65,9 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(
-                        color: Color(0xffE9F0EC),
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundLight,
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(30),
                           bottomRight: Radius.circular(30),
                         ),
@@ -129,7 +129,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               vertical: 5,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.shade100,
+                              color: AppColors.lightGreen3,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: CustomeText(
@@ -294,14 +294,23 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          color: Colors.red.shade100,
+                          color: AppColors.lightRed,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
                           leading: const Icon(Icons.logout, color: Colors.red),
-                          title: Text("admin_profile.logout".tr()),
-                          subtitle: Text("admin_profile.logout_desc".tr()),
-                          trailing: const Icon(Icons.arrow_forward_ios),
+                          title: Text(
+                            "admin_profile.logout".tr(),
+                            style: TextStyle(color: AppColors.textPrimary),
+                          ),
+                          subtitle: Text(
+                            "admin_profile.logout_desc".tr(),
+                            style: TextStyle(color: AppColors.textGrey),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.textGrey,
+                          ),
                         ),
                       ),
                     ),

@@ -22,7 +22,6 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      /// 🔥 حاول تسجل دخول الأول
       try {
         await instance.signInWithEmailAndPassword(
           email: userData.email,

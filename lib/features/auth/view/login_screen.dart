@@ -228,9 +228,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             btnText: (state is LoginLoading)
-                                ? Center(
+                                ? SizedBox(
+                                    height: 30,
+                                    width: 30,
                                     child: Lottie.asset(
                                       "assets/lotties/loading.json",
+                                      fit: BoxFit.contain,
                                     ),
                                   )
                                 : CustomeText(
@@ -302,9 +305,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .signInWithGoogle();
                                 },
                                 btnText: (state is googleLoginLoading)
-                                    ? Lottie.asset(
-                                        "assets/lotties/loading.json",
-                                        height: h * .08,
+                                    ? SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: Lottie.asset(
+                                          "assets/lotties/loading.json",
+                                          fit: BoxFit.contain,
+                                        ),
                                       )
                                     : Row(
                                         mainAxisAlignment: .center,

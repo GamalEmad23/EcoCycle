@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
-
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
 
@@ -54,14 +53,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           Row(
             children: [
               IconButton(
-                icon:  Icon(
+                icon: Icon(
                   Icons.notifications_none,
                   color: AppColors.textSecondary,
                 ),
                 onPressed: () {},
               ),
               IconButton(
-                icon:  Icon(
+                icon: Icon(
                   Icons.settings_outlined,
                   color: AppColors.textSecondary,
                 ),
@@ -121,8 +120,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   );
                 }
 
-
-
                 if (state is StatisticsFailure) {
                   return Center(
                     child: Padding(
@@ -136,7 +133,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 int operationsCount = 0;
                 double co2Saved = 0;
                 List<RecyclingRequestModel> recentActivities = [];
-
 
                 // Trends and chart data from state
                 String weightTrend = "+0%";
@@ -166,8 +162,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     return DateFormat('E').format(day);
                   });
 
-
-
                   // Calculate spots for last week based on operations count
                   List<double> dailyOps = List.filled(7, 0.0);
                   for (var activity in recentActivities) {
@@ -183,7 +177,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .entries
                       .map((e) => FlSpot(e.key.toDouble(), e.value))
                       .toList();
-
                 } else if (_selectedRange == "statistics.today") {
                   // Every 3 hours: 12AM, 3AM, 6AM, 9AM, 12PM, 3PM, 6PM, 9PM
                   chartLabels = List.generate(8, (i) {
@@ -194,7 +187,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       'ha',
                       context.locale.languageCode,
                     ).format(time);
-
                   });
 
                   // Calculate spots for today based on operations count
@@ -204,7 +196,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       // Check if it's the same day
                       if (activity.createdAt!.year == now.year &&
                           activity.createdAt!.month == now.month &&
-
                           activity.createdAt!.day == now.day) {
                         int hour = activity.createdAt!.hour;
                         int slot = hour ~/ 3;
@@ -219,7 +210,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .entries
                       .map((e) => FlSpot(e.key.toDouble(), e.value))
                       .toList();
-
                 } else if (_selectedRange == "statistics.last_month") {
                   chartLabels = List.generate(4, (i) {
                     return "${"statistics.week".tr()} ${i + 1}";
@@ -288,10 +278,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       .toList();
                 }
 
-
-
-
-
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -305,7 +291,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withValues(alpha: 0.12),
+                              color: AppColors.isDarkMode
+                                  ? Colors.black.withValues(alpha: 0.22)
+                                  : Colors.grey.withValues(alpha: 0.12),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -381,7 +369,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               value: co2Saved.toStringAsFixed(1),
                               subtitle:
                                   "$co2Trend ${"statistics.this_month".tr()}",
-
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -392,7 +379,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               value: operationsCount.toString(),
                               subtitle:
                                   "$operationsTrend ${"statistics.this_month".tr()}",
-
                             ),
                           ),
                         ],
@@ -409,7 +395,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withValues(alpha: 0.15),
+                              color: AppColors.isDarkMode
+                                  ? Colors.black.withValues(alpha: 0.22)
+                                  : Colors.grey.withValues(alpha: 0.15),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -421,13 +409,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const CustomeText(
+                                CustomeText(
                                   text: "statistics.progress",
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 PopupMenuButton<String>(
-
                                   onSelected: (value) {
                                     setState(() {
                                       _selectedRange = value;
@@ -452,7 +439,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         "statistics.Last_months".tr(),
                                       ),
                                     ),
-
                                   ],
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -491,7 +477,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         show: true,
                                         color: AppColors.primaryLight
                                             .withValues(alpha: 0.1),
-
                                       ),
                                     ),
                                   ],
@@ -504,7 +489,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               children: chartLabels
                                   .map((label) => MonthText(label))
                                   .toList(),
-
                             ),
                           ],
                         ),
@@ -573,7 +557,7 @@ class MonthText extends StatelessWidget {
     return CustomeText(
       text: text,
       fontSize: 12,
-      textColor: Colors.grey.shade700,
+      textColor: AppColors.textGrey,
     );
   }
 }
@@ -600,7 +584,6 @@ class RecentActivityList extends StatelessWidget {
         String subtitle = activity.center ?? "";
         String weight = activity.weight.toString();
 
-
         String imagePath = "assets/images/plastic.png";
         Color iconBg = const Color(0xFFDDF5F0);
         Color iconColor = Colors.teal;
@@ -608,7 +591,6 @@ class RecentActivityList extends StatelessWidget {
 
         // Generalized translation logic: try to find a key for any subtitle
         String centerKey = subtitle.toLowerCase().trim().replaceAll(' ', '_');
-
 
         // Check if there's a specific translation key for this center name
         if ("statistics.$centerKey".tr() != "statistics.$centerKey") {
@@ -624,7 +606,6 @@ class RecentActivityList extends StatelessWidget {
             subtitle = "statistics.green_recycle".tr();
           }
         }
-
 
         if (title.contains("ورق") || title.toLowerCase().contains("paper")) {
           translatedTitle = "statistics.paper".tr();
@@ -650,7 +631,6 @@ class RecentActivityList extends StatelessWidget {
               "assets/images/description.png"; // Fallback to description icon
           iconBg = const Color(0xFFF3E5F5);
           iconColor = Colors.purple;
-
         }
 
         return Padding(

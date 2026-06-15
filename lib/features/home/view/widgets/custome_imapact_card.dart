@@ -5,8 +5,16 @@ import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomeImapactCard extends StatelessWidget {
-  const CustomeImapactCard({super.key, required this.value, required this.label, required this.icon, required this.iconBg, required this.iconColor, required this.amount});
-  
+  const CustomeImapactCard({
+    super.key,
+    required this.value,
+    required this.label,
+    required this.icon,
+    required this.iconBg,
+    required this.iconColor,
+    required this.amount,
+  });
+
   final String value;
   final String label;
   final String amount;
@@ -21,7 +29,7 @@ class CustomeImapactCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),

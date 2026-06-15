@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/onBording/view/onbording_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,21 +13,22 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  Future.delayed(const Duration(seconds: 3), () {
-    if (!mounted) return; // 🔥 أهم سطر
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return; // 🔥 أهم سطر
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const OnbordingScreen()),
-    );
-  });
-}
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const OnbordingScreen()),
+      );
+    });
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50),
         child: Column(

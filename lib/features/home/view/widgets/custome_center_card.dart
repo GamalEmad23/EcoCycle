@@ -4,14 +4,23 @@ import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomeCenterCard extends StatelessWidget {
-  const CustomeCenterCard({super.key, required this.name, required this.address, required this.distance, required this.imgUrl, required this.distanceLable, required this.h, required this.w});
- final String name;
- final String address;
- final String distance;
- final String distanceLable;
- final String imgUrl;
- final double h;
- final double w;
+  const CustomeCenterCard({
+    super.key,
+    required this.name,
+    required this.address,
+    required this.distance,
+    required this.imgUrl,
+    required this.distanceLable,
+    required this.h,
+    required this.w,
+  });
+  final String name;
+  final String address;
+  final String distance;
+  final String distanceLable;
+  final String imgUrl;
+  final double h;
+  final double w;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,15 +28,24 @@ class CustomeCenterCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
-
           Row(
             children: [
-              CustomeText(text: distance.tr() , fontSize: 14,fontWeight: FontWeight.bold,textColor: AppColors.lightGreen,),
-              CustomeText(text: distanceLable.tr() , fontSize: 14,fontWeight: FontWeight.bold,textColor: AppColors.lightGreen,),
+              CustomeText(
+                text: distance.tr(),
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                textColor: AppColors.lightGreen,
+              ),
+              CustomeText(
+                text: distanceLable.tr(),
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                textColor: AppColors.lightGreen,
+              ),
             ],
           ),
           Expanded(
