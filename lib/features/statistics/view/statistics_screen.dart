@@ -9,7 +9,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/statistics/view/widgets/Small_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class StatisticsScreen extends StatefulWidget {
@@ -554,11 +553,7 @@ class MonthText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomeText(
-      text: text,
-      fontSize: 12,
-      textColor: AppColors.textGrey,
-    );
+    return CustomeText(text: text, fontSize: 12, textColor: AppColors.textGrey);
   }
 }
 

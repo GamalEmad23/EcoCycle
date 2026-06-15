@@ -28,6 +28,7 @@ class _OrdersView extends StatefulWidget {
 class _OrdersViewState extends State<_OrdersView>
     with TickerProviderStateMixin {
   late TabController tabController;
+  int _currentTabIndex = 0;
 
   final tabs = ["all", "pending", "accepted", "rejected"];
 
@@ -38,10 +39,17 @@ class _OrdersViewState extends State<_OrdersView>
     tabController = TabController(length: tabs.length, vsync: this);
 
     tabController.addListener(() {
-      context
-          .read<OrderCubit>()
-          .getOrders(tabs[tabController.index]);
+      if (tabController.index == _currentTabIndex) return;
+
+      _currentTabIndex = tabController.index;
+      context.read<OrderCubit>().getOrders(tabs[_currentTabIndex]);
     });
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,9 +76,7 @@ class _OrdersViewState extends State<_OrdersView>
 
           if (state is OrderSuccess) {
             if (state.orders.isEmpty) {
-              return Center(
-                child: Text("orders.no_orders".tr()),
-              );
+              return Center(child: Text("orders.no_orders".tr()));
             }
 
             return ListView.builder(

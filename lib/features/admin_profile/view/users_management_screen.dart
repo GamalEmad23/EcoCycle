@@ -1,4 +1,4 @@
-﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -14,19 +14,13 @@ class _UsersScreenState extends State<UsersScreen> {
   String searchText = "";
 
   void toggleStatus(String userId, bool currentStatus) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .update({
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
       "isActive": !currentStatus,
     });
   }
 
   void deleteUser(String userId) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .delete();
+    await FirebaseFirestore.instance.collection('users').doc(userId).delete();
   }
 
   @override
@@ -93,9 +87,9 @@ class _UsersScreenState extends State<UsersScreen> {
                     final data = doc.data() as Map<String, dynamic>;
                     final name = data['name'] ?? "";
 
-                    return name
-                        .toLowerCase()
-                        .contains(searchText.toLowerCase());
+                    return name.toLowerCase().contains(
+                      searchText.toLowerCase(),
+                    );
                   }).toList();
 
                   return ListView.builder(
@@ -163,8 +157,8 @@ class _UsersScreenState extends State<UsersScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: isActive
-                                      ? Colors.green.withOpacity(0.15)
-                                      : Colors.red.withOpacity(0.15),
+                                      ? Colors.green.withValues(alpha: 0.15)
+                                      : Colors.red.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -172,9 +166,7 @@ class _UsersScreenState extends State<UsersScreen> {
                                       ? "admin_profile.active".tr()
                                       : "admin_profile.blocked".tr(),
                                   style: TextStyle(
-                                    color: isActive
-                                        ? Colors.green
-                                        : Colors.red,
+                                    color: isActive ? Colors.green : Colors.red,
                                   ),
                                 ),
                               ),
@@ -197,8 +189,6 @@ class _UsersScreenState extends State<UsersScreen> {
           ],
         ),
       ),
-
     );
   }
 }
-

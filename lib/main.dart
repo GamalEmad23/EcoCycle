@@ -38,7 +38,9 @@ void main() async {
             create: (context) => ProfileCubit()..getSavedLang(context),
             child: Container(),
           ),
-          BlocProvider(create: (context) => StatisticsCubit()..getStatisticsData()),
+          BlocProvider(
+            create: (context) => StatisticsCubit()..getStatisticsData(),
+          ),
         ],
         child: MyApp(),
       ),
@@ -74,6 +76,8 @@ class _MyAppState extends State<MyApp> {
           themeMode: themeMode,
           theme: _buildTheme(Brightness.light),
           darkTheme: _buildTheme(Brightness.dark),
+          themeAnimationDuration: const Duration(milliseconds: 180),
+          themeAnimationCurve: Curves.easeOutCubic,
           debugShowCheckedModeBanner: false,
           home: StreamBuilder<User?>(
             stream: _authStream,
