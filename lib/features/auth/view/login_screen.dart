@@ -306,8 +306,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 btnText: (state is googleLoginLoading)
                                     ? SizedBox(
-                                        height: 30,
-                                        width: 30,
+                                        height: 70,
+                                        width: 70,
                                         child: Lottie.asset(
                                           "assets/lotties/loading.json",
                                           fit: BoxFit.contain,
