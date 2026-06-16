@@ -1,12 +1,20 @@
-// ignore_for_file: deprecated_member_use
+﻿// ignore_for_file: deprecated_member_use
 
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomeImapactCard extends StatelessWidget {
-  const CustomeImapactCard({super.key, required this.value, required this.label, required this.icon, required this.iconBg, required this.iconColor, required this.amount});
-  
+  const CustomeImapactCard({
+    super.key,
+    required this.value,
+    required this.label,
+    required this.icon,
+    required this.iconBg,
+    required this.iconColor,
+    required this.amount,
+  });
+
   final String value;
   final String label;
   final String amount;
@@ -19,9 +27,9 @@ class CustomeImapactCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(w * 0.04),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -31,15 +39,19 @@ class CustomeImapactCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Container(
+            padding: EdgeInsets.all(w * 0.025),
+            decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
+            child: Icon(icon, color: iconColor, size: w * 0.06),
+          ),
+          SizedBox(width: w * 0.02),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomeText(
                       text: amount,
@@ -69,12 +81,6 @@ class CustomeImapactCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(width: w * 0.02),
-          Container(
-            padding: EdgeInsets.all(w * 0.025),
-            decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-            child: Icon(icon, color: iconColor, size: w * 0.06),
           ),
         ],
       ),

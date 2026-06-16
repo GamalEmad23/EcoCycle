@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/features/home/view/widgets/custom_quick_action.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_center_card.dart';
@@ -9,19 +9,20 @@ import 'package:eco_cycle/features/home/view/widgets/custome_level_card.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_nearby_centers_header.dart';
 import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
-import 'package:eco_cycle/core/Data/centers_data.dart' as static_data;
+import 'package:eco_cycle/core/data/centers_data.dart' as static_data;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lottie/lottie.dart';
 
-class HomeScree extends StatefulWidget {
-  const HomeScree({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScree> createState() => _HomeScreeState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreeState extends State<HomeScree> {
+class _HomeScreenState extends State<HomeScreen> {
   Position? _currentPosition;
   List<Map<String, dynamic>> _nearbyCenters = [];
 
@@ -83,7 +84,7 @@ class _HomeScreeState extends State<HomeScree> {
     double h = MediaQuery.sizeOf(context).height;
     double w = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
@@ -118,7 +119,7 @@ class _HomeScreeState extends State<HomeScree> {
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// User Header
                   CustomeHeader(
@@ -163,8 +164,8 @@ class _HomeScreeState extends State<HomeScree> {
                           label: "home.recycle_now".tr(),
                           icon: Icons.recycling_rounded,
                           bgColor: AppColors.levelCardEnd,
-                          textColor: AppColors.white,
-                          iconColor: AppColors.white,
+                          textColor: Colors.white,
+                          iconColor: Colors.white,
                           h: h,
                           w: w,
                           onTap: () =>
@@ -195,7 +196,12 @@ class _HomeScreeState extends State<HomeScree> {
 
                   /// Centers List Nearest
                   if (_nearbyCenters.isEmpty)
-                    const Center(child: CircularProgressIndicator())
+                    Center(
+                      child: Lottie.asset(
+                        "assets/lotties/Sandy Loading.json",
+                        height: h * .18,
+                      ),
+                    )
                   else
                     ..._nearbyCenters.map(
                       (center) => Padding(
@@ -233,3 +239,5 @@ class _HomeScreeState extends State<HomeScree> {
     );
   }
 }
+
+

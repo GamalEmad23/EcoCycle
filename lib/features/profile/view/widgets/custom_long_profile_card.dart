@@ -35,7 +35,7 @@ class customeLongProfileCard extends StatelessWidget {
           width: w * .89,
           decoration: BoxDecoration(
             color: AppColors.white,
-            border: Border.all(color: AppColors.lightGrey , width: 3),
+            border: Border.all(color: AppColors.border, width: 2),
             borderRadius: BorderRadius.circular(15),
           ),
         
@@ -43,7 +43,7 @@ class customeLongProfileCard extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: w * .03),
             child: Row(
-              mainAxisAlignment: .spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
@@ -51,7 +51,7 @@ class customeLongProfileCard extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: backGroung ?? AppColors.lightGrey,
+                        color: backGroung ?? AppColors.iconBgLight,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -70,7 +70,8 @@ class customeLongProfileCard extends StatelessWidget {
         
                 // SizedBox(width: w*.025,),
                 Icon(
-                  Icons.arrow_forward_ios
+                  Icons.arrow_forward_ios,
+                  color: AppColors.textSecondary,
                 ),
               ],
             ),

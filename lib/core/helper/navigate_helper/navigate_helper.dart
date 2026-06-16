@@ -9,14 +9,14 @@ class NavigateHelper {
     );
   }
 
-  /// pushReplacement (بدل الصفحة الحالية)
+  /// pushReplacement
   static void pushReplacement(BuildContext context, Widget page) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => page),
     );
   }
 
-  /// pushAndRemoveUntil (يمسح كل اللي قبله)
+  /// pushAndRemoveUntil 
   static void pushAndRemoveUntil(BuildContext context, Widget page) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => page),

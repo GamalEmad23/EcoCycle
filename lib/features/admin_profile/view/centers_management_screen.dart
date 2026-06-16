@@ -1,17 +1,17 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CentersManagementScreen extends StatefulWidget {
-  const CentersManagementScreen({super.key});
+class RecyclingCentersScreen extends StatefulWidget {
+  const RecyclingCentersScreen({super.key});
 
   @override
-  State<CentersManagementScreen> createState() =>
-      _CentersManagementScreenState();
+  State<RecyclingCentersScreen> createState() =>
+      _RecyclingCentersScreenState();
 }
 
-class _CentersManagementScreenState
-    extends State<CentersManagementScreen> {
+class _RecyclingCentersScreenState
+    extends State<RecyclingCentersScreen> {
   String searchText = "";
 
   @override

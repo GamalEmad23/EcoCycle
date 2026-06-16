@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_imapact_card.dart';
@@ -25,12 +24,10 @@ class CustomeImpactSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
-          alignment: context.locale.countryCode == "en"
-              ? AlignmentGeometry.topLeft
-              : AlignmentGeometry.centerRight,
+          alignment: AlignmentDirectional.topStart,
           child: CustomeText(
             text: "home.impact_summary",
             fontSize: 20,

@@ -1,3 +1,4 @@
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomeLangCard extends StatelessWidget {
@@ -16,16 +17,16 @@ class CustomeLangCard extends StatelessWidget {
        duration: const Duration(milliseconds: 200),
   padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
   decoration: BoxDecoration(
-    color: selected ? const Color(0xFFE8F5E9) : Colors.white,
+    color: selected ? AppColors.lightGreen1 : AppColors.white,
     borderRadius: BorderRadius.circular(14),
     border: Border.all(
-      color: selected ? const Color(0xFF4CAF50) : Colors.grey.shade300, 
+      color: selected ? AppColors.primary : AppColors.border, 
       width: selected ? 2 : 1.2,
     ),
     boxShadow: selected
         ? [
             BoxShadow(
-              color: Colors.green.withValues(alpha: 0.2),
+              color: AppColors.primary.withValues(alpha: 0.15),
               blurRadius: 8,
               offset: const Offset(0, 3),
             )
@@ -34,7 +35,7 @@ class CustomeLangCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.grey.shade700),
+          Icon(icon, color: selected ? AppColors.primary : AppColors.textSecondary),
           SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -42,11 +43,12 @@ class CustomeLangCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                color: AppColors.black,
               ),
             ),
           ),
           if (selected)
-            Icon(Icons.check_circle, color: Color(0xFF8FD3A8)),
+            Icon(Icons.check_circle, color: AppColors.primary),
         ],
       ),
     ),

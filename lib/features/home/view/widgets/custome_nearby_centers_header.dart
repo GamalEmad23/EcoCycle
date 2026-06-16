@@ -12,6 +12,12 @@ class CustomeNearbyCentersHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        CustomeText(
+          text: "home.nearby_centers",
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          textColor: AppColors.textPrimary,
+        ),
         TextButton(
           onPressed: onViewAllTap,
           child: CustomeText(
@@ -21,13 +27,6 @@ class CustomeNearbyCentersHeader extends StatelessWidget {
             textColor: AppColors.lightGreen,
           ),
         ),
-
-        CustomeText(
-          text: "home.nearby_centers",
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          textColor: AppColors.textPrimary,
-        )
       ],
     );
   }

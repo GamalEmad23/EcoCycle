@@ -11,8 +11,8 @@ class AboutBottomSheet extends StatelessWidget {
     return FadeInUp(
       duration: const Duration(milliseconds: 300),
       child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
           boxShadow: [
@@ -44,7 +44,7 @@ class AboutBottomSheet extends StatelessWidget {
               height: 90,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [AppColors.lightGreen3, AppColors.lightGreen4],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -57,7 +57,7 @@ class AboutBottomSheet extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.recycling_rounded,
                 size: 50,
                 color: AppColors.primary,
@@ -68,7 +68,7 @@ class AboutBottomSheet extends StatelessWidget {
             // App Name
             Text(
               "about_app.name".tr(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
@@ -85,7 +85,7 @@ class AboutBottomSheet extends StatelessWidget {
               ),
               child: Text(
                 "about_app.version".tr(),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textSecondary,
@@ -98,7 +98,7 @@ class AboutBottomSheet extends StatelessWidget {
             Text(
               "about_app.description".tr(),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 height: 1.5,
                 color: AppColors.textSecondary,

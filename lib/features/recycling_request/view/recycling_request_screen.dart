@@ -1,11 +1,13 @@
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/recycling_request/cubit/recycling_request_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
-import '../widgets/material_card_widget.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_input_field.dart';
+import 'widgets/material_card_widget.dart';
+import 'widgets/custom_button.dart';
+import 'widgets/custom_input_field.dart';
 
 class RecyclingRequestScreen extends StatelessWidget {
   const RecyclingRequestScreen({super.key});
@@ -25,16 +27,16 @@ class _RecyclingRequestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        forceMaterialTransparency: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
         centerTitle: true,
         title: Text(
           'add_process.recycling'.tr(),
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: AppColors.black,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -69,9 +71,10 @@ class _RecyclingRequestView extends StatelessWidget {
                 /// MATERIAL
                 Text(
                   'add_process.select_material'.tr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -88,59 +91,72 @@ class _RecyclingRequestView extends StatelessWidget {
                     MaterialCardWidget(
                       title: 'add_process.paper'.tr(),
                       icon: Icons.description_outlined,
-                      isSelected: cubit.selectedMaterial == 'ورق',
-                      onTap: () => cubit.selectMaterial('ورق'),
+                      isSelected: cubit.selectedMaterial == 'ÙˆØ±Ù‚',
+                      onTap: () => cubit.selectMaterial('ÙˆØ±Ù‚'),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.plastic'.tr(),
                       icon: Icons.eco_outlined,
-                      isSelected: cubit.selectedMaterial == 'بلاستيك',
-                      onTap: () => cubit.selectMaterial('بلاستيك'),
+                      isSelected: cubit.selectedMaterial == 'Ø¨Ù„Ø§Ø³ØªÙŠÙƒ',
+                      onTap: () => cubit.selectMaterial('Ø¨Ù„Ø§Ø³ØªÙŠÙƒ'),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.electronics'.tr(),
                       icon: Icons.devices_other_outlined,
-                      isSelected: cubit.selectedMaterial == 'إلكترونيات',
-                      onTap: () => cubit.selectMaterial('إلكترونيات'),
+                      isSelected: cubit.selectedMaterial == 'Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª',
+                      onTap: () => cubit.selectMaterial('Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª'),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.metal'.tr(),
                       icon: Icons.precision_manufacturing_outlined,
-                      isSelected: cubit.selectedMaterial == 'معدن',
-                      onTap: () => cubit.selectMaterial('معدن'),
+                      isSelected: cubit.selectedMaterial == 'Ù…Ø¹Ø¯Ù†',
+                      onTap: () => cubit.selectMaterial('Ù…Ø¹Ø¯Ù†'),
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 1),
 
                 /// CENTER
                 Text(
                   'add_process.center'.tr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
                 const SizedBox(height: 16),
 
                 if (cubit.isLoadingCenters)
-                  const Center(child: CircularProgressIndicator())
+                  Center(
+                    child: LottieBuilder.asset(
+                      "assets/lotties/Green eco earth animation.json",
+                      height: 100,
+                    ),
+                  )
                 else if (cubit.centers.isEmpty)
                   Center(child: Text("common.no_centers".tr()))
                 else
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: cubit.selectedCenter,
-                        hint: Text('add_process.choose_center'.tr()),
+                        hint: Text(
+                          'add_process.choose_center'.tr(),
+                          style: TextStyle(color: AppColors.textGrey),
+                        ),
                         isExpanded: true,
+                        dropdownColor: AppColors.white,
+                        style: TextStyle(color: AppColors.textPrimary),
+                        iconEnabledColor: AppColors.textPrimary,
                         items: cubit.centers.map((center) {
                           return DropdownMenuItem<String>(
                             value: center,
@@ -157,9 +173,10 @@ class _RecyclingRequestView extends StatelessWidget {
                 /// WEIGHT
                 Text(
                   'add_process.estimated_weight'.tr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -175,9 +192,10 @@ class _RecyclingRequestView extends StatelessWidget {
                 /// IMAGE
                 Text(
                   'add_process.upload_image'.tr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -189,8 +207,9 @@ class _RecyclingRequestView extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 32),
                     decoration: BoxDecoration(
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade300),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Column(
                       children: [
@@ -208,6 +227,7 @@ class _RecyclingRequestView extends StatelessWidget {
                           cubit.image != null
                               ? 'add_process.image_uploaded_success'.tr()
                               : 'add_process.upload_here'.tr(),
+                          style: TextStyle(color: AppColors.textPrimary),
                         ),
                       ],
                     ),
@@ -221,26 +241,26 @@ class _RecyclingRequestView extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.green.shade50,
+                        color: AppColors.lightGreen3,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green.shade200),
+                        border: Border.all(color: AppColors.green),
                       ),
                       child: Column(
                         children: [
                           Text(
-                            'تم التعرف على: ${cubit.predictionResult}',
-                            style: const TextStyle(
+                            'ØªÙ… Ø§Ù„ØªØ¹Ø±Ù Ø¹Ù„Ù‰: ${cubit.predictionResult}',
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: AppColors.primary,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'نسبة الدقة: ${cubit.confidence.toStringAsFixed(1)}%',
+                            'Ù†Ø³Ø¨Ø© Ø§Ù„Ø¯Ù‚Ø©: ${cubit.confidence.toStringAsFixed(1)}%',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green.shade700,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -266,3 +286,5 @@ class _RecyclingRequestView extends StatelessWidget {
     );
   }
 }
+
+

@@ -14,6 +14,7 @@ import 'package:eco_cycle/features/auth/view/forget_password_screen.dart';
 import 'package:eco_cycle/features/nav_bar/view/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -227,8 +228,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             btnText: (state is LoginLoading)
-                                ? CircularProgressIndicator(
-                                    color: AppColors.white,
+                                ? SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: Lottie.asset(
+                                      "assets/lotties/loading.json",
+                                      fit: BoxFit.contain,
+                                    ),
                                   )
                                 : CustomeText(
                                     text: "login.login_button",
@@ -299,8 +305,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .signInWithGoogle();
                                 },
                                 btnText: (state is googleLoginLoading)
-                                    ? CircularProgressIndicator(
-                                        color: AppColors.green,
+                                    ? SizedBox(
+                                        height: 70,
+                                        width: 70,
+                                        child: Lottie.asset(
+                                          "assets/lotties/loading.json",
+                                          fit: BoxFit.contain,
+                                        ),
                                       )
                                     : Row(
                                         mainAxisAlignment: .center,

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'model/order_model.dart';
+import '../model/order_model.dart';
 
 abstract class OrderState {}
 

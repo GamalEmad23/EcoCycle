@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../order_cubit.dart';
-import '../widget/order_card.dart';
+import '../../../core/themes/app_colors.dart';
+import '../cubit/order_cubit.dart';
+import 'widget/order_card.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -27,6 +28,7 @@ class _OrdersView extends StatefulWidget {
 class _OrdersViewState extends State<_OrdersView>
     with TickerProviderStateMixin {
   late TabController tabController;
+  int _currentTabIndex = 0;
 
   final tabs = ["all", "pending", "accepted", "rejected"];
 
@@ -37,15 +39,23 @@ class _OrdersViewState extends State<_OrdersView>
     tabController = TabController(length: tabs.length, vsync: this);
 
     tabController.addListener(() {
-      context
-          .read<OrderCubit>()
-          .getOrders(tabs[tabController.index]);
+      if (tabController.index == _currentTabIndex) return;
+
+      _currentTabIndex = tabController.index;
+      context.read<OrderCubit>().getOrders(tabs[_currentTabIndex]);
     });
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text("orders.title".tr()),
         bottom: TabBar(
@@ -66,9 +76,7 @@ class _OrdersViewState extends State<_OrdersView>
 
           if (state is OrderSuccess) {
             if (state.orders.isEmpty) {
-              return Center(
-                child: Text("orders.no_orders".tr()),
-              );
+              return Center(child: Text("orders.no_orders".tr()));
             }
 
             return ListView.builder(

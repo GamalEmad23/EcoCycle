@@ -1,3 +1,4 @@
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MaterialCardWidget extends StatelessWidget {
@@ -20,10 +21,10 @@ class MaterialCardWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? const Color(0xFF00E676) : Colors.grey.shade200,
+            color: isSelected ? const Color(0xFF00E676) : AppColors.border,
             width: 2,
           ),
           boxShadow: [
@@ -40,7 +41,7 @@ class MaterialCardWidget extends StatelessWidget {
             Icon(
               icon,
               size: 32,
-              color: isSelected ? const Color(0xFF00E676) : Colors.grey.shade400,
+              color: isSelected ? const Color(0xFF00E676) : AppColors.textGrey,
             ),
             const SizedBox(height: 8),
             Text(
@@ -48,7 +49,7 @@ class MaterialCardWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.black : Colors.grey.shade600,
+                color: isSelected ? AppColors.textPrimary : AppColors.textGrey,
               ),
             ),
           ],
@@ -57,3 +58,5 @@ class MaterialCardWidget extends StatelessWidget {
     );
   }
 }
+
+

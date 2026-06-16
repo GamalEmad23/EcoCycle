@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "105674295131",
+    "firebase_url": "https://ecocycle-7bee3-default-rtdb.firebaseio.com",
+    "project_id": "ecocycle-7bee3",
+    "storage_bucket": "ecocycle-7bee3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105674295131:android:acc82a605b2d41dd37bc7e",
+        "android_client_info": {
+          "package_name": "com.example.eco_cycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105674295131-6n4chivf9bcoctp6t8875lvgcnprurq7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eco_cycle",
+            "certificate_hash": "6b582d735dad0bdbb58b8db5773d8febad63ca0a"
+          }
+        },
+        {
+          "client_id": "105674295131-p2aecgabve058p1utq02d9usjenobcns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eco_cycle",
+            "certificate_hash": "a463d03d13b16ab4ca13640e9fbd0c8c49ca5844"
+          }
+        },
+        {
+          "client_id": "105674295131-7cdupfj0dt2ie3uilqnu05s4pu71j39i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2pzUJJtRNVFfMoqNwSBnCN5jdwNYTe1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105674295131-7cdupfj0dt2ie3uilqnu05s4pu71j39i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "105674295131-9jt79hqlk86spnh5tpdgeou2aatne2je.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecoCycle"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

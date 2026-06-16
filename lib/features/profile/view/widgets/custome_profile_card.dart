@@ -1,4 +1,4 @@
-import 'package:eco_cycle/core/themes/app_colors.dart';
+﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class customeProfileCard extends StatelessWidget {
         height: h * .11,
         width: w * .28,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           //  boxShadow: [
           //    BoxShadow(
           //      blurRadius: 2,
@@ -55,3 +55,4 @@ class customeProfileCard extends StatelessWidget {
     );
   }
 }
+

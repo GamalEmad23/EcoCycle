@@ -2,8 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../model/order_model.dart';
-import '../order_cubit.dart';
+import '../../cubit/order_cubit.dart';
+import '../../model/order_model.dart';
+
 
 class OrderCard extends StatelessWidget {
   final OrderModel order;
@@ -50,23 +51,7 @@ class OrderCard extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(16),
             ),
-            child: order.imageUrl != null &&
-                order.imageUrl!.isNotEmpty
-                ? Image.network(
-              order.imageUrl!,
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Image.asset(
-                  "assets/images/Image+Background.png",
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                );
-              },
-            )
-                : Image.asset(
+            child: Image.asset(
               "assets/images/Image+Background.png",
               height: 120,
               width: double.infinity,

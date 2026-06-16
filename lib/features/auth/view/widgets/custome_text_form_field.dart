@@ -15,7 +15,7 @@ class CustomeTextFormField extends StatelessWidget {
     this.suffix,
     this.validator,
     this.secText,
-    this.onFieldSubmitted
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -38,9 +38,13 @@ class CustomeTextFormField extends StatelessWidget {
         validator: validator,
         obscureText: secText ?? false,
         keyboardType: inputType,
-        onFieldSubmitted:onFieldSubmitted ,
+        onFieldSubmitted: onFieldSubmitted,
+        cursorColor: AppColors.green,
+        style: TextStyle(color: AppColors.textPrimary),
 
         decoration: InputDecoration(
+          filled: true,
+          fillColor: AppColors.white,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(color: AppColors.border, width: 3),
@@ -56,10 +60,10 @@ class CustomeTextFormField extends StatelessWidget {
             borderSide: BorderSide(color: AppColors.red, width: 3),
           ),
 
-          disabledBorder:OutlineInputBorder(
+          disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(color: AppColors.border, width: 3),
-          ), 
+          ),
 
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
@@ -76,9 +80,11 @@ class CustomeTextFormField extends StatelessWidget {
 
           ///
           prefixIcon: prefix,
+          prefixIconColor: AppColors.textGrey,
 
           ///
           suffixIcon: suffix,
+          suffixIconColor: AppColors.textGrey,
         ),
       ),
     );
