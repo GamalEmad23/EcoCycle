@@ -14,52 +14,34 @@ class AdminCubit extends Cubit<AdminState> {
   int centersCount = 0;
   int ordersCount = 0;
 
-  /// 🔥 مهم: ده الـ Admin الحقيقي بتاعك
-  final String adminDocId = "uxn1Fo5a7tcBiBzzpk7eE4FSLbe2";
+  final String adminDocId = "gZadFjTDdLTzGWiSEWYQgmwVrkD2";
 
   Future<void> getAdminData(String userId) async {
     emit(AdminLoading());
 
     try {
-      /// 🧠 نحدد انهي ID نستخدمه
-      String docId = userId;
-
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-
-      /// ❌ لو المستخدم الحالي مش هو الأدمن
-      if (!userDoc.exists) {
-        docId = adminDocId;
-      }
-
-      /// 👤 Admin Data
       final doc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(docId)
+          .doc(adminDocId)
           .get();
 
-      final data = doc.data();
-
-      if (data == null) {
-        emit(AdminError("Admin data not found"));
+      if (!doc.exists) {
+        emit(AdminError("Admin document not found"));
         return;
       }
 
-      final admin = AdminModel.fromFirestore(data);
+      final admin = AdminModel.fromFirestore(doc.data());
 
-      /// 👥 Users Count
       final usersSnapshot =
       await FirebaseFirestore.instance.collection('users').get();
+
       usersCount = usersSnapshot.docs.length;
 
-      /// ♻️ Centers Count
       final centersSnapshot =
       await FirebaseFirestore.instance.collection('centers').get();
+
       centersCount = centersSnapshot.docs.length;
 
-      /// 📦 Orders Count
       int totalOrders = 0;
 
       for (var user in usersSnapshot.docs) {
@@ -80,7 +62,6 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  /// 🔥 Upload Image
   Future<String?> uploadImage(File file, String userId) async {
     try {
       final ref = FirebaseStorage.instance
@@ -96,11 +77,10 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  /// 🔥 Update Image
   Future<void> updateAdminImage(String userId, String imageUrl) async {
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(adminDocId) // 👈 مهم
+        .doc(adminDocId)
         .update({
       'image': imageUrl,
     });

@@ -50,7 +50,23 @@ class OrderCard extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(16),
             ),
-            child: Image.asset(
+            child: order.imageUrl != null &&
+                order.imageUrl!.isNotEmpty
+                ? Image.network(
+              order.imageUrl!,
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  "assets/images/Image+Background.png",
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                );
+              },
+            )
+                : Image.asset(
               "assets/images/Image+Background.png",
               height: 120,
               width: double.infinity,

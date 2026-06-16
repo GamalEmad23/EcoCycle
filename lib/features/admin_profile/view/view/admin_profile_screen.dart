@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/admin_profile/view/view/centers_management_screen.dart';
 import 'package:eco_cycle/features/admin_profile/view/view/users_management_screen.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import '../../../../core/helper/navigate_helper/navigate_helper.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../profile/cubit/cubit/profile_cubit.dart';
@@ -21,7 +19,6 @@ import '../../admin_cubit.dart';
 
 class AdminProfileScreen extends StatefulWidget {
   const AdminProfileScreen({super.key});
-
   @override
   State<AdminProfileScreen> createState() => _AdminProfileScreenState();
 }
@@ -30,34 +27,28 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   @override
   void initState() {
     super.initState();
-
     final user = FirebaseAuth.instance.currentUser;
-
     if (user != null) {
-      context.read<AdminCubit>().getAdminData(user?.uid ?? "");    }
+      context.read<AdminCubit>().getAdminData("");    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF5F7F6),
-
       body: SafeArea(
         child: BlocBuilder<AdminCubit, AdminState>(
           builder: (context, state) {
             if (state is AdminLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-
             if (state is AdminError) {
               return Center(child: Text(state.message));
             }
-
             if (state is AdminSuccess) {
               final admin = state.admin;
               final cubit = context.read<AdminCubit>();
               final user = FirebaseAuth.instance.currentUser;
-
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -73,24 +64,19 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-
                           GestureDetector(
                             onTap: () async {
                               if (user == null) return;
-
                               final picker = ImagePicker();
                               final picked = await picker.pickImage(
                                 source: ImageSource.gallery,
                               );
-
                               if (picked != null) {
                                 final file = File(picked.path);
-
                                 final url = await cubit.uploadImage(
                                   file,
                                   user.uid,
                                 );
-
                                 if (url != null) {
                                   await cubit.updateAdminImage(user.uid, url);
                                 }
@@ -109,18 +95,14 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                   : null,
                             ),
                           ),
-
                           const SizedBox(height: 10),
-
                           CustomeText(
                             text: admin.name.isEmpty
                                 ? "admin_profile.admin".tr()
                                 : admin.name,
                             fontWeight: FontWeight.bold,
                           ),
-
                           const SizedBox(height: 5),
-
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -135,9 +117,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               textColor: AppColors.primary,
                             ),
                           ),
-
                           const SizedBox(height: 20),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -167,30 +147,26 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
                     sectionWidget(
                       onTap: () {
-                        NavigateHelper.push(context, const UsersScreen());
+                        NavigateHelper.push(context, const UsersManagementScreen());
                       },
                       icon: Icons.people,
                       title: "admin_profile.manage_users".tr(),
                       subtitle: "admin_profile.users_desc".tr(),
                     ),
-
                     sectionWidget(
                       onTap: () {
                         NavigateHelper.push(
                           context,
-                          const RecyclingCentersScreen(),
+                          const CentersManagementScreen(),
                         );
                       },
                       icon: Icons.recycling,
                       title: "admin_profile.recycling_centers".tr(),
                       subtitle: "admin_profile.centers_desc".tr(),
                     ),
-
                     sectionWidget(
                       icon: Icons.language,
                       title: "admin_profile.language".tr(),
@@ -250,9 +226,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         );
                       },
                     ),
-
                     const SizedBox(height: 10),
-
                     GestureDetector(
                       onTap: () async {
                         await context.read<AuthCubit>().Signout();
@@ -275,9 +249,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       padding: const EdgeInsets.all(16),
@@ -299,13 +271,11 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
                   ],
                 ),
               );
             }
-
             return const SizedBox();
           },
         ),

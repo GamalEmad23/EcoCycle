@@ -10,6 +10,7 @@ class OrderModel {
   final DateTime date;
   final String? userName;
   final String? userEmail;
+  final String? imageUrl;
 
   OrderModel({
     required this.id,
@@ -21,10 +22,13 @@ class OrderModel {
     required this.date,
     this.userName,
     this.userEmail,
+    this.imageUrl,
   });
 
   factory OrderModel.fromFirestore(
-      DocumentSnapshot doc, String userId) {
+      DocumentSnapshot doc,
+      String userId,
+      ) {
     final data = doc.data() as Map<String, dynamic>;
 
     return OrderModel(
@@ -32,10 +36,11 @@ class OrderModel {
       userId: userId,
       center: data['center'] ?? '',
       material: data['material'] ?? '',
-      weight: (data['weight'] as num?)?.toInt() ?? 0, // 🔥 FIX
+      weight: (data['weight'] as num?)?.toInt() ?? 0,
       status: data['status'] ?? 'pending',
       userName: data['userName'],
       userEmail: data['userEmail'],
+      imageUrl: data['imageUrl'],
       date: (data['createdAt'] as Timestamp).toDate(),
     );
   }

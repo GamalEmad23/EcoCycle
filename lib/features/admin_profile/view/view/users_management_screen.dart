@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-class UsersScreen extends StatefulWidget {
-  const UsersScreen({super.key});
+class UsersManagementScreen extends StatefulWidget {
+  const UsersManagementScreen({super.key});
 
   @override
-  State<UsersScreen> createState() => _UsersScreenState();
+  State<UsersManagementScreen> createState() => _UsersManagementScreenState();
 }
 
-class _UsersScreenState extends State<UsersScreen> {
+class _UsersManagementScreenState extends State<UsersManagementScreen> {
   String searchText = "";
 
   void toggleStatus(String userId, bool currentStatus) async {
@@ -21,13 +21,30 @@ class _UsersScreenState extends State<UsersScreen> {
     });
   }
 
-  void deleteUser(String userId) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .delete();
-  }
+  Future<void> deleteUser(String userId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .delete();
 
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("User deleted successfully"),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+          ),
+        );
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,10 +205,35 @@ class _UsersScreenState extends State<UsersScreen> {
                             const SizedBox(width: 8),
 
                             IconButton(
-                              onPressed: () =>
-                                  deleteUser(doc.id),
-                              icon: const Icon(Icons.delete,
-                                  color: Colors.red),
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: const Text("Delete User"),
+                                    content: const Text(
+                                      "Are you sure you want to delete this user?",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: const Text("Delete"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirm == true) {
+                                  await deleteUser(doc.id);
+                                }
+                              },
                             ),
                           ],
                         ),
