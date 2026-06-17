@@ -54,8 +54,14 @@ class _OrdersViewState extends State<_OrdersView>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    AppColors.isDarkMode = isDark;
+    final backgroundColor = isDark
+        ? const Color(0xFF0A0D0B)
+        : const Color(0xFFF8FAF9);
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: Text("orders.title".tr()),
         bottom: TabBar(

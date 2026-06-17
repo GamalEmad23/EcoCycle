@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -13,32 +14,29 @@ class _UsersScreenState extends State<UsersScreen> {
   String searchText = "";
 
   void toggleStatus(String userId, bool currentStatus) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .update({
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
       "isActive": !currentStatus,
     });
   }
 
   void deleteUser(String userId) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .delete();
+    await FirebaseFirestore.instance.collection('users').doc(userId).delete();
   }
 
   @override
   Widget build(BuildContext context) {
+    AppColors.isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xffF5F6F8),
+      backgroundColor: AppColors.background,
 
       appBar: AppBar(
         title: Text("admin_profile.manage_users_title".tr()),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppColors.textPrimary,
+        surfaceTintColor: Colors.transparent,
       ),
 
       body: Padding(
@@ -47,10 +45,13 @@ class _UsersScreenState extends State<UsersScreen> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border),
               ),
               child: TextField(
+                cursorColor: AppColors.green,
+                style: TextStyle(color: AppColors.textPrimary),
                 onChanged: (value) {
                   setState(() {
                     searchText = value;
@@ -58,7 +59,8 @@ class _UsersScreenState extends State<UsersScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: "admin_profile.search_user".tr(),
-                  prefixIcon: const Icon(Icons.search),
+                  hintStyle: TextStyle(color: AppColors.textGrey),
+                  prefixIcon: Icon(Icons.search, color: AppColors.textGrey),
                   border: InputBorder.none,
                 ),
               ),
@@ -72,32 +74,35 @@ class _UsersScreenState extends State<UsersScreen> {
                     .collection('users')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(
-                        child: CircularProgressIndicator());
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(color: AppColors.green),
+                    );
                   }
 
-                  if (!snapshot.hasData ||
-                      snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text("No Users"));
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No Users",
+                        style: TextStyle(color: AppColors.textPrimary),
+                      ),
+                    );
                   }
 
                   final users = snapshot.data!.docs.where((doc) {
                     final data = doc.data() as Map<String, dynamic>;
                     final name = data['name'] ?? "";
 
-                    return name
-                        .toLowerCase()
-                        .contains(searchText.toLowerCase());
+                    return name.toLowerCase().contains(
+                      searchText.toLowerCase(),
+                    );
                   }).toList();
 
                   return ListView.builder(
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final doc = users[index];
-                      final data =
-                      doc.data() as Map<String, dynamic>;
+                      final data = doc.data() as Map<String, dynamic>;
 
                       final name = data['name'] ?? "";
                       final email = data['email'] ?? "";
@@ -105,13 +110,21 @@ class _UsersScreenState extends State<UsersScreen> {
                       final isActive = data['isActive'] ?? true;
 
                       return Container(
-                        margin:
-                        const EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                          BorderRadius.circular(16),
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.border),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.isDarkMode
+                                  ? Colors.black.withValues(alpha: 0.22)
+                                  : Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 14,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
@@ -119,14 +132,15 @@ class _UsersScreenState extends State<UsersScreen> {
                               backgroundImage: image != null
                                   ? NetworkImage(image)
                                   : null,
-                              backgroundColor:
-                              Colors.green.shade100,
+                              backgroundColor: AppColors.lightGreen3,
                               child: image == null
                                   ? Text(
-                                name.isNotEmpty
-                                    ? name[0]
-                                    : "?",
-                              )
+                                      name.isNotEmpty ? name[0] : "?",
+                                      style: TextStyle(
+                                        color: AppColors.green,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
                                   : null,
                             ),
 
@@ -134,52 +148,44 @@ class _UsersScreenState extends State<UsersScreen> {
 
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     name,
-                                    style: const TextStyle(
-                                        fontWeight:
-                                        FontWeight.bold),
+                                    style: TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   Text(
                                     email,
-                                    style: const TextStyle(
-                                        color: Colors.grey),
+                                    style: TextStyle(color: AppColors.textGrey),
                                   ),
                                 ],
                               ),
                             ),
 
                             GestureDetector(
-                              onTap: () => toggleStatus(
-                                  doc.id, isActive),
+                              onTap: () => toggleStatus(doc.id, isActive),
                               child: Container(
-                                padding:
-                                const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 5,
+                                ),
                                 decoration: BoxDecoration(
                                   color: isActive
-                                      ? Colors.green
-                                      .withOpacity(0.15)
-                                      : Colors.red
-                                      .withOpacity(0.15),
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      20),
+                                      ? AppColors.green.withValues(alpha: 0.15)
+                                      : AppColors.red.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
                                   isActive
-                                      ? "admin_profile.active"
-                                      .tr()
-                                      : "admin_profile.blocked"
-                                      .tr(),
+                                      ? "admin_profile.active".tr()
+                                      : "admin_profile.blocked".tr(),
                                   style: TextStyle(
                                     color: isActive
-                                        ? Colors.green
-                                        : Colors.red,
+                                        ? AppColors.green
+                                        : AppColors.red,
                                   ),
                                 ),
                               ),
@@ -188,10 +194,8 @@ class _UsersScreenState extends State<UsersScreen> {
                             const SizedBox(width: 8),
 
                             IconButton(
-                              onPressed: () =>
-                                  deleteUser(doc.id),
-                              icon: const Icon(Icons.delete,
-                                  color: Colors.red),
+                              onPressed: () => deleteUser(doc.id),
+                              icon: Icon(Icons.delete, color: AppColors.red),
                             ),
                           ],
                         ),
@@ -204,7 +208,6 @@ class _UsersScreenState extends State<UsersScreen> {
           ],
         ),
       ),
-
     );
   }
 }

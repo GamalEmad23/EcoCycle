@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../cubit/order_cubit.dart';
 import '../../model/order_model.dart';
-
 
 class OrderCard extends StatelessWidget {
   final OrderModel order;
@@ -14,11 +14,11 @@ class OrderCard extends StatelessWidget {
   Color getStatusColor() {
     switch (order.status) {
       case "accepted":
-        return Colors.green;
+        return AppColors.green;
       case "rejected":
-        return Colors.red;
+        return AppColors.red;
       default:
-        return Colors.orange;
+        return AppColors.orange;
     }
   }
 
@@ -35,22 +35,35 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    AppColors.isDarkMode = isDark;
+    final cardColor = isDark ? const Color(0xFF141A16) : Colors.white;
+    final borderColor = isDark
+        ? const Color(0xFF233027)
+        : const Color(0xFFE5E7EB);
     final cubit = context.read<OrderCubit>();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.22)
+                : Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(16),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: Image.asset(
               "assets/images/Image+Background.png",
               height: 120,
@@ -64,17 +77,26 @@ class OrderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(order.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Expanded(
+                      child: Text(
+                        order.center,
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
                       decoration: BoxDecoration(
-                        color: getStatusColor().withOpacity(0.15),
+                        color: getStatusColor().withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -87,8 +109,14 @@ class OrderCard extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                Text("${"admin_orders.material".tr()}: ${order.material}"),
-                Text("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
+                Text(
+                  "${"admin_orders.material".tr()}: ${order.material}",
+                  style: TextStyle(color: AppColors.textSecondary),
+                ),
+                Text(
+                  "${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}",
+                  style: TextStyle(color: AppColors.textSecondary),
+                ),
 
                 const SizedBox(height: 10),
 
@@ -107,7 +135,8 @@ class OrderCard extends StatelessWidget {
                             cubit.getOrders("all");
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: AppColors.green,
+                            foregroundColor: Colors.white,
                           ),
                           child: Text("admin_orders.accept".tr()),
                         ),
@@ -125,7 +154,8 @@ class OrderCard extends StatelessWidget {
                             cubit.getOrders("all");
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
+                            backgroundColor: AppColors.red,
+                            foregroundColor: Colors.white,
                           ),
                           child: Text("admin_orders.reject".tr()),
                         ),
