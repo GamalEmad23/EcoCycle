@@ -1,30 +1,32 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class RecyclingCentersScreen extends StatefulWidget {
   const RecyclingCentersScreen({super.key});
 
   @override
-  State<RecyclingCentersScreen> createState() =>
-      _RecyclingCentersScreenState();
+  State<RecyclingCentersScreen> createState() => _RecyclingCentersScreenState();
 }
 
-class _RecyclingCentersScreenState
-    extends State<RecyclingCentersScreen> {
+class _RecyclingCentersScreenState extends State<RecyclingCentersScreen> {
   String searchText = "";
 
   @override
   Widget build(BuildContext context) {
+    AppColors.isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xffF5F6F8),
+      backgroundColor: AppColors.background,
 
       appBar: AppBar(
         title: Text("admin_profile.manage_centers_title".tr()),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppColors.textPrimary,
+        surfaceTintColor: Colors.transparent,
       ),
 
       body: Padding(
@@ -33,10 +35,13 @@ class _RecyclingCentersScreenState
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border),
               ),
               child: TextField(
+                cursorColor: AppColors.green,
+                style: TextStyle(color: AppColors.textPrimary),
                 onChanged: (value) {
                   setState(() {
                     searchText = value;
@@ -44,7 +49,8 @@ class _RecyclingCentersScreenState
                 },
                 decoration: InputDecoration(
                   hintText: "admin_profile.search_center".tr(),
-                  prefixIcon: const Icon(Icons.search),
+                  hintStyle: TextStyle(color: AppColors.textGrey),
+                  prefixIcon: Icon(Icons.search, color: AppColors.textGrey),
                   border: InputBorder.none,
                 ),
               ),
@@ -58,40 +64,39 @@ class _RecyclingCentersScreenState
                     .collection('centers')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(color: AppColors.green),
                     );
                   }
 
-                  if (!snapshot.hasData ||
-                      snapshot.data!.docs.isEmpty) {
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Center(
                       child: Text(
-                          "admin_profile.no_centers_found".tr()),
+                        "admin_profile.no_centers_found".tr(),
+                        style: TextStyle(color: AppColors.textPrimary),
+                      ),
                     );
                   }
 
                   final centers = snapshot.data!.docs.where((doc) {
-                    final data =
-                    doc.data() as Map<String, dynamic>;
+                    final data = doc.data() as Map<String, dynamic>;
 
                     final name = data['name'] ?? "";
                     final city = data['city'] ?? "";
 
-                    return name
-                        .toLowerCase()
-                        .contains(searchText.toLowerCase()) ||
-                        city
-                            .toLowerCase()
-                            .contains(searchText.toLowerCase());
+                    return name.toLowerCase().contains(
+                          searchText.toLowerCase(),
+                        ) ||
+                        city.toLowerCase().contains(searchText.toLowerCase());
                   }).toList();
 
                   if (centers.isEmpty) {
                     return Center(
                       child: Text(
-                          "admin_profile.no_centers_found".tr()),
+                        "admin_profile.no_centers_found".tr(),
+                        style: TextStyle(color: AppColors.textPrimary),
+                      ),
                     );
                   }
 
@@ -99,26 +104,32 @@ class _RecyclingCentersScreenState
                     itemCount: centers.length,
                     itemBuilder: (context, index) {
                       final center = centers[index];
-                      final data =
-                      center.data() as Map<String, dynamic>;
+                      final data = center.data() as Map<String, dynamic>;
 
                       return Container(
-                        margin:
-                        const EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                          BorderRadius.circular(16),
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.border),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.isDarkMode
+                                  ? Colors.black.withValues(alpha: 0.22)
+                                  : Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 14,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundColor:
-                              Colors.green.shade100,
-                              child: const Icon(
+                              backgroundColor: AppColors.lightGreen3,
+                              child: Icon(
                                 Icons.recycling,
-                                color: Colors.green,
+                                color: AppColors.green,
                               ),
                             ),
 
@@ -126,22 +137,19 @@ class _RecyclingCentersScreenState
 
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     data['name'] ?? "",
-                                    style: const TextStyle(
-                                      fontWeight:
-                                      FontWeight.bold,
+                                    style: TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     "${data['city'] ?? ""} - ${data['address'] ?? ""}",
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                    ),
+                                    style: TextStyle(color: AppColors.textGrey),
                                   ),
                                 ],
                               ),

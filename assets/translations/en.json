@@ -274,6 +274,13 @@
     "accept": "Accept",
     "reject": "Reject"
   },
+  "app_mode": {
+    "dark": "Switch to dark appearance",
+    "light": "Switch to light appearance",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode"
+
+  },
   "auth": {
     "google_config_error": "Configuration Error (Error 10): Ensure SHA-1 and google-services.json are added to Firebase"
   }

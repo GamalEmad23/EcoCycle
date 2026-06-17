@@ -209,10 +209,10 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                             bool isDark = themeMode == ThemeMode.dark;
                             return sectionWidget(
                               icon: isDark ? Icons.dark_mode : Icons.light_mode,
-                              title: isDark ? "Dark Mode" : "Light Mode",
+                              title: isDark ? "app_mode.dark_mode".tr() : "app_mode.light_mode".tr(),
                               subtitle: isDark
-                                  ? "Switch to light appearance"
-                                  : "Switch to dark appearance",
+                                  ? "app_mode.light".tr()
+                                  : "app_mode.dark".tr(),
                               onTap: () {
                                 context.read<ThemeCubit>().toggleTheme();
                               },

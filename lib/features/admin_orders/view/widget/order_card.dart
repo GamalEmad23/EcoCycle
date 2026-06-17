@@ -58,25 +58,7 @@ class OrderCard extends StatelessWidget {
               height: 120,
               width: double.infinity,
               fit: BoxFit.cover,
-              loadingBuilder: (
-                  context,
-                  child,
-                  loadingProgress,
-                  ) {
-                if (loadingProgress == null) return child;
-
-                return SizedBox(
-                  height: 120,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              },
-              errorBuilder: (
-                  context,
-                  error,
-                  stackTrace,
-                  ) {
+              errorBuilder: (_, __, ___) {
                 return Image.asset(
                   "assets/images/Image+Background.png",
                   height: 120,
@@ -143,7 +125,9 @@ class OrderCard extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          child: Text("admin_orders.accept".tr()),
+                          child: Text("admin_orders.accept".tr(),style: TextStyle(
+                            color: Colors.white
+                          ),),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -161,7 +145,9 @@ class OrderCard extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
                           ),
-                          child: Text("admin_orders.reject".tr()),
+                          child: Text("admin_orders.reject".tr(),style: TextStyle(
+                            color: Colors.white
+                          ),),
                         ),
                       ),
                     ],

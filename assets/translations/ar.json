@@ -274,6 +274,14 @@
     "accept": "قبول",
     "reject": "رفض"
   },
+  "app_mode": {
+    "dark": "التغيير الي الوضع الليلي",
+    "light": "التغيير الي الوضع النهاري",
+    "dark_mode": "الوضع الليلي",
+    "light_mode": "الوضع النهاري"
+
+  },
+
   "auth": {
     "google_config_error": "خطأ في الإعدادات (Error 10): تأكد من إضافة SHA-1 وملف google-services.json في Firebase"
   }
