@@ -42,11 +42,14 @@ class OrderCubit extends Cubit<OrderState> {
           final order =
           OrderModel.fromFirestore(doc, userDoc.id);
 
+          print(
+            "Order: ${order.id} => ${order.imageUrl}",
+          );
+
           if (status == "all" || order.status == status) {
             allOrders.add(order);
           }
-        }
-      }
+        }      }
 
       emit(OrderSuccess(allOrders));
     } catch (e) {
