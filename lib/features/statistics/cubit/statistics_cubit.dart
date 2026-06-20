@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_cycle/features/recycling_request/model/recycling_request_model.dart';
@@ -32,7 +33,22 @@ class StatisticsCubit extends Cubit<StatisticsState> {
       for (var doc in snapshot.docs) {
         var data = doc.data();
         var model = RecyclingRequestModel.fromMap(data, doc.id);
-        
+
+        // ✅ Fix corrupted UTF-8 text if any exists
+        final fixedMaterial = _fixUtf8Corruption(model.material);
+        if (fixedMaterial != model.material) {
+          model = RecyclingRequestModel(
+            id: model.id,
+            material: fixedMaterial,
+            center: model.center,
+            weight: model.weight,
+            userId: model.userId,
+            status: model.status,
+            createdAt: model.createdAt,
+            imageUrl: model.imageUrl,
+          );
+        }
+
         recentActivities.add(model);
         totalWeight += model.weight;
       }
@@ -73,6 +89,45 @@ class StatisticsCubit extends Cubit<StatisticsState> {
       );
     } catch (e) {
       emit(StatisticsFailure(message: e.toString()));
+    }
+  }
+
+  Future<void> deleteActivity(String activityId) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(StatisticsFailure(message: "User not found"));
+        return;
+      }
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('recycling_requests')
+          .doc(activityId)
+          .delete();
+
+      // Refresh statistics data after deletion
+      await getStatisticsData();
+    } catch (e) {
+      emit(StatisticsFailure(message: e.toString()));
+    }
+  }
+
+  /// Fixes corrupted UTF-8 text (e.g., "Ø§Ù„Ù†Øµ" -> "النص")
+  String _fixUtf8Corruption(String text) {
+    try {
+      // Check if text contains corruption markers (like "Ø" or "Ù„")
+      if (!text.contains(RegExp(r'Ø|Ù|ï|¿'))) {
+        return text; // Text is fine
+      }
+      // Interpret the malformed Dart string as Latin1 bytes, then decode as UTF-8
+      // This mirrors: restored = mojibake.encode('latin-1').decode('utf-8')
+      List<int> latinBytes = latin1.encode(text);
+      return utf8.decode(latinBytes);
+    } catch (e) {
+      print("UTF-8 recovery failed: $e");
+      return text; // Return original if recovery fails
     }
   }
 }

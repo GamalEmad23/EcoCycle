@@ -1,9 +1,14 @@
+import 'package:eco_cycle/core/services/notification_service.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
+import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
+import 'package:eco_cycle/features/profile/view/widgets/custome_lang_card.dart';
 import 'package:eco_cycle/features/recycling_request/model/recycling_request_model.dart';
 import 'package:eco_cycle/features/statistics/cubit/statistics_cubit.dart';
 import 'package:eco_cycle/features/statistics/cubit/statistics_state.dart';
 import 'package:eco_cycle/features/statistics/view/widgets/Activity_Item.dart';
+import 'package:eco_cycle/features/statistics/view/widgets/adaptive_flowchart.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/features/statistics/view/widgets/Small_card.dart';
@@ -21,11 +26,47 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   bool _isViewAll = false;
   String _selectedRange = "statistics.Last_months";
+  int _unreadCount = 0;
 
   @override
   void initState() {
     super.initState();
     context.read<StatisticsCubit>().getStatisticsData();
+    _loadUnreadCount();
+  }
+
+  Future<void> _loadUnreadCount() async {
+    final count = await NotificationService().getUnreadCount();
+    if (mounted) setState(() => _unreadCount = count);
+  }
+
+  Future<void> _clearNotifications() async {
+    await NotificationService().clearUnreadCount();
+    if (mounted) setState(() => _unreadCount = 0);
+  }
+
+  // ── Notifications bottom sheet ──────────────────────────────────────────────
+  void _showNotificationsSheet() async {
+    await _clearNotifications();
+    final history = await NotificationService().getHistory();
+    if (!mounted) return;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _NotificationsSheet(messages: history),
+    );
+  }
+
+  // ── Settings bottom sheet ───────────────────────────────────────────────────
+  void _showSettingsSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _SettingsSheet(),
+    );
   }
 
   @override
@@ -51,24 +92,55 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         actions: [
           Row(
             children: [
-              IconButton(
-                icon: Icon(
-                  Icons.notifications_none,
-                  color: AppColors.textSecondary,
-                ),
-                onPressed: () {},
+              // ── Bell icon with badge ──
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.notifications_none,
+                      color: AppColors.textSecondary,
+                    ),
+                    onPressed: _showNotificationsSheet,
+                  ),
+                  if (_unreadCount > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 18,
+                          minHeight: 18,
+                        ),
+                        child: Text(
+                          _unreadCount > 99 ? '99+' : '$_unreadCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
               ),
+              // ── Settings icon ──
               IconButton(
                 icon: Icon(
                   Icons.settings_outlined,
                   color: AppColors.textSecondary,
                 ),
-                onPressed: () {},
+                onPressed: _showSettingsSheet,
               ),
             ],
           ),
         ],
-
         title: Align(
           alignment: Alignment.centerRight,
           child: Row(
@@ -150,26 +222,78 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   chartData = state.chartData;
                 }
 
+                // Calculate period-specific stats for the Progress Flowchart
+                double periodWeight = 0;
+                int periodOperations = 0;
+                double periodCo2 = 0;
+                double periodPoints = 0;
+
+                if (recentActivities.isNotEmpty) {
+                  final now = DateTime.now();
+                  List<RecyclingRequestModel> filteredActivities = [];
+
+                  if (_selectedRange == "statistics.today") {
+                    filteredActivities = recentActivities.where((a) {
+                      if (a.createdAt == null) return false;
+                      return a.createdAt!.year == now.year &&
+                             a.createdAt!.month == now.month &&
+                             a.createdAt!.day == now.day;
+                    }).toList();
+                  } else if (_selectedRange == "statistics.last_week") {
+                    final weekAgo = now.subtract(const Duration(days: 7));
+                    filteredActivities = recentActivities.where((a) {
+                      if (a.createdAt == null) return false;
+                      return a.createdAt!.isAfter(weekAgo);
+                    }).toList();
+                  } else if (_selectedRange == "statistics.last_month") {
+                    final monthAgo = now.subtract(const Duration(days: 30));
+                    filteredActivities = recentActivities.where((a) {
+                      if (a.createdAt == null) return false;
+                      return a.createdAt!.isAfter(monthAgo);
+                    }).toList();
+                  } else {
+                    // Last 6 months
+                    final sixMonthsAgo = DateTime(now.year, now.month - 6, now.day);
+                    filteredActivities = recentActivities.where((a) {
+                      if (a.createdAt == null) return false;
+                      return a.createdAt!.isAfter(sixMonthsAgo);
+                    }).toList();
+                  }
+
+                  periodOperations = filteredActivities.length;
+                  for (var a in filteredActivities) {
+                    periodWeight += a.weight;
+                  }
+                  periodCo2 = periodWeight * 1.2;
+                  periodPoints = periodWeight * 5;
+                }
+
                 // Dynamic chart labels and SPOTS based on range
                 List<String> chartLabels = [];
                 List<FlSpot> chartSpots = [];
-                final now = DateTime.now();
+                final nowForChart = DateTime.now();
 
                 if (_selectedRange == "statistics.last_week") {
                   chartLabels = List.generate(7, (i) {
-                    final day = now.subtract(Duration(days: 6 - i));
-                    return DateFormat('E').format(day);
+                    final day = nowForChart.subtract(Duration(days: 6 - i));
+                    return DateFormat('E', context.locale.languageCode).format(day);
                   });
 
-                  // Calculate spots for last week based on operations count
+                  // Calculate spots for last week based on cumulative operations count
                   List<double> dailyOps = List.filled(7, 0.0);
                   for (var activity in recentActivities) {
                     if (activity.createdAt != null) {
-                      final diff = now.difference(activity.createdAt!).inDays;
+                      final diff = nowForChart.difference(activity.createdAt!).inDays;
                       if (diff >= 0 && diff < 7) {
                         dailyOps[6 - diff] += 1;
                       }
                     }
+                  }
+                  // Make cumulative
+                  double sum = 0;
+                  for (int i = 0; i < dailyOps.length; i++) {
+                    sum += dailyOps[i];
+                    dailyOps[i] = sum;
                   }
                   chartSpots = dailyOps
                       .asMap()
@@ -180,7 +304,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   // Every 3 hours: 12AM, 3AM, 6AM, 9AM, 12PM, 3PM, 6PM, 9PM
                   chartLabels = List.generate(8, (i) {
                     final hour = i * 3;
-                    final time = DateTime(now.year, now.month, now.day, hour);
+                    final time = DateTime(nowForChart.year, nowForChart.month, nowForChart.day, hour);
                     // Use locale-aware format for AM/PM
                     return DateFormat(
                       'ha',
@@ -188,14 +312,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     ).format(time);
                   });
 
-                  // Calculate spots for today based on operations count
+                  // Calculate spots for today based on cumulative operations count
                   List<double> hourlyOps = List.filled(8, 0.0);
                   for (var activity in recentActivities) {
                     if (activity.createdAt != null) {
                       // Check if it's the same day
-                      if (activity.createdAt!.year == now.year &&
-                          activity.createdAt!.month == now.month &&
-                          activity.createdAt!.day == now.day) {
+                      if (activity.createdAt!.year == nowForChart.year &&
+                          activity.createdAt!.month == nowForChart.month &&
+                          activity.createdAt!.day == nowForChart.day) {
                         int hour = activity.createdAt!.hour;
                         int slot = hour ~/ 3;
                         if (slot >= 0 && slot < 8) {
@@ -203,6 +327,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         }
                       }
                     }
+                  }
+                  // Make cumulative
+                  double sum = 0;
+                  for (int i = 0; i < hourlyOps.length; i++) {
+                    sum += hourlyOps[i];
+                    hourlyOps[i] = sum;
                   }
                   chartSpots = hourlyOps
                       .asMap()
@@ -214,11 +344,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     return "${"statistics.week".tr()} ${i + 1}";
                   });
 
-                  // Calculate spots for last month (4 weeks) based on operations count
+                  // Calculate spots for last month (4 weeks) based on cumulative operations count
                   List<double> weeklyOps = List.filled(4, 0.0);
                   for (var activity in recentActivities) {
                     if (activity.createdAt != null) {
-                      final diffDays = now
+                      final diffDays = nowForChart
                           .difference(activity.createdAt!)
                           .inDays;
 
@@ -230,6 +360,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       }
                     }
                   }
+                  // Make cumulative
+                  double sum = 0;
+                  for (int i = 0; i < weeklyOps.length; i++) {
+                    sum += weeklyOps[i];
+                    weeklyOps[i] = sum;
+                  }
                   chartSpots = weeklyOps
                       .asMap()
                       .entries
@@ -239,27 +375,33 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   // Default 6 months
                   chartLabels = List.generate(6, (i) {
                     final monthDate = DateTime(
-                      now.year,
-                      now.month - (5 - i),
+                      nowForChart.year,
+                      nowForChart.month - (5 - i),
                       1,
                     );
 
-                    return DateFormat('MMM').format(monthDate);
+                    return DateFormat('MMM', context.locale.languageCode).format(monthDate);
                   });
 
-                  // Calculate spots for 6 months based on operations count
+                  // Calculate spots for 6 months based on cumulative operations count
                   List<double> monthlyOps = List.filled(6, 0.0);
                   for (var activity in recentActivities) {
                     if (activity.createdAt != null) {
                       final diffMonths =
-                          (now.year - activity.createdAt!.year) * 12 +
-                          now.month -
+                          (nowForChart.year - activity.createdAt!.year) * 12 +
+                          nowForChart.month -
                           activity.createdAt!.month;
 
                       if (diffMonths >= 0 && diffMonths < 6) {
                         monthlyOps[5 - diffMonths] += 1;
                       }
                     }
+                  }
+                  // Make cumulative
+                  double sum = 0;
+                  for (int i = 0; i < monthlyOps.length; i++) {
+                    sum += monthlyOps[i];
+                    monthlyOps[i] = sum;
                   }
                   chartSpots = monthlyOps
                       .asMap()
@@ -494,6 +636,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       ),
                     ),
 
+                    ProgressFlowchartWidget(
+                      weight: periodWeight,
+                      co2: periodCo2,
+                      operations: periodOperations,
+                      points: periodPoints,
+                      dateRange: _selectedRange,
+                    ),
+                    const SizedBox(height: 16),
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -533,6 +684,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         activities: _isViewAll
                             ? recentActivities
                             : recentActivities.take(3).toList(),
+                        isViewAll: _isViewAll,
                       ),
                     ),
                   ],
@@ -560,7 +712,12 @@ class MonthText extends StatelessWidget {
 /// القائمة
 class RecentActivityList extends StatelessWidget {
   final List<RecyclingRequestModel> activities;
-  const RecentActivityList({super.key, required this.activities});
+  final bool isViewAll;
+  const RecentActivityList({
+    super.key,
+    required this.activities,
+    required this.isViewAll,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -628,7 +785,7 @@ class RecentActivityList extends StatelessWidget {
           iconColor = Colors.purple;
         }
 
-        return Padding(
+        final itemWidget = Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: ActivityItem(
             title: translatedTitle,
@@ -642,7 +799,468 @@ class RecentActivityList extends StatelessWidget {
             iconColor: iconColor,
           ),
         );
+
+        if (isViewAll) {
+          return Dismissible(
+            key: Key(activity.id ?? UniqueKey().toString()),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: AppColors.red,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.delete_outline,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
+            confirmDismiss: (direction) async {
+              return await showDialog<bool>(
+                context: context,
+                builder: (BuildContext dialogContext) => AlertDialog(
+                  backgroundColor: AppColors.white,
+                  title: Text(
+                    "statistics.delete_confirm_title".tr(),
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  content: Text(
+                    "statistics.delete_confirm_content".tr(),
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext, false),
+                      child: Text(
+                        "buttons.cancel".tr(),
+                        style: TextStyle(color: AppColors.textGrey),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext, true),
+                      child: Text(
+                        "buttons.delete".tr(),
+                        style: TextStyle(
+                          color: AppColors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            onDismissed: (direction) {
+              if (activity.id != null) {
+                context.read<StatisticsCubit>().deleteActivity(activity.id!);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "${"buttons.delete".tr()}: $translatedTitle",
+                    ),
+                  ),
+                );
+              }
+            },
+            child: itemWidget,
+          );
+        }
+
+        return itemWidget;
       }).toList(),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Notifications Bottom Sheet
+// ══════════════════════════════════════════════════════════════════════════════
+class _NotificationsSheet extends StatelessWidget {
+  final List<NotificationMessage> messages;
+  const _NotificationsSheet({required this.messages});
+
+  String _formatTime(DateTime t) {
+    final now = DateTime.now();
+    final diff = now.difference(t);
+    if (diff.inMinutes < 1) return 'الآن';
+    if (diff.inMinutes < 60) return 'منذ ${diff.inMinutes} دقيقة';
+    if (diff.inHours < 24) return 'منذ ${diff.inHours} ساعة';
+    return 'منذ ${diff.inDays} يوم';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.55,
+      minChildSize: 0.35,
+      maxChildSize: 0.85,
+      builder: (_, controller) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // Handle
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGreen3,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.notifications_active,
+                      color: AppColors.primaryLight,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  CustomeText(
+                    text: 'الإشعارات',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  const Spacer(),
+                  if (messages.isNotEmpty)
+                    GestureDetector(
+                      onTap: () async {
+                        await NotificationService().clearHistory();
+                        if (context.mounted) Navigator.pop(context);
+                      },
+                      child: CustomeText(
+                        text: 'مسح الكل',
+                        fontSize: 13,
+                        textColor: Colors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Divider(color: AppColors.border, height: 1),
+            // Content
+            Expanded(
+              child: messages.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.notifications_off_outlined,
+                            size: 64,
+                            color: AppColors.textGrey.withValues(alpha: 0.5),
+                          ),
+                          const SizedBox(height: 16),
+                          CustomeText(
+                            text: 'لا توجد إشعارات',
+                            fontSize: 16,
+                            textColor: AppColors.textGrey,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      controller: controller,
+                      padding: const EdgeInsets.all(16),
+                      itemCount: messages.length,
+                      separatorBuilder: (_, __) =>
+                          Divider(color: AppColors.border, height: 1),
+                      itemBuilder: (_, i) {
+                        final msg = messages[i];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: AppColors.lightGreen3,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: const Text(
+                                  '♻️',
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      msg.title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      msg.body,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: AppColors.textGrey,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      _formatTime(msg.time),
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: AppColors.primaryLight,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Settings Bottom Sheet
+// ══════════════════════════════════════════════════════════════════════════════
+class _SettingsSheet extends StatelessWidget {
+  const _SettingsSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.52,
+      minChildSize: 0.35,
+      maxChildSize: 0.7,
+      builder: (_, __) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // Handle
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.iconBgLight,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.settings,
+                      color: AppColors.textSecondary,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  CustomeText(
+                    text: 'settings.title',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Divider(color: AppColors.border, height: 1),
+            const SizedBox(height: 16),
+
+            // ── Dark / Light Mode ──────────────────────────────────────────
+            BlocBuilder<ThemeCubit, ThemeMode>(
+              builder: (ctx, themeMode) {
+                final isDark = themeMode == ThemeMode.dark;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GestureDetector(
+                    onTap: () => ctx.read<ThemeCubit>().toggleTheme(),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 18,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.border, width: 1.5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF1E1E2E)
+                                  : const Color(0xFFFFF8E1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              isDark ? Icons.dark_mode : Icons.light_mode,
+                              color: isDark
+                                  ? Colors.indigo
+                                  : Colors.orangeAccent,
+                              size: 22,
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isDark ? 'settings.dark_mode'.tr() : 'settings.light_mode'.tr(),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                Text(
+                                  isDark
+                                      ? 'settings.switch_to_light'.tr()
+                                      : 'settings.switch_to_dark'.tr(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.textGrey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Switch(
+                            value: isDark,
+                            onChanged: (_) =>
+                                ctx.read<ThemeCubit>().toggleTheme(),
+                            activeThumbColor: AppColors.primaryLight,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 16),
+
+            // ── Language ───────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: CustomeText(
+                      text: 'settings.choose_language',
+                      fontSize: 14,
+                      textColor: AppColors.textGrey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  StatefulBuilder(
+                    builder: (ctx, setSt) => Column(
+                      children: [
+                        // English
+                        CustomeLangCard(
+                          title: 'English',
+                          icon: Icons.language,
+                          selected: ctx.locale.languageCode == 'en',
+                          onTap: () {
+                            ctx.read<ProfileCubit>().changeLanguage(ctx, 'en');
+                            setSt(() {});
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        // Arabic
+                        CustomeLangCard(
+                          title: 'العربية',
+                          icon: Icons.language,
+                          selected: ctx.locale.languageCode == 'ar',
+                          onTap: () {
+                            ctx.read<ProfileCubit>().changeLanguage(ctx, 'ar');
+                            setSt(() {});
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
     );
   }
 }

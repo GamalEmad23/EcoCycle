@@ -58,6 +58,7 @@ dependencies:
   fl_chart: ^1.2.0
   image: ^4.8.0
   firebase_crashlytics: ^5.2.0
+  flutter_local_notifications: ^18.0.1
 
 
 

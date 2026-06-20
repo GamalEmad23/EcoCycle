@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_cycle/core/services/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eco_cycle/features/recycling_request/model/recycling_request_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,9 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
           .collection('centers')
           .get();
 
-      centers = snapshot.docs.map((doc) => doc['name'] as String).toList();
+      centers = snapshot.docs
+          .map((doc) => _fixUtf8Corruption(doc['name'] as String))
+          .toList();
 
       isLoadingCenters = false;
       emit(RecyclingRequestUpdated());
@@ -245,12 +248,17 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       );
 
       final request = http.MultipartRequest('POST', url);
-      request.fields['upload_preset'] = uploadPreset;
+      // ✅ Add UTF-8 headers for proper encoding
+      request.headers['Accept-Charset'] = 'utf-8';
+      request.headers['Accept'] = 'application/json; charset=utf-8';
 
+      request.fields['upload_preset'] = uploadPreset;
       request.files.add(await http.MultipartFile.fromPath('file', file.path));
 
       final response = await request.send();
-      final responseData = await response.stream.bytesToString();
+      // ✅ Fix: Decode bytes as UTF-8 instead of using bytesToString()
+      final responseBytes = await response.stream.toBytes();
+      final responseData = utf8.decode(responseBytes);
 
       final data = json.decode(responseData);
 
@@ -304,6 +312,9 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
       weight = '';
       image = null;
 
+      // 🔔 Send local notification
+      await NotificationService().showRecyclingSuccessNotification();
+
       emit(RecyclingRequestSuccess());
     } catch (e) {
       emit(RecyclingRequestError('حدث خطأ أثناء تقديم الطلب: ${e.toString()}'));
@@ -314,5 +325,18 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
   Future<void> close() {
     _interpreter?.close();
     return super.close();
+  }
+
+  /// Fixes corrupted UTF-8 text from API/Firestore responses
+  String _fixUtf8Corruption(String text) {
+    try {
+      if (!text.contains(RegExp(r'Ø|Ù|ï|¿'))) {
+        return text;
+      }
+      List<int> bytes = text.codeUnits.cast<int>();
+      return utf8.decode(bytes);
+    } catch (e) {
+      return text;
+    }
   }
 }

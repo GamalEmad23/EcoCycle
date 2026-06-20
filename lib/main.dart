@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/services/notification_service.dart';
 import 'package:eco_cycle/features/admin_nav_bar/admin_nav_bar.dart';
 import 'package:eco_cycle/features/admin_profile/cubit/admin_cubit.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
@@ -20,6 +21,7 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService().init();
   // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   runApp(

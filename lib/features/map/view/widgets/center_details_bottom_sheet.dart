@@ -1,4 +1,5 @@
 ﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
@@ -134,7 +135,7 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            Text(
+                            ArabicText(
                               centerData['name'],
                               style: TextStyle(
                                 fontSize: 18,
@@ -152,7 +153,7 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                     color: AppColors.textSecondary,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
+                                  ArabicText(
                                     centerData['city'],
                                     style: TextStyle(
                                       fontSize: 13,
@@ -163,9 +164,9 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                               ),
                             ],
                             const SizedBox(height: 4),
-                            Text(
+                            ArabicText(
                               centerData['materials'] ??
-                                  "Ø¨Ù„Ø§Ø³ØªÙŠÙƒØŒ ÙˆØ±Ù‚ØŒ Ù…Ø¹Ø¯Ù†ØŒ Ø²Ø¬Ø§Ø¬",
+                                  "بلاستيك، ورق، معدن، زجاج",
                               style: TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,

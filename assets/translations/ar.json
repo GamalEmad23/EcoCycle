@@ -10,7 +10,9 @@
   "buttons": {
     "skip": "تخطي",
     "next": "التالي",
-    "finish": "ابدأ"
+    "finish": "ابدأ",
+    "cancel": "إلغاء",
+    "delete": "حذف"
   },
   "login": {
     "title": "تسجيل الدخول",
@@ -211,6 +213,7 @@
     "view_all": "عرض الكل",
     "show_less": "عرض أقل",
     "no_activities": "لا توجد نشاطات حديثة",
+    "no_activities_period": "لم يتم العثور على عمليات إعادة تدوير في هذه الفترة.",
     "points": "نقطة",
     "paper_waste": "مخلفات ورقية",
     "plastic_bottles": "زجاجات بلاستيكية",
@@ -226,7 +229,15 @@
     "verynile_recycling_hub": "مركز فيري نايل",
     "recyclobekia_e-waste": "ريسيكلوبيكيا للمخلفات",
     "bekia_recycling": "بيكيا للتدوير",
-    "ecocycle_alexandria": "إيكوسايكل الإسكندرية"
+    "ecocycle_alexandria": "إيكوسايكل الإسكندرية",
+    "ecocycle_cairo": "إيكوسايكل القاهرة",
+    "ecocycle_giza": "إيكوسايكل الجيزة",
+    "ecocycle_6october": "إيكوسايكل 6 أكتوبر",
+    "ecocycle_10th_of_ramadan": "إيكوسايكل 10 رمضان",
+    "ecocycle_5th_settlements": "إيكوسايكل التجمع الخامس",
+    "ecocycle_15th_of_may": "إيكوسايكل 15 مايو",
+    "delete_confirm_title": "حذف النشاط",
+    "delete_confirm_content": "هل أنت متأكد من رغبتك في حذف هذا النشاط؟ لا يمكن التراجع عن هذا الإجراء."
   },
   "map": {
     "search_failed": "فشل في البحث عن الموقع: {}",
@@ -284,5 +295,24 @@
 
   "auth": {
     "google_config_error": "خطأ في الإعدادات (Error 10): تأكد من إضافة SHA-1 وملف google-services.json في Firebase"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "dark_mode": "الوضع الداكن",
+    "light_mode": "الوضع الفاتح",
+    "switch_to_light": "اضغط للتبديل إلى الفاتح",
+    "switch_to_dark": "اضغط للتبديل إلى الداكن",
+    "choose_language": "اختر اللغة"
+  },
+  "flowchart": {
+    "title": "مخطط تقدم إعادة التدوير",
+    "deposited": "إجمالي تدويره",
+    "deposited_desc": "الوزن المعاد تدويره لهذه الفترة",
+    "offset": "توفير انبعاثات CO2",
+    "offset_desc": "ما يعادل انبعاثات الكربون التي تم توفيرها",
+    "processes": "عدد العمليات",
+    "processes_desc": "طلبات إعادة التدوير المكتملة",
+    "reward": "النقاط الممنوحة",
+    "reward_desc": "النقاط المكتسبة لصالح البيئة"
   }
 }

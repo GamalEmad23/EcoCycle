@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -84,7 +85,7 @@ class OrderCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(order.center,
+                    ArabicText(order.center,
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -103,8 +104,8 @@ class OrderCard extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                Text("${"admin_orders.material".tr()}: ${order.material}"),
-                Text("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
+                ArabicText("${"admin_orders.material".tr()}: ${order.material}"),
+                ArabicText("${"admin_orders.weight".tr()}: ${order.weight} ${"admin_orders.kg".tr()}"),
 
                 const SizedBox(height: 10),
 

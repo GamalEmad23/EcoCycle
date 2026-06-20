@@ -1,5 +1,6 @@
 ﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
+import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:flutter/material.dart';
 
 class ActivityItem extends StatelessWidget {
@@ -52,22 +53,27 @@ class ActivityItem extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          /// Ø§Ù„Ù†Øµ
+          /// الخصائص
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomeText(
-                  text: title,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                ArabicText(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                CustomeText(
-                  text: subtitle,
-                  textColor: AppColors.textGrey,
-                  fontSize: 12,
+                ArabicText(
+                  subtitle,
+                  style: TextStyle(
+                    color: AppColors.textGrey,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),

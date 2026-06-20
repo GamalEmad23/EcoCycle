@@ -1,5 +1,6 @@
 ﻿import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:eco_cycle/features/recycling_request/cubit/recycling_request_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,26 +92,26 @@ class _RecyclingRequestView extends StatelessWidget {
                     MaterialCardWidget(
                       title: 'add_process.paper'.tr(),
                       icon: Icons.description_outlined,
-                      isSelected: cubit.selectedMaterial == 'ÙˆØ±Ù‚',
-                      onTap: () => cubit.selectMaterial('ÙˆØ±Ù‚'),
+                      isSelected: cubit.selectedMaterial == 'ورق',
+                      onTap: () => cubit.selectMaterial('ورق'),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.plastic'.tr(),
                       icon: Icons.eco_outlined,
-                      isSelected: cubit.selectedMaterial == 'Ø¨Ù„Ø§Ø³ØªÙŠÙƒ',
-                      onTap: () => cubit.selectMaterial('Ø¨Ù„Ø§Ø³ØªÙŠÙƒ'),
+                      isSelected: cubit.selectedMaterial == 'بلاستيك',
+                      onTap: () => cubit.selectMaterial('بلاستيك'),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.electronics'.tr(),
                       icon: Icons.devices_other_outlined,
-                      isSelected: cubit.selectedMaterial == 'Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª',
-                      onTap: () => cubit.selectMaterial('Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª'),
+                      isSelected: cubit.selectedMaterial == 'إلكترونيات',
+                      onTap: () => cubit.selectMaterial('إلكترونيات'),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.metal'.tr(),
                       icon: Icons.precision_manufacturing_outlined,
-                      isSelected: cubit.selectedMaterial == 'Ù…Ø¹Ø¯Ù†',
-                      onTap: () => cubit.selectMaterial('Ù…Ø¹Ø¯Ù†'),
+                      isSelected: cubit.selectedMaterial == 'معدن',
+                      onTap: () => cubit.selectMaterial('معدن'),
                     ),
                   ],
                 ),
@@ -160,7 +161,7 @@ class _RecyclingRequestView extends StatelessWidget {
                         items: cubit.centers.map((center) {
                           return DropdownMenuItem<String>(
                             value: center,
-                            child: Text(center),
+                            child: ArabicText(center),
                           );
                         }).toList(),
                         onChanged: cubit.selectCenter,
@@ -257,7 +258,7 @@ class _RecyclingRequestView extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Ù†Ø³Ø¨Ø© Ø§Ù„Ø¯Ù‚Ø©: ${cubit.confidence.toStringAsFixed(1)}%',
+                            'نسبة الدقة: ${cubit.confidence.toStringAsFixed(1)}%',
                             style: TextStyle(
                               fontSize: 14,
                               color: AppColors.textSecondary,
