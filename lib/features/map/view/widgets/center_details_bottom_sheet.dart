@@ -1,4 +1,4 @@
-﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
@@ -18,6 +18,38 @@ class CenterDetailsBottomSheet extends StatelessWidget {
     required this.isFavorite,
     required this.onFavoriteToggle,
   });
+
+  String _localizedMaterials() {
+    final raw = centerData['materials']?.toString().trim() ?? '';
+    if (raw.isEmpty) {
+      return [
+        'map.filter_plastic'.tr(),
+        'map.filter_paper'.tr(),
+        'map.filter_metal'.tr(),
+        'map.filter_glass'.tr(),
+      ].join('، ');
+    }
+
+    const materialKeys = {
+      'plastic': 'map.filter_plastic',
+      'paper': 'map.filter_paper',
+      'metal': 'map.filter_metal',
+      'glass': 'map.filter_glass',
+    };
+    final tokens = raw
+        .toLowerCase()
+        .split(RegExp(r'[,;\s]+'))
+        .where((token) => token.isNotEmpty)
+        .toList();
+    final knownMaterials = tokens
+        .map((token) => materialKeys[token])
+        .whereType<String>()
+        .toSet()
+        .map((key) => key.tr())
+        .toList();
+
+    return knownMaterials.isEmpty ? raw : knownMaterials.join('، ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +199,8 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                             ArabicText(
                               centerData['materials'] ??
                                   "بلاستيك، ورق، معدن، زجاج",
+                            Text(
+                              _localizedMaterials(),
                               style: TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
@@ -217,8 +251,8 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
-                                        centerData['hours'] ??
-                                            "08:00 Øµ - 09:00 Ù…",
+                                        centerData['hours']?.toString() ??
+                                            "08:00 - 21:00",
                                         style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
@@ -266,10 +300,7 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.near_me_rounded,
-                              color: Colors.white,
-                            ),
+                            Icon(Icons.near_me_rounded, color: Colors.white),
                             const SizedBox(width: 8),
                             Text(
                               'map.get_directions'.tr(),
@@ -293,5 +324,3 @@ class CenterDetailsBottomSheet extends StatelessWidget {
     );
   }
 }
-
-

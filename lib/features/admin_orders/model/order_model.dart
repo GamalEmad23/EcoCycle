@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_cycle/core/utils/recycling_material.dart';
 
 class OrderModel {
   final String id;
@@ -25,17 +26,14 @@ class OrderModel {
     this.imageUrl,
   });
 
-  factory OrderModel.fromFirestore(
-      DocumentSnapshot doc,
-      String userId,
-      ) {
+  factory OrderModel.fromFirestore(DocumentSnapshot doc, String userId) {
     final data = doc.data() as Map<String, dynamic>;
 
     return OrderModel(
       id: doc.id,
       userId: userId,
       center: data['center'] ?? '',
-      material: data['material'] ?? '',
+      material: RecyclingMaterial.normalize(data['material']?.toString() ?? ''),
       weight: (data['weight'] as num?)?.toInt() ?? 0,
       status: data['status'] ?? 'pending',
       userName: data['userName'],

@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
+import 'package:eco_cycle/core/utils/recycling_material.dart';
 
 part 'recycling_request_state.dart';
 
@@ -25,7 +26,7 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
   Interpreter? _interpreter;
   List<String>? _labels;
 
-  String selectedMaterial = 'بلاستيك';
+  String selectedMaterial = RecyclingMaterial.plastic;
   String? selectedCenter;
   String weight = '';
   File? image;
@@ -136,7 +137,6 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
             inputFlat[bufferIndex++] = pixel.r.toDouble();
             inputFlat[bufferIndex++] = pixel.g.toDouble();
             inputFlat[bufferIndex++] = pixel.b.toDouble();
-
           }
         }
       }
@@ -188,17 +188,17 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
         confidence = maxConfidence * 100;
 
         if (label.contains('paper')) {
-          predictionResult = 'ورق';
-          selectMaterial('ورق');
+          predictionResult = RecyclingMaterial.paper;
+          selectMaterial(RecyclingMaterial.paper);
         } else if (label.contains('plastic')) {
-          predictionResult = 'بلاستيك';
-          selectMaterial('بلاستيك');
+          predictionResult = RecyclingMaterial.plastic;
+          selectMaterial(RecyclingMaterial.plastic);
         } else if (label.contains('metal')) {
-          predictionResult = 'معدن';
-          selectMaterial('معدن');
+          predictionResult = RecyclingMaterial.metal;
+          selectMaterial(RecyclingMaterial.metal);
         } else if (label.contains('electronics')) {
-          predictionResult = 'إلكترونيات';
-          selectMaterial('إلكترونيات');
+          predictionResult = RecyclingMaterial.electronics;
+          selectMaterial(RecyclingMaterial.electronics);
         } else {
           predictionResult = label;
         }
@@ -211,7 +211,7 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
   }
 
   void selectMaterial(String material) {
-    selectedMaterial = material;
+    selectedMaterial = RecyclingMaterial.normalize(material);
     emit(RecyclingRequestUpdated());
   }
 
@@ -298,7 +298,7 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
         center: selectedCenter,
         weight: double.tryParse(weight) ?? 0.0,
         userId: user.uid,
-        imageUrl: imageUrl, 
+        imageUrl: imageUrl,
       );
 
       await FirebaseFirestore.instance
@@ -307,7 +307,7 @@ class RecyclingRequestCubit extends Cubit<RecyclingRequestState> {
           .collection('recycling_requests')
           .add(model.toMap());
 
-      selectedMaterial = 'بلاستيك';
+      selectedMaterial = RecyclingMaterial.plastic;
       selectedCenter = null;
       weight = '';
       image = null;

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_cycle/core/utils/recycling_material.dart';
 
 class RecyclingRequestModel {
   final String? id;
@@ -24,7 +25,7 @@ class RecyclingRequestModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'material': material,
+      'material': RecyclingMaterial.normalize(material),
       'center': center,
       'weight': weight,
       'userId': userId,
@@ -42,7 +43,7 @@ class RecyclingRequestModel {
   ) {
     return RecyclingRequestModel(
       id: documentId,
-      material: map['material'] ?? '',
+      material: RecyclingMaterial.normalize(map['material']?.toString() ?? ''),
       center: map['center'],
       weight: (map['weight'] ?? 0).toDouble(),
       userId: map['userId'],

@@ -15,6 +15,7 @@ import 'package:eco_cycle/features/statistics/view/widgets/Small_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:eco_cycle/core/utils/recycling_material.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -733,13 +734,14 @@ class RecentActivityList extends StatelessWidget {
     return Column(
       children: activities.map((activity) {
         String title = activity.material;
+        final material = RecyclingMaterial.normalize(title);
         String subtitle = activity.center ?? "";
         String weight = activity.weight.toString();
 
         String imagePath = "assets/images/plastic.png";
         Color iconBg = const Color(0xFFDDF5F0);
         Color iconColor = Colors.teal;
-        String translatedTitle = title;
+        String translatedTitle = RecyclingMaterial.displayName(title);
 
         // Generalized translation logic: try to find a key for any subtitle
         String centerKey = subtitle.toLowerCase().trim().replaceAll(' ', '_');
@@ -759,25 +761,22 @@ class RecentActivityList extends StatelessWidget {
           }
         }
 
-        if (title.contains("ورق") || title.toLowerCase().contains("paper")) {
+        if (material == RecyclingMaterial.paper) {
           translatedTitle = "statistics.paper".tr();
           imagePath = "assets/images/description.png";
           iconBg = const Color(0xFFDCE8FF);
           iconColor = Colors.blue;
-        } else if (title.contains("معدن") ||
-            title.toLowerCase().contains("metal")) {
+        } else if (material == RecyclingMaterial.metal) {
           translatedTitle = "statistics.metal".tr();
           imagePath = "assets/images/metal.png";
           iconBg = const Color(0xFFFFE9D6);
           iconColor = Colors.orange;
-        } else if (title.contains("بلاستيك") ||
-            title.toLowerCase().contains("plastic")) {
+        } else if (material == RecyclingMaterial.plastic) {
           translatedTitle = "statistics.plastic".tr();
           imagePath = "assets/images/plastic.png";
           iconBg = const Color(0xFFDDF5F0);
           iconColor = Colors.teal;
-        } else if (title.contains("إلكترونيات") ||
-            title.toLowerCase().contains("electronics")) {
+        } else if (material == RecyclingMaterial.electronics) {
           translatedTitle = "statistics.electronics".tr();
           imagePath =
               "assets/images/description.png"; // Fallback to description icon

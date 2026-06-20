@@ -1,10 +1,11 @@
-﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:eco_cycle/features/recycling_request/cubit/recycling_request_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:eco_cycle/core/utils/recycling_material.dart';
 
 import 'widgets/material_card_widget.dart';
 import 'widgets/custom_button.dart';
@@ -92,26 +93,35 @@ class _RecyclingRequestView extends StatelessWidget {
                     MaterialCardWidget(
                       title: 'add_process.paper'.tr(),
                       icon: Icons.description_outlined,
-                      isSelected: cubit.selectedMaterial == 'ورق',
-                      onTap: () => cubit.selectMaterial('ورق'),
+                      isSelected:
+                          cubit.selectedMaterial == RecyclingMaterial.paper,
+                      onTap: () =>
+                          cubit.selectMaterial(RecyclingMaterial.paper),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.plastic'.tr(),
                       icon: Icons.eco_outlined,
-                      isSelected: cubit.selectedMaterial == 'بلاستيك',
-                      onTap: () => cubit.selectMaterial('بلاستيك'),
+                      isSelected:
+                          cubit.selectedMaterial == RecyclingMaterial.plastic,
+                      onTap: () =>
+                          cubit.selectMaterial(RecyclingMaterial.plastic),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.electronics'.tr(),
                       icon: Icons.devices_other_outlined,
-                      isSelected: cubit.selectedMaterial == 'إلكترونيات',
-                      onTap: () => cubit.selectMaterial('إلكترونيات'),
+                      isSelected:
+                          cubit.selectedMaterial ==
+                          RecyclingMaterial.electronics,
+                      onTap: () =>
+                          cubit.selectMaterial(RecyclingMaterial.electronics),
                     ),
                     MaterialCardWidget(
                       title: 'add_process.metal'.tr(),
                       icon: Icons.precision_manufacturing_outlined,
-                      isSelected: cubit.selectedMaterial == 'معدن',
-                      onTap: () => cubit.selectMaterial('معدن'),
+                      isSelected:
+                          cubit.selectedMaterial == RecyclingMaterial.metal,
+                      onTap: () =>
+                          cubit.selectMaterial(RecyclingMaterial.metal),
                     ),
                   ],
                 ),
@@ -249,7 +259,7 @@ class _RecyclingRequestView extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            'ØªÙ… Ø§Ù„ØªØ¹Ø±Ù Ø¹Ù„Ù‰: ${cubit.predictionResult}',
+                            'تم التعرف على: ${RecyclingMaterial.displayName(cubit.predictionResult)}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -287,5 +297,3 @@ class _RecyclingRequestView extends StatelessWidget {
     );
   }
 }
-
-

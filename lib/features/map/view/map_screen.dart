@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_field
+// ignore_for_file: unused_field
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -241,8 +241,9 @@ class _MapScreenState extends State<MapScreen> {
       return {
         "id": "static_${c['name']}",
         "name": c['name'],
-        "materials": "Ã˜Â¨Ã™â€žÃ˜Â§Ã˜Â³Ã˜ÂªÃ™Å Ã™Æ’Ã˜Å’ Ã™Ë†Ã˜Â±Ã™â€šÃ˜Å’ Ã™â€¦Ã˜Â¹Ã˜Â¯Ã™â€ Ã˜Å’ Ã˜Â²Ã˜Â¬Ã˜Â§Ã˜Â¬",
-        "hours": "08:00 Ã˜Âµ - 09:00 Ã™â€¦",
+        // Keep data language-neutral; the bottom sheet localizes it for display.
+        "materials": "plastic;paper;metal;glass",
+        "hours": "08:00 - 21:00",
         "distance": (distanceInMeters / 1000).toStringAsFixed(1),
         "imgUrl":
             "https://images.unsplash.com/photo-1532996122724-e3c354a0b15f?w=400&q=80",
@@ -428,10 +429,7 @@ class _MapScreenState extends State<MapScreen> {
                       color: AppColors.lightGreen2,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      Icons.directions_car,
-                      color: AppColors.primary,
-                    ),
+                    child: Icon(Icons.directions_car, color: AppColors.primary),
                   ),
                   title: Text(
                     'map.driving'.tr(),
@@ -1037,7 +1035,3 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
-
-
-
