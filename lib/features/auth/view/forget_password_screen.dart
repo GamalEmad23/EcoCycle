@@ -11,6 +11,7 @@ import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eco_cycle/core/responsive/app_breakpoints.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -25,7 +26,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
+    double w = AppBreakpoints.readableMaxWidth(
+      context,
+      maxWidth: AppBreakpoints.formMaxWidth,
+    );
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -45,151 +49,167 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             onPressed: () {
               NavigateHelper.pushAndRemoveUntil(context, LoginScreen());
             },
-            icon: context.locale == "en"
+            icon: context.locale.languageCode == "en"
                 ? Icon(Icons.arrow_back_ios_new_outlined)
                 : Icon(Icons.arrow_forward_ios_rounded),
           ),
         ],
       ),
 
-      body: SingleChildScrollView(
-        child: Form(
-          key: _globalKey,
-          child: Column(
-            mainAxisAlignment: .start,
-            crossAxisAlignment: .start,
-            children: [
-              ///Image
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: w * .03,
-                  vertical: h * .03,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(15),
-                  child: Image.asset("assets/authImages/forgetPassword.png"),
-                ),
-              ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppBreakpoints.formMaxWidth,
+          ),
+          child: SingleChildScrollView(
+            padding: AppBreakpoints.contentPadding(
+              context,
+            ).copyWith(top: 16, bottom: 24),
+            child: Form(
+              key: _globalKey,
+              child: Column(
+                mainAxisAlignment: .start,
+                crossAxisAlignment: .start,
+                children: [
+                  ///Image
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: w * .03,
+                      vertical: h * .03,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(15),
+                      child: Image.asset(
+                        "assets/authImages/forgetPassword.png",
+                        height: (h * .2).clamp(130, 190).toDouble(),
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
 
-              /// Forget Password Text
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: w * .04),
-                child: CustomeText(
-                  text: "forgot_password.title",
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                  /// Forget Password Text
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * .04),
+                    child: CustomeText(
+                      text: "forgot_password.title",
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-              /// Forget Password Subtitle
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: w * .04,
-                  vertical: h * .01,
-                ),
-                child: CustomeText(
-                  text: "forgot_password.subtitle",
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+                  /// Forget Password Subtitle
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: w * .04,
+                      vertical: h * .01,
+                    ),
+                    child: CustomeText(
+                      text: "forgot_password.subtitle",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
 
-              // Email Text
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: w * .04,
-                  vertical: h * .01,
-                ),
-                child: CustomeText(
-                  text: "forgot_password.email_label",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                  // Email Text
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: w * .04,
+                      vertical: h * .01,
+                    ),
+                    child: CustomeText(
+                      text: "forgot_password.email_label",
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-              /// Email TextFormField
-              CustomeTextFormField(
-                controller: _email,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "login_validation.email_required".tr();
-                  }
-                  if (!(value.contains("@gmail.com"))) {
-                    return "login_validation.email_invalid".tr();
-                  }
-                },
-                inputType: TextInputType.emailAddress,
-                hint: "example@mail.com",
-                prefix: Icon(Icons.email_outlined),
-                suffix: null,
-                onFieldSubmitted: (gamal) {
-                  FocusScope.of(context).nextFocus();
-                },
-              ),
-              SizedBox(height: h * .019),
-
-              /// Send Link Button
-              BlocConsumer<AuthCubit, AuthState>(
-                listener: (context, state) {
-                  if (state is ResetPasswordFailure) {
-                    CustomeSnakBar.show(
-                      backgroundColor: AppColors.red,
-                      icon: Icons.error,
-                      context: context,
-                      message: "forgot_password.error".tr(),
-                    );
-                  }
-                  if (state is ResetPasswordSuccess) {
-                    CustomeSnakBar.show(
-                      backgroundColor: AppColors.green,
-                      icon: Icons.done,
-                      context: context,
-                      message: "forgot_password.success".tr(),
-                    );
-                    NavigateHelper.pushReplacement(context, LoginScreen());
-                  }
-                },
-                builder: (context, state) {
-                  return CustomeButton(
-                    onPressed: () {
-                      if (_globalKey.currentState!.validate()) {
-                        context.read<AuthCubit>().resetPassword(_email.text);
+                  /// Email TextFormField
+                  CustomeTextFormField(
+                    controller: _email,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "login_validation.email_required".tr();
+                      }
+                      if (!(value.contains("@gmail.com"))) {
+                        return "login_validation.email_invalid".tr();
                       }
                     },
-                    btnWidth: w * .9,
-                    btnText: (state is ResetPasswordLoading)
-                        ? SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: AppColors.white,
-                              strokeWidth: 2.5,
-                            ),
-                          )
-                        : CustomeText(
-                            text: "forgot_password.reset_button",
-                            textColor: AppColors.white,
-                          ),
-                    btnColor: AppColors.green,
-                  );
-                },
-              ),
-              SizedBox(height: h * .019),
-
-              /// under button text
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: w * .1),
-                  child: CustomeText(
-                    centerAlign: true,
-                    text: "forgot_password.info_message",
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    textColor: AppColors.textGrey,
+                    inputType: TextInputType.emailAddress,
+                    hint: "example@mail.com",
+                    prefix: Icon(Icons.email_outlined),
+                    suffix: null,
+                    onFieldSubmitted: (gamal) {
+                      FocusScope.of(context).nextFocus();
+                    },
                   ),
-                ),
+                  SizedBox(height: h * .019),
+
+                  /// Send Link Button
+                  BlocConsumer<AuthCubit, AuthState>(
+                    listener: (context, state) {
+                      if (state is ResetPasswordFailure) {
+                        CustomeSnakBar.show(
+                          backgroundColor: AppColors.red,
+                          icon: Icons.error,
+                          context: context,
+                          message: "forgot_password.error".tr(),
+                        );
+                      }
+                      if (state is ResetPasswordSuccess) {
+                        CustomeSnakBar.show(
+                          backgroundColor: AppColors.green,
+                          icon: Icons.done,
+                          context: context,
+                          message: "forgot_password.success".tr(),
+                        );
+                        NavigateHelper.pushReplacement(context, LoginScreen());
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomeButton(
+                        onPressed: () {
+                          if (_globalKey.currentState!.validate()) {
+                            context.read<AuthCubit>().resetPassword(
+                              _email.text,
+                            );
+                          }
+                        },
+                        btnText: (state is ResetPasswordLoading)
+                            ? SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  color: AppColors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                            : CustomeText(
+                                text: "forgot_password.reset_button",
+                                textColor: AppColors.white,
+                              ),
+                        btnColor: AppColors.green,
+                      );
+                    },
+                  ),
+                  SizedBox(height: h * .019),
+
+                  /// under button text
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: w * .1),
+                      child: CustomeText(
+                        centerAlign: true,
+                        text: "forgot_password.info_message",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        textColor: AppColors.textGrey,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

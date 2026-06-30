@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:eco_cycle/core/utils/recycling_material.dart';
+import 'package:eco_cycle/core/responsive/responsive_layout.dart';
 
 import 'widgets/material_card_widget.dart';
 import 'widgets/custom_button.dart';
@@ -65,231 +66,240 @@ class _RecyclingRequestView extends StatelessWidget {
         builder: (context, state) {
           final cubit = context.watch<RecyclingRequestCubit>();
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// MATERIAL
-                Text(
-                  'add_process.select_material'.tr(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 1.8,
-                  children: [
-                    MaterialCardWidget(
-                      title: 'add_process.paper'.tr(),
-                      icon: Icons.description_outlined,
-                      isSelected:
-                          cubit.selectedMaterial == RecyclingMaterial.paper,
-                      onTap: () =>
-                          cubit.selectMaterial(RecyclingMaterial.paper),
-                    ),
-                    MaterialCardWidget(
-                      title: 'add_process.plastic'.tr(),
-                      icon: Icons.eco_outlined,
-                      isSelected:
-                          cubit.selectedMaterial == RecyclingMaterial.plastic,
-                      onTap: () =>
-                          cubit.selectMaterial(RecyclingMaterial.plastic),
-                    ),
-                    MaterialCardWidget(
-                      title: 'add_process.electronics'.tr(),
-                      icon: Icons.devices_other_outlined,
-                      isSelected:
-                          cubit.selectedMaterial ==
-                          RecyclingMaterial.electronics,
-                      onTap: () =>
-                          cubit.selectMaterial(RecyclingMaterial.electronics),
-                    ),
-                    MaterialCardWidget(
-                      title: 'add_process.metal'.tr(),
-                      icon: Icons.precision_manufacturing_outlined,
-                      isSelected:
-                          cubit.selectedMaterial == RecyclingMaterial.metal,
-                      onTap: () =>
-                          cubit.selectMaterial(RecyclingMaterial.metal),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 1),
-
-                /// CENTER
-                Text(
-                  'add_process.center'.tr(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                if (cubit.isLoadingCenters)
-                  Center(
-                    child: LottieBuilder.asset(
-                      "assets/lotties/Green eco earth animation.json",
-                      height: 100,
-                    ),
-                  )
-                else if (cubit.centers.isEmpty)
-                  Center(child: Text("common.no_centers".tr()))
-                else
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: cubit.selectedCenter,
-                        hint: Text(
-                          'add_process.choose_center'.tr(),
-                          style: TextStyle(color: AppColors.textGrey),
-                        ),
-                        isExpanded: true,
-                        dropdownColor: AppColors.white,
-                        style: TextStyle(color: AppColors.textPrimary),
-                        iconEnabledColor: AppColors.textPrimary,
-                        items: cubit.centers.map((center) {
-                          return DropdownMenuItem<String>(
-                            value: center,
-                            child: ArabicText(center),
-                          );
-                        }).toList(),
-                        onChanged: cubit.selectCenter,
-                      ),
+          return ResponsiveContent(
+            maxWidth: 1000,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// MATERIAL
+                  Text(
+                    'add_process.select_material'.tr(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
                     ),
                   ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
-                /// WEIGHT
-                Text(
-                  'add_process.estimated_weight'.tr(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                CustomInputField(
-                  hintText: 'add_process.enter_weight'.tr(),
-                  onChanged: cubit.updateWeight,
-                ),
-
-                const SizedBox(height: 24),
-
-                /// IMAGE
-                Text(
-                  'add_process.upload_image'.tr(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                GestureDetector(
-                  onTap: cubit.pickImage,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 32),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
+                  LayoutBuilder(
+                    builder: (context, constraints) => GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: constraints.maxWidth >= 720 ? 4 : 2,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: constraints.maxWidth >= 720
+                          ? 1.45
+                          : 1.8,
                       children: [
-                        Icon(
-                          cubit.image != null
-                              ? Icons.check_circle_outline
-                              : Icons.camera_enhance_outlined,
-                          color: cubit.image != null
-                              ? Colors.green
-                              : const Color(0xFF00E676),
-                          size: 40,
+                        MaterialCardWidget(
+                          title: 'add_process.paper'.tr(),
+                          icon: Icons.description_outlined,
+                          isSelected:
+                              cubit.selectedMaterial == RecyclingMaterial.paper,
+                          onTap: () =>
+                              cubit.selectMaterial(RecyclingMaterial.paper),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          cubit.image != null
-                              ? 'add_process.image_uploaded_success'.tr()
-                              : 'add_process.upload_here'.tr(),
-                          style: TextStyle(color: AppColors.textPrimary),
+                        MaterialCardWidget(
+                          title: 'add_process.plastic'.tr(),
+                          icon: Icons.eco_outlined,
+                          isSelected:
+                              cubit.selectedMaterial ==
+                              RecyclingMaterial.plastic,
+                          onTap: () =>
+                              cubit.selectMaterial(RecyclingMaterial.plastic),
+                        ),
+                        MaterialCardWidget(
+                          title: 'add_process.electronics'.tr(),
+                          icon: Icons.devices_other_outlined,
+                          isSelected:
+                              cubit.selectedMaterial ==
+                              RecyclingMaterial.electronics,
+                          onTap: () => cubit.selectMaterial(
+                            RecyclingMaterial.electronics,
+                          ),
+                        ),
+                        MaterialCardWidget(
+                          title: 'add_process.metal'.tr(),
+                          icon: Icons.precision_manufacturing_outlined,
+                          isSelected:
+                              cubit.selectedMaterial == RecyclingMaterial.metal,
+                          onTap: () =>
+                              cubit.selectMaterial(RecyclingMaterial.metal),
                         ),
                       ],
                     ),
                   ),
-                ),
 
-                if (cubit.image != null && cubit.predictionResult.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
+                  const SizedBox(height: 1),
+
+                  /// CENTER
+                  Text(
+                    'add_process.center'.tr(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  if (cubit.isLoadingCenters)
+                    Center(
+                      child: LottieBuilder.asset(
+                        "assets/lotties/Green eco earth animation.json",
+                        height: 100,
+                      ),
+                    )
+                  else if (cubit.centers.isEmpty)
+                    Center(child: Text("common.no_centers".tr()))
+                  else
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: cubit.selectedCenter,
+                          hint: Text(
+                            'add_process.choose_center'.tr(),
+                            style: TextStyle(color: AppColors.textGrey),
+                          ),
+                          isExpanded: true,
+                          dropdownColor: AppColors.white,
+                          style: TextStyle(color: AppColors.textPrimary),
+                          iconEnabledColor: AppColors.textPrimary,
+                          items: cubit.centers.map((center) {
+                            return DropdownMenuItem<String>(
+                              value: center,
+                              child: ArabicText(center),
+                            );
+                          }).toList(),
+                          onChanged: cubit.selectCenter,
+                        ),
+                      ),
+                    ),
+
+                  const SizedBox(height: 24),
+
+                  /// WEIGHT
+                  Text(
+                    'add_process.estimated_weight'.tr(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  CustomInputField(
+                    hintText: 'add_process.enter_weight'.tr(),
+                    onChanged: cubit.updateWeight,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  /// IMAGE
+                  Text(
+                    'add_process.upload_image'.tr(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  GestureDetector(
+                    onTap: cubit.pickImage,
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.symmetric(vertical: 32),
                       decoration: BoxDecoration(
-                        color: AppColors.lightGreen3,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.green),
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
                         children: [
-                          Text(
-                            'تم التعرف على: ${RecyclingMaterial.displayName(cubit.predictionResult)}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
-                            ),
+                          Icon(
+                            cubit.image != null
+                                ? Icons.check_circle_outline
+                                : Icons.camera_enhance_outlined,
+                            color: cubit.image != null
+                                ? Colors.green
+                                : const Color(0xFF00E676),
+                            size: 40,
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 8),
                           Text(
-                            'نسبة الدقة: ${cubit.confidence.toStringAsFixed(1)}%',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textSecondary,
-                            ),
+                            cubit.image != null
+                                ? 'add_process.image_uploaded_success'.tr()
+                                : 'add_process.upload_here'.tr(),
+                            style: TextStyle(color: AppColors.textPrimary),
                           ),
                         ],
                       ),
                     ),
                   ),
 
-                const SizedBox(height: 40),
+                  if (cubit.image != null && cubit.predictionResult.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGreen3,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.green),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'تم التعرف على: ${RecyclingMaterial.displayName(cubit.predictionResult)}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'نسبة الدقة: ${cubit.confidence.toStringAsFixed(1)}%',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
 
-                /// BUTTON
-                CustomButton(
-                  text: 'add_process.confirm'.tr(),
-                  isLoading: state is RecyclingRequestLoading,
-                  onPressed: cubit.submitRequest,
-                ),
+                  const SizedBox(height: 40),
 
-                const SizedBox(height: 120),
-              ],
+                  /// BUTTON
+                  CustomButton(
+                    text: 'add_process.confirm'.tr(),
+                    isLoading: state is RecyclingRequestLoading,
+                    onPressed: cubit.submitRequest,
+                  ),
+
+                  const SizedBox(height: 120),
+                ],
+              ),
             ),
           );
         },

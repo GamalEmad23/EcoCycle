@@ -30,9 +30,8 @@ class CustomeTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: w * .03, vertical: h * .01),
+      padding: EdgeInsets.symmetric(horizontal: 4, vertical: h * .01),
       child: TextFormField(
         controller: controller,
         validator: validator,
@@ -73,7 +72,7 @@ class CustomeTextFormField extends StatelessWidget {
           ///
           hint: CustomeText(
             text: hint,
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: FontWeight.w300,
             textColor: AppColors.textGrey,
           ),

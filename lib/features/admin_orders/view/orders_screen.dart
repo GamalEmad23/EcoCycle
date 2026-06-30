@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/themes/app_colors.dart';
+import '../../../core/responsive/responsive_layout.dart';
 import '../cubit/order_cubit.dart';
 import 'widget/order_card.dart';
 
@@ -66,6 +67,7 @@ class _OrdersViewState extends State<_OrdersView>
         title: Text("orders.title".tr()),
         bottom: TabBar(
           controller: tabController,
+          isScrollable: true,
           tabs: [
             Tab(text: "orders.all".tr()),
             Tab(text: "orders.pending".tr()),
@@ -85,11 +87,16 @@ class _OrdersViewState extends State<_OrdersView>
               return Center(child: Text("orders.no_orders".tr()));
             }
 
-            return ListView.builder(
-              itemCount: state.orders.length,
-              itemBuilder: (context, index) {
-                return OrderCard(order: state.orders[index]);
-              },
+            return ResponsiveContent(
+              maxWidth: 760,
+              padding: EdgeInsets.zero,
+              child: ListView.builder(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
+                itemCount: state.orders.length,
+                itemBuilder: (context, index) {
+                  return OrderCard(order: state.orders[index]);
+                },
+              ),
             );
           }
 

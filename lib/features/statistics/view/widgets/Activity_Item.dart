@@ -1,4 +1,4 @@
-﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/core/widgets/arabic_text.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +61,8 @@ class ActivityItem extends StatelessWidget {
               children: [
                 ArabicText(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -70,10 +72,9 @@ class ActivityItem extends StatelessWidget {
                 const SizedBox(height: 4),
                 ArabicText(
                   subtitle,
-                  style: TextStyle(
-                    color: AppColors.textGrey,
-                    fontSize: 12,
-                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: AppColors.textGrey, fontSize: 12),
                 ),
               ],
             ),
@@ -119,4 +120,3 @@ class ActivityItem extends StatelessWidget {
     );
   }
 }
-

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/responsive/responsive_layout.dart';
 import 'package:flutter/material.dart';
 
 class RecyclingCentersScreen extends StatefulWidget {
@@ -29,8 +30,8 @@ class _RecyclingCentersScreenState extends State<RecyclingCentersScreen> {
         surfaceTintColor: Colors.transparent,
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: ResponsiveContent(
+        maxWidth: 900,
         child: Column(
           children: [
             Container(
@@ -141,6 +142,8 @@ class _RecyclingCentersScreenState extends State<RecyclingCentersScreen> {
                                 children: [
                                   Text(
                                     data['name'] ?? "",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: AppColors.textPrimary,
                                       fontWeight: FontWeight.bold,
@@ -149,6 +152,8 @@ class _RecyclingCentersScreenState extends State<RecyclingCentersScreen> {
                                   const SizedBox(height: 4),
                                   Text(
                                     "${data['city'] ?? ""} - ${data['address'] ?? ""}",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: AppColors.textGrey),
                                   ),
                                 ],

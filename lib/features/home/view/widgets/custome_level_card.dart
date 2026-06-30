@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +22,14 @@ class CustomeLevelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.sizeOf(context).width;
+    final padding = (w * 0.05).clamp(18, 28).toDouble();
+    final tinyText = (w * 0.03).clamp(12, 14).toDouble();
+    final bodyText = (w * 0.035).clamp(13, 16).toDouble();
+    final rankText = (w * 0.07).clamp(24, 34).toDouble();
+
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(w * 0.05),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.levelCardStart, AppColors.levelCardEnd],
@@ -48,7 +53,10 @@ class CustomeLevelCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
@@ -56,14 +64,14 @@ class CustomeLevelCard extends StatelessWidget {
                 child: CustomeText(
                   text: "home.excellent_category",
                   textColor: Colors.white,
-                  fontSize: w * 0.03,
+                  fontSize: tinyText,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               CustomeText(
                 text: "home.current_level",
                 textColor: Colors.white.withValues(alpha: 0.9),
-                fontSize: w * 0.035,
+                fontSize: bodyText,
                 fontWeight: FontWeight.w500,
               ),
             ],
@@ -75,7 +83,7 @@ class CustomeLevelCard extends StatelessWidget {
           CustomeText(
             text: rankName,
             textColor: Colors.white,
-            fontSize: w * 0.07,
+            fontSize: rankText,
             fontWeight: FontWeight.bold,
           ),
 
@@ -90,14 +98,14 @@ class CustomeLevelCard extends StatelessWidget {
                   CustomeText(
                     text: "${nextLevelPoints.toInt()}",
                     textColor: Colors.white,
-                    fontSize: w * 0.035,
+                    fontSize: bodyText,
                     fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(width: 4),
                   CustomeText(
                     text: "home.points_unit",
                     textColor: Colors.white,
-                    fontSize: w * 0.035,
+                    fontSize: bodyText,
                   ),
                 ],
               ),
@@ -106,14 +114,14 @@ class CustomeLevelCard extends StatelessWidget {
                   CustomeText(
                     text: "${points.toInt()}",
                     textColor: Colors.white,
-                    fontSize: w * 0.035,
+                    fontSize: bodyText,
                     fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(width: 4),
                   CustomeText(
                     text: "home.points_unit",
                     textColor: Colors.white,
-                    fontSize: w * 0.035,
+                    fontSize: bodyText,
                   ),
                 ],
               ),
@@ -154,12 +162,14 @@ class CustomeLevelCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomeText(
-                text: "home.points_left_to".tr(args: [
-                  (nextLevelPoints - points).toInt().toString(),
-                  nextRankName.tr()
-                ]),
+                text: "home.points_left_to".tr(
+                  args: [
+                    (nextLevelPoints - points).toInt().toString(),
+                    nextRankName.tr(),
+                  ],
+                ),
                 textColor: Colors.white.withValues(alpha: 0.9),
-                fontSize: w * 0.03,
+                fontSize: tinyText,
                 fontWeight: FontWeight.w500,
               ),
             ],
@@ -169,4 +179,3 @@ class CustomeLevelCard extends StatelessWidget {
     );
   }
 }
-

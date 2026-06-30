@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:eco_cycle/core/services/cloudinary_service.dart';
 
 import '../model/admin_model.dart';
 
@@ -64,13 +64,8 @@ class AdminCubit extends Cubit<AdminState> {
 
   Future<String?> uploadImage(File file, String userId) async {
     try {
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child("admins/$userId/profile.jpg");
-
-      await ref.putFile(file);
-
-      return await ref.getDownloadURL();
+      final imageUrl = await CloudinaryService.uploadImage(file);
+      return imageUrl;
     } catch (e) {
       emit(AdminError(e.toString()));
       return null;

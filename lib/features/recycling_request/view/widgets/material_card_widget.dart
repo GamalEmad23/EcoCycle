@@ -1,4 +1,4 @@
-﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MaterialCardWidget extends StatelessWidget {
@@ -46,6 +46,9 @@ class MaterialCardWidget extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -58,5 +61,3 @@ class MaterialCardWidget extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/features/home/view/widgets/custom_quick_action.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_center_card.dart';
@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
+import 'package:eco_cycle/core/responsive/responsive_layout.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -82,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
+    double w = MediaQuery.sizeOf(context).width.clamp(0, 1200).toDouble();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -116,121 +117,123 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// User Header
-                  CustomeHeader(
-                    h: h,
-                    w: w,
-                    imagePath: userImage,
-                    userName: userName,
-                  ),
-                  SizedBox(height: h * .03),
-
-                  /// User Level Data
-                  CustomeLevelCard(
-                    points: points,
-                    nextLevelPoints: nextLevelPoints,
-                    rankName: "home.$rankName",
-                    nextRankName:
-                        "home.${context.read<ProfileCubit>().getNextRank(points)}",
-                    rankColor: rankColor,
-                  ),
-                  SizedBox(height: h * .025),
-
-                  /// Find center and Recycle
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: CustomeQuickAction(
-                          label: "home.find_center".tr(),
-                          icon: Icons.location_on_rounded,
-                          bgColor: AppColors.lightWight,
-                          textColor: AppColors.textPrimary,
-                          iconColor: AppColors.textPrimary,
-                          h: h,
-                          w: w,
-                          onTap: () =>
-                              context.read<NavBarCubit>().changeIndex(1),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: CustomeQuickAction(
-                          label: "home.recycle_now".tr(),
-                          icon: Icons.recycling_rounded,
-                          bgColor: AppColors.levelCardEnd,
-                          textColor: Colors.white,
-                          iconColor: Colors.white,
-                          h: h,
-                          w: w,
-                          onTap: () =>
-                              context.read<NavBarCubit>().changeIndex(2),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: h * .038),
-
-                  /// User Usage Summary
-                  CustomeImpactSummary(
-                    h: h,
-                    w: w,
-                    totalWeight: totalWeight,
-                    co2Saved: co2Saved,
-                    waterSaved: waterSaved,
-                    energySaved: energySaved,
-                  ),
-                  SizedBox(height: h * .032),
-
-                  /// Near Centers
-                  CustomeNearbyCentersHeader(
-                    onViewAllTap: () =>
-                        context.read<NavBarCubit>().changeIndex(1),
-                  ),
-                  SizedBox(height: h * .016),
-
-                  /// Centers List Nearest
-                  if (_nearbyCenters.isEmpty)
-                    Center(
-                      child: Lottie.asset(
-                        "assets/lotties/Sandy Loading.json",
-                        height: h * .18,
-                      ),
-                    )
-                  else
-                    ..._nearbyCenters.map(
-                      (center) => Padding(
-                        padding: EdgeInsets.only(bottom: h * .015),
-                        child: CustomeCenterCard(
-                          name: center['name'],
-                          address: "${center['address']}, ${center['city']}",
-                          distance:
-                              center['distance_val']?.toStringAsFixed(1) ??
-                              "...",
-                          imgUrl:
-                              "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80",
-                          distanceLable: 'map.km',
-                          h: h,
-                          w: w,
-                        ),
-                      ),
+            return ResponsiveContent(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// User Header
+                    CustomeHeader(
+                      h: h,
+                      w: w,
+                      imagePath: userImage,
+                      userName: userName,
                     ),
+                    SizedBox(height: h * .03),
 
-                  SizedBox(height: h * .032),
+                    /// User Level Data
+                    CustomeLevelCard(
+                      points: points,
+                      nextLevelPoints: nextLevelPoints,
+                      rankName: "home.$rankName",
+                      nextRankName:
+                          "home.${context.read<ProfileCubit>().getNextRank(points)}",
+                      rankColor: rankColor,
+                    ),
+                    SizedBox(height: h * .025),
 
-                  /// tip for user
-                  CustomeDailyTip(
-                    h: h,
-                    w: w,
-                    tip: context.read<ProfileCubit>().getDailyTip(),
-                  ),
-                  SizedBox(height: h * .1),
-                ],
+                    /// Find center and Recycle
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: CustomeQuickAction(
+                            label: "home.find_center".tr(),
+                            icon: Icons.location_on_rounded,
+                            bgColor: AppColors.lightWight,
+                            textColor: AppColors.textPrimary,
+                            iconColor: AppColors.textPrimary,
+                            h: h,
+                            w: w,
+                            onTap: () =>
+                                context.read<NavBarCubit>().changeIndex(1),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: CustomeQuickAction(
+                            label: "home.recycle_now".tr(),
+                            icon: Icons.recycling_rounded,
+                            bgColor: AppColors.levelCardEnd,
+                            textColor: Colors.white,
+                            iconColor: Colors.white,
+                            h: h,
+                            w: w,
+                            onTap: () =>
+                                context.read<NavBarCubit>().changeIndex(2),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: h * .038),
+
+                    /// User Usage Summary
+                    CustomeImpactSummary(
+                      h: h,
+                      w: w,
+                      totalWeight: totalWeight,
+                      co2Saved: co2Saved,
+                      waterSaved: waterSaved,
+                      energySaved: energySaved,
+                    ),
+                    SizedBox(height: h * .032),
+
+                    /// Near Centers
+                    CustomeNearbyCentersHeader(
+                      onViewAllTap: () =>
+                          context.read<NavBarCubit>().changeIndex(1),
+                    ),
+                    SizedBox(height: h * .016),
+
+                    /// Centers List Nearest
+                    if (_nearbyCenters.isEmpty)
+                      Center(
+                        child: Lottie.asset(
+                          "assets/lotties/Sandy Loading.json",
+                          height: h * .18,
+                        ),
+                      )
+                    else
+                      ..._nearbyCenters.map(
+                        (center) => Padding(
+                          padding: EdgeInsets.only(bottom: h * .015),
+                          child: CustomeCenterCard(
+                            name: center['name'],
+                            address: "${center['address']}, ${center['city']}",
+                            distance:
+                                center['distance_val']?.toStringAsFixed(1) ??
+                                "...",
+                            imgUrl:
+                                "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80",
+                            distanceLable: 'map.km',
+                            h: h,
+                            w: w,
+                          ),
+                        ),
+                      ),
+
+                    SizedBox(height: h * .032),
+
+                    /// tip for user
+                    CustomeDailyTip(
+                      h: h,
+                      w: w,
+                      tip: context.read<ProfileCubit>().getDailyTip(),
+                    ),
+                    SizedBox(height: h * .1),
+                  ],
+                ),
               ),
             );
           },
@@ -239,5 +242,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-

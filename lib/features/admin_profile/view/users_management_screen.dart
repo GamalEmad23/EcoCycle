@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_cycle/core/responsive/responsive_layout.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,8 @@ class _UsersScreenState extends State<UsersScreen> {
         surfaceTintColor: Colors.transparent,
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: ResponsiveContent(
+        maxWidth: 900,
         child: Column(
           children: [
             Container(
@@ -152,6 +153,8 @@ class _UsersScreenState extends State<UsersScreen> {
                                 children: [
                                   Text(
                                     name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: AppColors.textPrimary,
                                       fontWeight: FontWeight.bold,
@@ -159,6 +162,8 @@ class _UsersScreenState extends State<UsersScreen> {
                                   ),
                                   Text(
                                     email,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: AppColors.textGrey),
                                   ),
                                 ],
@@ -167,25 +172,33 @@ class _UsersScreenState extends State<UsersScreen> {
 
                             GestureDetector(
                               onTap: () => toggleStatus(doc.id, isActive),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isActive
-                                      ? AppColors.green.withValues(alpha: 0.15)
-                                      : AppColors.red.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  isActive
-                                      ? "admin_profile.active".tr()
-                                      : "admin_profile.blocked".tr(),
-                                  style: TextStyle(
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 92),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
                                     color: isActive
-                                        ? AppColors.green
-                                        : AppColors.red,
+                                        ? AppColors.green.withValues(
+                                            alpha: 0.15,
+                                          )
+                                        : AppColors.red.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    isActive
+                                        ? "admin_profile.active".tr()
+                                        : "admin_profile.blocked".tr(),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: isActive
+                                          ? AppColors.green
+                                          : AppColors.red,
+                                    ),
                                   ),
                                 ),
                               ),

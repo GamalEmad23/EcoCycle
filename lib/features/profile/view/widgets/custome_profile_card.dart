@@ -1,4 +1,4 @@
-﻿import 'package:eco_cycle/core/themes/app_colors.dart';
+import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
 import 'package:eco_cycle/features/profile/cubit/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +23,8 @@ class customeProfileCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: w * .012),
       child: Container(
-        height: h * .11,
-        width: w * .28,
+        height: (h * .11).clamp(92, 116).toDouble(),
+        width: (w * .28).clamp(96, 160).toDouble(),
         decoration: BoxDecoration(
           color: AppColors.white,
           //  boxShadow: [
@@ -42,11 +42,19 @@ class customeProfileCard extends StatelessWidget {
           builder: (context, state) => Column(
             mainAxisAlignment: .center,
             children: [
-              CustomeText(text: text, fontSize: 19),
+              CustomeText(
+                text: text,
+                fontSize: 14,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                centerAlign: true,
+              ),
               CustomeText(
                 text: rate,
-                fontSize: 18,
+                fontSize: 16,
                 textColor: AppColors.primaryDark,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -55,4 +63,3 @@ class customeProfileCard extends StatelessWidget {
     );
   }
 }
-

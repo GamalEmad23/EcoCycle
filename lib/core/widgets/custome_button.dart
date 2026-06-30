@@ -3,7 +3,14 @@
 import 'package:flutter/material.dart';
 
 class CustomeButton extends StatelessWidget {
-  CustomeButton({super.key, this.btnColor, this.onPressed, this.btnHight, this.btnWidth, required this.btnText});
+  CustomeButton({
+    super.key,
+    this.btnColor,
+    this.onPressed,
+    this.btnHight,
+    this.btnWidth,
+    required this.btnText,
+  });
 
   void Function()? onPressed;
   final Color? btnColor;
@@ -13,17 +20,19 @@ class CustomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
     return Center(
-      child: MaterialButton(
-        onPressed: onPressed,
-        color: btnColor ?? Colors.transparent,
-        height:btnHight ?? h*.07,
-        minWidth: btnWidth ?? w*.7,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
-        child: btnText,
+      child: SizedBox(
+        width: btnWidth ?? double.infinity,
+        height: btnHight ?? h * .064,
+        child: MaterialButton(
+          onPressed: onPressed,
+          color: btnColor ?? Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(15),
+          ),
+          child: btnText,
+        ),
       ),
-      
     );
   }
 }

@@ -12,6 +12,7 @@ import 'package:eco_cycle/features/auth/view/login_screen.dart';
 import 'package:eco_cycle/features/auth/view/widgets/custome_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eco_cycle/core/responsive/app_breakpoints.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -29,7 +30,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
+    double w = MediaQuery.sizeOf(
+      context,
+    ).width.clamp(0, AppBreakpoints.formMaxWidth).toDouble();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -37,234 +40,263 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: Center(
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Form(
-                key: _globalKey,
-                child: Column(
-                  mainAxisAlignment: .start,
-                  crossAxisAlignment: .start,
-                  children: [
-                    ///Image
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * .03,
-                        vertical: h * .01,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: AppBreakpoints.formMaxWidth,
+            ),
+            child: SingleChildScrollView(
+              padding: AppBreakpoints.contentPadding(
+                context,
+              ).copyWith(top: 16, bottom: 24),
+              child: SafeArea(
+                child: Form(
+                  key: _globalKey,
+                  child: Column(
+                    mainAxisAlignment: .start,
+                    crossAxisAlignment: .start,
+                    children: [
+                      ///Image
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: w * .03,
+                          vertical: h * .01,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(15),
+                          child: Image.asset(
+                            "assets/authImages/signup.png",
+                            height: (h * .18).clamp(120, 170).toDouble(),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(15),
-                        child: Image.asset("assets/authImages/signup.png" , height: h*.18,width: double.infinity, fit: BoxFit.cover,),
-                      ),
-                    ),
 
-                    /// sign up Text
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: w * .04),
-                      child: CustomeText(
-                        text: "signup.title",
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                      /// sign up Text
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: w * .04),
+                        child: CustomeText(
+                          text: "signup.title",
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
 
-                    /// Sign up Subtitle
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * .04,
-                        vertical: h * .007,
+                      /// Sign up Subtitle
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: w * .04,
+                          vertical: h * .007,
+                        ),
+                        child: CustomeText(
+                          text: "signup.subtitle",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      child: CustomeText(
-                        text: "signup.subtitle",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
 
-                    /// Name Text
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * .04,
-                        vertical: h * .007,
+                      /// Name Text
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: w * .04,
+                          vertical: h * .007,
+                        ),
+                        child: CustomeText(
+                          text: "signup.name_label",
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      child: CustomeText(
-                        text: "signup.name_label",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
 
-                    /// Name TextFormField
-                    CustomeTextFormField(
-                      controller: _name,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "signup_validation.name_required".tr();
-                        }
+                      /// Name TextFormField
+                      CustomeTextFormField(
+                        controller: _name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "signup_validation.name_required".tr();
+                          }
 
-                        if (value.length < 2) {
-                          return "signup_validation.name_short".tr();
-                        }
-                      },
-                      inputType: TextInputType.text,
-                      hint: "signup.name_hint",
-                      prefix: Icon(Icons.person_3_outlined),
-                      suffix: null,
-                      onFieldSubmitted: (gamal) {
-                        FocusScope.of(context).nextFocus();
-                      },
-                    ),
-
-                    /// Email Text
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * .04,
-                        vertical: h * .007,
-                      ),
-                      child: CustomeText(
-                        text: "login.email",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    /// Email TextFormField
-                    CustomeTextFormField(
-                      controller: _email,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "signup_validation.email_required".tr();
-                        }
-                        if (!(value.contains("@gmail.com"))) {
-                          return "signup_validation.email_invalid".tr();
-                        }
-                      },
-                      inputType: TextInputType.emailAddress,
-                      hint: "example@mail.com",
-                      prefix: Icon(Icons.email_outlined),
-                      suffix: null,
-                      onFieldSubmitted: (gamal) {
-                        FocusScope.of(context).nextFocus();
-                      },
-                    ),
-
-                    /// Password Text
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * .04,
-                        vertical: h * .007,
-                      ),
-                      child: CustomeText(
-                        text: "signup.password_label",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    /// Password lTextFormField
-                    CustomeTextFormField(
-                      controller: _password,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "signup_validation.password_required".tr();
-                        }
-                        if (value.length < 6) {
-                          return "signup_validation.password_short".tr();
-                        }
-                      },
-                      inputType: TextInputType.text,
-                      hint: "************",
-                      prefix: Icon(Icons.lock_open_outlined),
-                      suffix: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obsec = !obsec;
-                          });
+                          if (value.length < 2) {
+                            return "signup_validation.name_short".tr();
+                          }
                         },
-                        icon: Icon(
-                          obsec
-                              ? Icons.remove_red_eye_outlined
-                              : Icons.remove_red_eye,
+                        inputType: TextInputType.text,
+                        hint: "signup.name_hint",
+                        prefix: Icon(Icons.person_3_outlined),
+                        suffix: null,
+                        onFieldSubmitted: (gamal) {
+                          FocusScope.of(context).nextFocus();
+                        },
+                      ),
+
+                      /// Email Text
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: w * .04,
+                          vertical: h * .007,
+                        ),
+                        child: CustomeText(
+                          text: "login.email",
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      secText: obsec,
-                      onFieldSubmitted: (gamal) {
-                        FocusScope.of(context).nextFocus();
-                      },
-                    ),
-                    SizedBox(height: h * .018),
 
-                    /// sign up Button
-                    BlocConsumer<AuthCubit, AuthState>(
-                      builder: (context, state) {
-                        return CustomeButton(
-                          btnColor: AppColors.green,
-                          onPressed: () {
-                            if (_globalKey.currentState!.validate()) {
-                              context.read<AuthCubit>().createUser(
-                                UserData(
-                                  email: _email.text,
-                                  password: _password.text,
-                                  name: _name.text,
-                                ),
-                              );
-                              ///
-                            }
-                          },
-                          btnText: state is AuthLoading
-                              ? SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.white,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
-                              : CustomeText(
-                                  text: "signup.signup_button",
-                                  textColor: AppColors.white,
-                                ),
-                        );
-                      },
-                      listener: (context, state) {
-                        if (state is AuthFailure) {
-    
-                           CustomeSnakBar.show(context: context, message: state.message , icon: Icons.email , backgroundColor: AppColors.red);
-                        }
+                      /// Email TextFormField
+                      CustomeTextFormField(
+                        controller: _email,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "signup_validation.email_required".tr();
+                          }
+                          if (!(value.contains("@gmail.com"))) {
+                            return "signup_validation.email_invalid".tr();
+                          }
+                        },
+                        inputType: TextInputType.emailAddress,
+                        hint: "example@mail.com",
+                        prefix: Icon(Icons.email_outlined),
+                        suffix: null,
+                        onFieldSubmitted: (gamal) {
+                          FocusScope.of(context).nextFocus();
+                        },
+                      ),
 
-                        if (state is AuthSuccess) {
-                           CustomeSnakBar.show(context: context, message: "signup_validation.confirm_password_required".tr() , icon: Icons.email , backgroundColor: AppColors.orange);
-                          NavigateHelper.pushReplacement(
-                                context,
-                                LoginScreen(),
-                              );
-                        }
-                      },
-                    ),
-                    SizedBox(height: h * .018),
-
-                    ///  have account
-                    Row(
-                      mainAxisAlignment: .center,
-                      children: [
-                        CustomeText(text: "signup.have_account"),
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                NavigateHelper.pushReplacement(context, LoginScreen());
-                              },
-                              child: CustomeText(text: "signup.login_now")),
-                            Container(
-                              height: 2,
-                              width: w * .3,
-                              color: AppColors.black,
-                            ),
-                          ],
+                      /// Password Text
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: w * .04,
+                          vertical: h * .007,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: h * .04),
-                  ],
+                        child: CustomeText(
+                          text: "signup.password_label",
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      /// Password lTextFormField
+                      CustomeTextFormField(
+                        controller: _password,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "signup_validation.password_required".tr();
+                          }
+                          if (value.length < 6) {
+                            return "signup_validation.password_short".tr();
+                          }
+                        },
+                        inputType: TextInputType.text,
+                        hint: "************",
+                        prefix: Icon(Icons.lock_open_outlined),
+                        suffix: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obsec = !obsec;
+                            });
+                          },
+                          icon: Icon(
+                            obsec
+                                ? Icons.remove_red_eye_outlined
+                                : Icons.remove_red_eye,
+                          ),
+                        ),
+                        secText: obsec,
+                        onFieldSubmitted: (gamal) {
+                          FocusScope.of(context).nextFocus();
+                        },
+                      ),
+                      SizedBox(height: h * .018),
+
+                      /// sign up Button
+                      BlocConsumer<AuthCubit, AuthState>(
+                        builder: (context, state) {
+                          return CustomeButton(
+                            btnColor: AppColors.green,
+                            onPressed: () {
+                              if (_globalKey.currentState!.validate()) {
+                                context.read<AuthCubit>().createUser(
+                                  UserData(
+                                    email: _email.text,
+                                    password: _password.text,
+                                    name: _name.text,
+                                  ),
+                                );
+
+                                ///
+                              }
+                            },
+                            btnText: state is AuthLoading
+                                ? SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: AppColors.white,
+                                      strokeWidth: 2.5,
+                                    ),
+                                  )
+                                : CustomeText(
+                                    text: "signup.signup_button",
+                                    textColor: AppColors.white,
+                                  ),
+                          );
+                        },
+                        listener: (context, state) {
+                          if (state is AuthFailure) {
+                            CustomeSnakBar.show(
+                              context: context,
+                              message: state.message,
+                              icon: Icons.email,
+                              backgroundColor: AppColors.red,
+                            );
+                          }
+
+                          if (state is AuthSuccess) {
+                            CustomeSnakBar.show(
+                              context: context,
+                              message:
+                                  "signup_validation.confirm_password_required"
+                                      .tr(),
+                              icon: Icons.email,
+                              backgroundColor: AppColors.orange,
+                            );
+                            NavigateHelper.pushReplacement(
+                              context,
+                              LoginScreen(),
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(height: h * .018),
+
+                      ///  have account
+                      Row(
+                        mainAxisAlignment: .center,
+                        children: [
+                          CustomeText(text: "signup.have_account"),
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  NavigateHelper.pushReplacement(
+                                    context,
+                                    LoginScreen(),
+                                  );
+                                },
+                                child: CustomeText(text: "signup.login_now"),
+                              ),
+                              Container(
+                                height: 2,
+                                width: w * .3,
+                                color: AppColors.black,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: h * .04),
+                    ],
+                  ),
                 ),
               ),
             ),

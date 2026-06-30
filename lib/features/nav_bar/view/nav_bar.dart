@@ -1,4 +1,4 @@
-﻿import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
+import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
 import 'package:eco_cycle/features/nav_bar/cubit/nav_bar_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
@@ -9,6 +9,7 @@ import 'package:eco_cycle/features/profile/view/profile_screen.dart';
 import 'package:eco_cycle/features/recycling_request/view/recycling_request_screen.dart';
 import 'package:eco_cycle/features/statistics/view/statistics_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:eco_cycle/core/responsive/app_breakpoints.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -33,100 +34,180 @@ class _NavBarState extends State<NavBar> {
         ];
         return BlocBuilder<NavBarCubit, int>(
           builder: (context, index) {
+            final useBottomNavigation = !AppBreakpoints.isDesktop(context);
+            final body = KeyedSubtree(
+              key: ValueKey(themeMode),
+              child: pages[index],
+            );
+
             return Scaffold(
               extendBody: true,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    context.read<NavBarCubit>().changeIndex(2);
-                  },
-                  backgroundColor: AppColors.green,
-                  elevation: 4,
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.recycling,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                ),
-              ),
-              bottomNavigationBar: Theme(
-                data: Theme.of(context).copyWith(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.isDarkMode
-                            ? Colors.black.withValues(alpha: 0.35)
-                            : Colors.black12,
-                        blurRadius: 10,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
-                  ),
-                  child: BottomNavigationBar(
-                    currentIndex: index,
-                    type: BottomNavigationBarType.fixed,
-                    elevation: 0,
-                    backgroundColor: AppColors.white,
-                    selectedItemColor: AppColors.green,
-                    unselectedItemColor: AppColors.textGrey,
-                    selectedFontSize: 12,
-                    unselectedFontSize: 12,
-                    selectedIconTheme: const IconThemeData(size: 26),
-                    unselectedIconTheme: const IconThemeData(size: 26),
-                    onTap: (value) {
-                      context.read<NavBarCubit>().changeIndex(value);
-                    },
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: const Padding(
-                          padding: EdgeInsets.only(bottom: 4),
-                          child: Icon(Icons.home_outlined),
+              floatingActionButtonLocation: useBottomNavigation
+                  ? FloatingActionButtonLocation.centerDocked
+                  : null,
+              floatingActionButton: useBottomNavigation
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          context.read<NavBarCubit>().changeIndex(2);
+                        },
+                        backgroundColor: AppColors.green,
+                        elevation: 4,
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.recycling,
+                          color: Colors.white,
+                          size: 32,
                         ),
-                        label: "nav_bar.home".tr(),
                       ),
-                      BottomNavigationBarItem(
-                        icon: const Padding(
-                          padding: EdgeInsets.only(bottom: 4),
-                          child: Icon(Icons.map_outlined),
+                    )
+                  : null,
+              bottomNavigationBar: useBottomNavigation
+                  ? Theme(
+                      data: Theme.of(context).copyWith(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.isDarkMode
+                                  ? Colors.black.withValues(alpha: 0.35)
+                                  : Colors.black12,
+                              blurRadius: 10,
+                              offset: const Offset(0, -2),
+                            ),
+                          ],
                         ),
-                        label: "nav_bar.map".tr(),
-                      ),
-                      BottomNavigationBarItem(
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.transparent,
-                          size: 10,
+                        child: BottomNavigationBar(
+                          currentIndex: index,
+                          type: BottomNavigationBarType.fixed,
+                          elevation: 0,
+                          backgroundColor: AppColors.white,
+                          selectedItemColor: AppColors.green,
+                          unselectedItemColor: AppColors.textGrey,
+                          selectedFontSize: 12,
+                          unselectedFontSize: 12,
+                          selectedIconTheme: const IconThemeData(size: 26),
+                          unselectedIconTheme: const IconThemeData(size: 26),
+                          onTap: (value) {
+                            context.read<NavBarCubit>().changeIndex(value);
+                          },
+                          items: [
+                            BottomNavigationBarItem(
+                              icon: const Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Icon(Icons.home_outlined),
+                              ),
+                              label: "nav_bar.home".tr(),
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Icon(Icons.map_outlined),
+                              ),
+                              label: "nav_bar.map".tr(),
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.transparent,
+                                size: 10,
+                              ),
+                              label: "",
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Icon(Icons.bar_chart),
+                              ),
+                              label: "nav_bar.statistic".tr(),
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Icon(Icons.person_2_outlined),
+                              ),
+                              label: "nav_bar.profile".tr(),
+                            ),
+                          ],
                         ),
-                        label: "",
                       ),
-                      BottomNavigationBarItem(
-                        icon: const Padding(
-                          padding: EdgeInsets.only(bottom: 4),
-                          child: Icon(Icons.bar_chart),
+                    )
+                  : null,
+              body: useBottomNavigation
+                  ? body
+                  : Row(
+                      children: [
+                        SafeArea(
+                          child: NavigationRail(
+                            selectedIndex: index,
+                            onDestinationSelected: (value) =>
+                                context.read<NavBarCubit>().changeIndex(value),
+                            labelType: NavigationRailLabelType.all,
+                            backgroundColor: AppColors.white,
+                            indicatorColor: AppColors.lightGreen3,
+                            selectedIconTheme: IconThemeData(
+                              color: AppColors.green,
+                              size: 28,
+                            ),
+                            selectedLabelTextStyle: TextStyle(
+                              color: AppColors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            leading: Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: FloatingActionButton.small(
+                                onPressed: () =>
+                                    context.read<NavBarCubit>().changeIndex(2),
+                                backgroundColor: AppColors.green,
+                                elevation: 0,
+                                child: const Icon(
+                                  Icons.recycling,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            destinations: [
+                              NavigationRailDestination(
+                                icon: const Icon(Icons.home_outlined),
+                                selectedIcon: const Icon(Icons.home),
+                                label: Text('nav_bar.home'.tr()),
+                              ),
+                              NavigationRailDestination(
+                                icon: const Icon(Icons.map_outlined),
+                                selectedIcon: const Icon(Icons.map),
+                                label: Text('nav_bar.map'.tr()),
+                              ),
+                              NavigationRailDestination(
+                                icon: const Icon(Icons.recycling_outlined),
+                                selectedIcon: const Icon(Icons.recycling),
+                                label: Text('add_process.recycling'.tr()),
+                              ),
+                              NavigationRailDestination(
+                                icon: const Icon(Icons.bar_chart_outlined),
+                                selectedIcon: const Icon(Icons.bar_chart),
+                                label: Text('nav_bar.statistic'.tr()),
+                              ),
+                              NavigationRailDestination(
+                                icon: const Icon(Icons.person_outline),
+                                selectedIcon: const Icon(Icons.person),
+                                label: Text('nav_bar.profile'.tr()),
+                              ),
+                            ],
+                          ),
                         ),
-                        label: "nav_bar.statistic".tr(),
-                      ),
-                      BottomNavigationBarItem(
-                        icon: const Padding(
-                          padding: EdgeInsets.only(bottom: 4),
-                          child: Icon(Icons.person_2_outlined),
+                        VerticalDivider(
+                          width: 1,
+                          thickness: 1,
+                          color: AppColors.border,
                         ),
-                        label: "nav_bar.profile".tr(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              body: KeyedSubtree(key: ValueKey(themeMode), child: pages[index]),
+                        Expanded(child: body),
+                      ],
+                    ),
             );
           },
         );

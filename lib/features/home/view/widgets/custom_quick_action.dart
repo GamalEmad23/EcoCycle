@@ -28,7 +28,7 @@ class CustomeQuickAction extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: h * .03, horizontal: w * .02),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(28),
@@ -44,15 +44,20 @@ class CustomeQuickAction extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: iconColor, size: w * 0.09),
+            Icon(
+              icon,
+              color: iconColor,
+              size: (w.clamp(320, 520) * 0.075).toDouble(),
+            ),
             const SizedBox(height: 10),
             CustomeText(
               text: label,
               textColor: textColor,
               fontWeight: FontWeight.bold,
-              fontSize: w * 0.04,
+              fontSize: 14,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              centerAlign: true,
             ),
           ],
         ),

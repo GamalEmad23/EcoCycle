@@ -30,17 +30,15 @@ class ProgressFlowchartWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.alt_route_rounded,
-                color: AppColors.primary,
-                size: 22,
-              ),
+              Icon(Icons.alt_route_rounded, color: AppColors.primary, size: 22),
               const SizedBox(width: 8),
               CustomeText(
                 text: 'flowchart.title',
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 textColor: AppColors.textPrimary,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               const Spacer(),
               Container(
@@ -52,6 +50,8 @@ class ProgressFlowchartWidget extends StatelessWidget {
                 ),
                 child: Text(
                   dateRangeText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 11,
                     color: AppColors.primary,
@@ -72,7 +72,9 @@ class ProgressFlowchartWidget extends StatelessWidget {
               border: Border.all(color: AppColors.border, width: 1.5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: AppColors.isDarkMode ? 0.22 : 0.05),
+                  color: Colors.black.withValues(
+                    alpha: AppColors.isDarkMode ? 0.22 : 0.05,
+                  ),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -159,7 +161,7 @@ class ProgressFlowchartWidget extends StatelessWidget {
                   color: AppColors.primary.withValues(alpha: 0.15),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
-                )
+                ),
               ]
             : [],
       ),
@@ -167,10 +169,7 @@ class ProgressFlowchartWidget extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: iconBg,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
             child: Icon(icon, color: iconColor, size: 22),
           ),
           const SizedBox(width: 14),
@@ -180,6 +179,8 @@ class ProgressFlowchartWidget extends StatelessWidget {
               children: [
                 Text(
                   titleKey.tr(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -189,21 +190,25 @@ class ProgressFlowchartWidget extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   subtitleKey.tr(),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textGrey,
-                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 11, color: AppColors.textGrey),
                 ),
               ],
             ),
           ),
           const SizedBox(width: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 15,
-              color: valueColor,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 120),
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 15,
+                color: valueColor,
+              ),
             ),
           ),
         ],
@@ -215,9 +220,7 @@ class ProgressFlowchartWidget extends StatelessWidget {
     return Container(
       height: 24,
       width: 2,
-      decoration: BoxDecoration(
-        color: AppColors.border,
-      ),
+      decoration: BoxDecoration(color: AppColors.border),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

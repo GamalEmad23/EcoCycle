@@ -1,4 +1,4 @@
-﻿// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use
 
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/widgets/custome_text.dart';
@@ -24,8 +24,15 @@ class CustomeImapactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.sizeOf(context).width;
+    final padding = (w * 0.04).clamp(14, 20).toDouble();
+    final iconPadding = (w * 0.025).clamp(8, 12).toDouble();
+    final iconSize = (w * 0.06).clamp(22, 30).toDouble();
+    final amountSize = (w * 0.045).clamp(16, 22).toDouble();
+    final unitSize = (w * 0.035).clamp(12, 16).toDouble();
+    final labelSize = (w * 0.028).clamp(11, 13).toDouble();
+
     return Container(
-      padding: EdgeInsets.all(w * 0.04),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(28),
@@ -41,11 +48,11 @@ class CustomeImapactCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(w * 0.025),
+            padding: EdgeInsets.all(iconPadding),
             decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-            child: Icon(icon, color: iconColor, size: w * 0.06),
+            child: Icon(icon, color: iconColor, size: iconSize),
           ),
-          SizedBox(width: w * 0.02),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +62,7 @@ class CustomeImapactCard extends StatelessWidget {
                   children: [
                     CustomeText(
                       text: amount,
-                      fontSize: w * 0.045,
+                      fontSize: amountSize,
                       fontWeight: FontWeight.bold,
                       textColor: AppColors.textPrimary,
                     ),
@@ -63,7 +70,7 @@ class CustomeImapactCard extends StatelessWidget {
                     Flexible(
                       child: CustomeText(
                         text: value,
-                        fontSize: w * 0.035,
+                        fontSize: unitSize,
                         fontWeight: FontWeight.bold,
                         textColor: AppColors.textPrimary,
                         maxLines: 1,
@@ -74,7 +81,7 @@ class CustomeImapactCard extends StatelessWidget {
                 ),
                 CustomeText(
                   text: label,
-                  fontSize: w * 0.028,
+                  fontSize: labelSize,
                   textColor: AppColors.textGrey,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

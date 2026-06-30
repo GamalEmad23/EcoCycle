@@ -1,30 +1,42 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:eco_cycle/core/responsive/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:eco_cycle/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  Future<void> pumpAtWidth(WidgetTester tester, double width) async {
+    tester.view.physicalSize = Size(width, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: ResponsiveLayout(
+          mobile: Text('mobile'),
+          tablet: Text('tablet'),
+          desktop: Text('desktop'),
+        ),
+      ),
+    );
+  }
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('uses the mobile layout on a phone', (tester) async {
+    await pumpAtWidth(tester, 390);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('mobile'), findsOneWidget);
+    expect(find.text('desktop'), findsNothing);
+  });
+
+  testWidgets('uses the tablet layout on a tablet', (tester) async {
+    await pumpAtWidth(tester, 768);
+
+    expect(find.text('tablet'), findsOneWidget);
+  });
+
+  testWidgets('uses the desktop layout on a laptop', (tester) async {
+    await pumpAtWidth(tester, 1366);
+
+    expect(find.text('desktop'), findsOneWidget);
+    expect(find.text('mobile'), findsNothing);
   });
 }

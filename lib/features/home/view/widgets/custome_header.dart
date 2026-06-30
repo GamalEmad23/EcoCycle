@@ -19,6 +19,10 @@ class CustomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleSize = (w * 0.045).clamp(16, 20).toDouble();
+    final subtitleSize = (w * 0.035).clamp(12, 15).toDouble();
+    final avatarRadius = (w * 0.065).clamp(22, 34).toDouble();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -54,15 +58,16 @@ class CustomeHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomeText(
-                      text: "${"home.welcome".tr().replaceAll("👋", "").trim()} $userName 👋",
-                      fontSize: w * 0.045, // Responsive font size
+                      text:
+                          "${"home.welcome".tr().replaceAll("👋", "").trim()} $userName 👋",
+                      fontSize: titleSize,
                       fontWeight: FontWeight.bold,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     CustomeText(
                       text: "home.happy_day",
-                      fontSize: w * 0.035, // Responsive font size
+                      fontSize: subtitleSize,
                       textColor: AppColors.textGrey,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -84,7 +89,7 @@ class CustomeHeader extends StatelessWidget {
                   ],
                 ),
                 child: CircleAvatar(
-                  radius: w * .065,
+                  radius: avatarRadius,
                   backgroundImage: imagePath.isNotEmpty
                       ? NetworkImage(imagePath)
                       : const AssetImage("assets/images/Margin.png")
@@ -98,4 +103,3 @@ class CustomeHeader extends StatelessWidget {
     );
   }
 }
-

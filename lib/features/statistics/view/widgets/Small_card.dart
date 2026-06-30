@@ -20,7 +20,6 @@ class SmallCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 106,
-      width: 173,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
@@ -43,13 +42,19 @@ class SmallCard extends StatelessWidget {
               text: title,
               textColor: AppColors.textGrey,
               fontSize: 12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             Row(
               children: [
-                CustomeText(
-                  text: value,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                Flexible(
+                  child: CustomeText(
+                    text: value,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 const SizedBox(width: 6),
                 if (showUnit)
@@ -67,6 +72,8 @@ class SmallCard extends StatelessWidget {
               text: subtitle,
               fontSize: 12,
               textColor: AppColors.Textcolor,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

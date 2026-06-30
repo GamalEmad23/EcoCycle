@@ -395,8 +395,8 @@ class _MapScreenState extends State<MapScreen> {
           textDirection: TextDirection.rtl,
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: bsW * 0.06,
-              vertical: bsW * 0.05,
+              horizontal: (bsW * 0.06).clamp(20, 32).toDouble(),
+              vertical: (bsW * 0.05).clamp(18, 28).toDouble(),
             ),
             decoration: BoxDecoration(
               color: AppColors.white,
@@ -408,7 +408,9 @@ class _MapScreenState extends State<MapScreen> {
                 Container(
                   width: bsW * 0.10,
                   height: 4,
-                  margin: EdgeInsets.only(bottom: bsW * 0.05),
+                  margin: EdgeInsets.only(
+                    bottom: (bsW * 0.05).clamp(16, 24).toDouble(),
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.border,
                     borderRadius: BorderRadius.circular(2),
@@ -417,14 +419,16 @@ class _MapScreenState extends State<MapScreen> {
                 Text(
                   'map.choose_transport_mode'.tr(),
                   style: TextStyle(
-                    fontSize: bsW * 0.045,
+                    fontSize: (bsW * 0.045).clamp(18, 22).toDouble(),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: bsW * 0.05),
+                SizedBox(height: (bsW * 0.05).clamp(16, 24).toDouble()),
                 ListTile(
                   leading: Container(
-                    padding: EdgeInsets.all(bsW * 0.025),
+                    padding: EdgeInsets.all(
+                      (bsW * 0.025).clamp(8, 12).toDouble(),
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.lightGreen2,
                       shape: BoxShape.circle,
@@ -435,7 +439,7 @@ class _MapScreenState extends State<MapScreen> {
                     'map.driving'.tr(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: bsW * 0.04,
+                      fontSize: (bsW * 0.04).clamp(15, 18).toDouble(),
                     ),
                   ),
                   onTap: () {
@@ -443,10 +447,12 @@ class _MapScreenState extends State<MapScreen> {
                     _launchNavigation(destination, 'driving');
                   },
                 ),
-                SizedBox(height: bsW * 0.025),
+                SizedBox(height: (bsW * 0.025).clamp(8, 12).toDouble()),
                 ListTile(
                   leading: Container(
-                    padding: EdgeInsets.all(bsW * 0.025),
+                    padding: EdgeInsets.all(
+                      (bsW * 0.025).clamp(8, 12).toDouble(),
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.lightGreen2,
                       shape: BoxShape.circle,
@@ -460,7 +466,7 @@ class _MapScreenState extends State<MapScreen> {
                     'map.walking'.tr(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: bsW * 0.04,
+                      fontSize: (bsW * 0.04).clamp(15, 18).toDouble(),
                     ),
                   ),
                   onTap: () {
@@ -468,7 +474,7 @@ class _MapScreenState extends State<MapScreen> {
                     _launchNavigation(destination, 'walking');
                   },
                 ),
-                SizedBox(height: bsW * 0.05),
+                SizedBox(height: (bsW * 0.05).clamp(16, 24).toDouble()),
               ],
             ),
           ),
@@ -483,6 +489,7 @@ class _MapScreenState extends State<MapScreen> {
     final double h = size.height;
     final double w = size.width;
     final double topPad = MediaQuery.of(context).padding.top;
+    final horizontalInset = w >= 600 ? 24.0 : 16.0;
 
     if (hasPermission == null) {
       return Scaffold(
@@ -616,7 +623,7 @@ class _MapScreenState extends State<MapScreen> {
                 ),
 
                 Positioned(
-                  left: w * 0.05,
+                  left: horizontalInset,
                   top: h * 0.38,
                   child: Column(
                     children: [
@@ -682,44 +689,103 @@ class _MapScreenState extends State<MapScreen> {
                 ),
                 Positioned(
                   top: topPad + 12,
-                  left: w * 0.05,
-                  right: w * 0.05,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!_isSearchExpanded)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                  left: horizontalInset,
+                  right: horizontalInset,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 640),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (!_isSearchExpanded)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 10,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.tune,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                      vertical: 12,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white.withValues(
+                                        alpha: 0.9,
+                                      ),
+                                      borderRadius: BorderRadius.circular(25),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 10,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Text(
+                                      'map.centers_map'.tr(),
+                                      style: TextStyle(
+                                        fontSize: (w * 0.045)
+                                            .clamp(16, 20)
+                                            .toDouble(),
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 10,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                      onPressed: () {
+                                        setState(
+                                          () => _isSearchExpanded = true,
+                                        );
+                                        _searchFocusNode.requestFocus();
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                            else
                               Container(
+                                height: (h * 0.065).clamp(50, 60).toDouble(),
                                 decoration: BoxDecoration(
                                   color: AppColors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 10,
-                                      offset: Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.tune,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white.withValues(alpha: 0.9),
                                   borderRadius: BorderRadius.circular(25),
                                   boxShadow: const [
                                     BoxShadow(
@@ -729,174 +795,141 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                   ],
                                 ),
-                                child: Text(
-                                  'map.centers_map'.tr(),
-                                  style: TextStyle(
-                                    fontSize: w * 0.045,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 10,
-                                      offset: Offset(0, 4),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_back,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isSearchExpanded = false;
+                                          _searchController.clear();
+                                          _onSearchChanged('');
+                                        });
+                                      },
                                     ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                  onPressed: () {
-                                    setState(() => _isSearchExpanded = true);
-                                    _searchFocusNode.requestFocus();
-                                  },
-                                ),
-                              ),
-                            ],
-                          )
-                        else
-                          Container(
-                            height: h * 0.065,
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(25),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 8),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.arrow_back,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isSearchExpanded = false;
-                                      _searchController.clear();
-                                      _onSearchChanged('');
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                  child: TextField(
-                                    controller: _searchController,
-                                    focusNode: _searchFocusNode,
-                                    onChanged: _onSearchChanged,
-                                    decoration: InputDecoration(
-                                      hintText: 'map.enter_your_location'.tr(),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                if (_isSearching)
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                    ),
-                                    child: SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
+                                    Expanded(
+                                      child: TextField(
+                                        controller: _searchController,
+                                        focusNode: _searchFocusNode,
+                                        onChanged: _onSearchChanged,
+                                        decoration: InputDecoration(
+                                          hintText: 'map.enter_your_location'
+                                              .tr(),
+                                          border: InputBorder.none,
+                                        ),
                                       ),
                                     ),
-                                  )
-                                else if (_searchController.text.isNotEmpty)
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.clear,
-                                      color: AppColors.textSecondary,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      _searchController.clear();
-                                      _onSearchChanged('');
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
+                                    if (_isSearching)
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 16.0,
+                                        ),
+                                        child: SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      )
+                                    else if (_searchController.text.isNotEmpty)
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: AppColors.textSecondary,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          _searchController.clear();
+                                          _onSearchChanged('');
+                                        },
+                                      ),
+                                  ],
+                                ),
+                              ),
 
-                        if (_isSearchExpanded && _searchResults.isNotEmpty)
-                          Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            constraints: BoxConstraints(maxHeight: h * 0.35),
-                            child: ListView.separated(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              shrinkWrap: true,
-                              itemCount: _searchResults.length,
-                              separatorBuilder: (context, index) =>
-                                  Divider(height: 1),
-                              itemBuilder: (context, index) {
-                                final result = _searchResults[index];
-                                return ListTile(
-                                  leading: Icon(
-                                    Icons.location_on,
-                                    color: AppColors.primary,
+                            if (_isSearchExpanded && _searchResults.isNotEmpty)
+                              Container(
+                                margin: const EdgeInsets.only(top: 8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                constraints: BoxConstraints(
+                                  maxHeight: h * 0.35,
+                                ),
+                                child: ListView.separated(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
                                   ),
-                                  title: Text(
-                                    result.displayName.split(',').first,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  onTap: () => _onResultSelected(result),
-                                );
-                              },
-                            ),
-                          ),
-                      ],
+                                  shrinkWrap: true,
+                                  itemCount: _searchResults.length,
+                                  separatorBuilder: (context, index) =>
+                                      Divider(height: 1),
+                                  itemBuilder: (context, index) {
+                                    final result = _searchResults[index];
+                                    return ListTile(
+                                      leading: Icon(
+                                        Icons.location_on,
+                                        color: AppColors.primary,
+                                      ),
+                                      title: Text(
+                                        result.displayName.split(',').first,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      onTap: () => _onResultSelected(result),
+                                    );
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
                 if (_selectedCenter != null)
                   Positioned(
                     bottom: h * 0.13,
-                    left: w * 0.05,
-                    right: w * 0.05,
-                    child: CenterDetailsBottomSheet(
-                      centerData: _selectedCenter!,
-                      isFavorite: _favoriteIds.contains(_selectedCenter!['id']),
-                      onFavoriteToggle: () {
-                        final isFav = _favoriteIds.contains(
-                          _selectedCenter!['id'],
-                        );
-                        _favoritesService.toggleFavorite(
-                          _selectedCenter!['id'],
-                          isFav,
-                        );
-                      },
-                      onGetDirections: () {
-                        _showNavigationOptions(
-                          _selectedCenter!['location'] as LatLng,
-                        );
-                      },
+                    left: horizontalInset,
+                    right: horizontalInset,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 560),
+                        child: CenterDetailsBottomSheet(
+                          centerData: _selectedCenter!,
+                          isFavorite: _favoriteIds.contains(
+                            _selectedCenter!['id'],
+                          ),
+                          onFavoriteToggle: () {
+                            final isFav = _favoriteIds.contains(
+                              _selectedCenter!['id'],
+                            );
+                            _favoritesService.toggleFavorite(
+                              _selectedCenter!['id'],
+                              isFav,
+                            );
+                          },
+                          onGetDirections: () {
+                            _showNavigationOptions(
+                              _selectedCenter!['location'] as LatLng,
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 if (_isLoadingCenters)
                   Positioned(
                     top: h * 0.16,
-                    left: w * 0.05,
-                    right: w * 0.05,
+                    left: horizontalInset,
+                    right: horizontalInset,
                     child: FadeInDown(
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -942,8 +975,8 @@ class _MapScreenState extends State<MapScreen> {
                 else if (_showEmptyStateMessage && currentLocation != null)
                   Positioned(
                     top: h * 0.16,
-                    left: w * 0.05,
-                    right: w * 0.05,
+                    left: horizontalInset,
+                    right: horizontalInset,
                     child: FadeInDown(
                       child: Container(
                         padding: const EdgeInsets.symmetric(

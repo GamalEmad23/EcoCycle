@@ -1,4 +1,3 @@
-
 // ignore_for_file: must_be_immutable
 
 import 'package:eco_cycle/core/themes/app_colors.dart';
@@ -31,48 +30,49 @@ class customeLongProfileCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: h * .005),
         child: Container(
-          height: h * .09,
-          width: w * .89,
+          constraints: BoxConstraints(
+            minHeight: (h * .075).clamp(60, 74).toDouble(),
+          ),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: AppColors.white,
             border: Border.all(color: AppColors.border, width: 2),
             borderRadius: BorderRadius.circular(15),
           ),
-        
+
           /// Container Content
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: w * .03),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    /// Icon
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: backGroung ?? AppColors.iconBgLight,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          icon,
-                          color: iconColor ?? AppColors.textSecondary,
+                Expanded(
+                  child: Row(
+                    children: [
+                      /// Icon
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: backGroung ?? AppColors.iconBgLight,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            icon,
+                            color: iconColor ?? AppColors.textSecondary,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: w * .025),
-        
-                    ///Text
-                    text,
-                  ],
+                      SizedBox(width: w * .025),
+
+                      ///Text
+                      Expanded(child: text),
+                    ],
+                  ),
                 ),
-        
+
                 // SizedBox(width: w*.025,),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: AppColors.textSecondary,
-                ),
+                Icon(Icons.arrow_forward_ios, color: AppColors.textSecondary),
               ],
             ),
           ),

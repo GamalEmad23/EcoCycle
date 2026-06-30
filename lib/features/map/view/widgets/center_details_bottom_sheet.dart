@@ -169,6 +169,8 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                             const SizedBox(height: 8),
                             ArabicText(
                               centerData['name'],
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -187,6 +189,8 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                                   const SizedBox(width: 4),
                                   ArabicText(
                                     centerData['city'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: AppColors.textSecondary,
@@ -197,10 +201,9 @@ class CenterDetailsBottomSheet extends StatelessWidget {
                             ],
                             const SizedBox(height: 4),
                             ArabicText(
-                              centerData['materials'] ??
-                                  "بلاستيك، ورق، معدن، زجاج",
-                            Text(
                               _localizedMaterials(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
