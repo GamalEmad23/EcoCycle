@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -129,7 +130,7 @@ class _MyAppState extends State<MyApp> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      textTheme: baseTheme.textTheme.apply(
+      textTheme: GoogleFonts.manropeTextTheme(baseTheme.textTheme).apply(
         bodyColor: AppColors.textPrimary,
         displayColor: AppColors.textPrimary,
       ),

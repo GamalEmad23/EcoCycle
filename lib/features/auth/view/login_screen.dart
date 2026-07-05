@@ -350,7 +350,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: .center,
                           children: [
-                            CustomeText(text: "login.no_account"),
+                            CustomeText(text: "login.no_account", fontSize: 15),
+                            SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
                                 NavigateHelper.pushReplacement(
@@ -360,7 +361,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               child: Column(
                                 children: [
-                                  CustomeText(text: "login.create_account"),
+                                  CustomeText(
+                                    text: "login.create_account",
+                                    fontSize: 15,
+                                  ),
                                   Container(
                                     height: 2,
                                     width: w * .3,

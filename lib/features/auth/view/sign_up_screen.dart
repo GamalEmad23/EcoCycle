@@ -273,7 +273,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Row(
                         mainAxisAlignment: .center,
                         children: [
-                          CustomeText(text: "signup.have_account"),
+                          CustomeText(
+                            text: "signup.have_account",
+                            fontSize: 15,
+                          ),
+
+                          SizedBox(width: 5),
                           Column(
                             children: [
                               GestureDetector(
@@ -283,11 +288,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     LoginScreen(),
                                   );
                                 },
-                                child: CustomeText(text: "signup.login_now"),
+                                child: CustomeText(
+                                  text: "signup.login_now",
+                                  fontSize: 15,
+                                ),
                               ),
                               Container(
                                 height: 2,
-                                width: w * .3,
+                                width: w * .1,
                                 color: AppColors.black,
                               ),
                             ],
