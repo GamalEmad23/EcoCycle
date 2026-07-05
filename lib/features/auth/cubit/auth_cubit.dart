@@ -12,10 +12,21 @@ import 'package:meta/meta.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
+  final GoogleSignIn _googleSignIn;
 
-  FirebaseAuth instance = FirebaseAuth.instance;
-  FirebaseFirestore fireInstase = FirebaseFirestore.instance;
+  AuthCubit({
+    FirebaseAuth? firebaseAuth,
+    FirebaseFirestore? firestore,
+    GoogleSignIn? googleSignIn,
+  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _firestore = firestore ?? FirebaseFirestore.instance,
+        _googleSignIn = googleSignIn ?? GoogleSignIn(),
+        super(AuthInitial());
+
+  FirebaseAuth get instance => _firebaseAuth;
+  FirebaseFirestore get fireInstase => _firestore;
 
   /// Sign Up
   Future<void> createUser(UserData userData) async {
@@ -92,7 +103,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signInWithGoogle() async {
     emit(googleLoginLoading());
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignIn googleSignIn = _googleSignIn;
 
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
@@ -134,9 +145,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   /// Log out
   Future<void> Signout() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
+    await _firebaseAuth.signOut();
+    await _googleSignIn.signOut();
   }
 }

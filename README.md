@@ -1,6 +1,26 @@
 # ♻️ EcoCycle
 
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
+![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-brightgreen?style=for-the-badge)
+![Build](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge)
+
 **EcoCycle** is an innovative Flutter application designed to promote and facilitate recycling. The app connects regular users with recycling administrators, providing a seamless process for submitting recycling requests, tracking statistics, and encouraging eco-friendly habits. Powered by machine learning (TFLite) and Firebase, EcoCycle is a modern solution to a cleaner environment.
+
+---
+
+## 📸 Screenshots
+
+*(Replace the placeholder image links with actual screenshots or a GIF of your app)*
+
+<div align="center">
+  <img src="https://via.placeholder.com/200x400.png?text=Splash+Screen" width="200" />
+  <img src="https://via.placeholder.com/200x400.png?text=Onboarding" width="200" />
+  <img src="https://via.placeholder.com/200x400.png?text=Home+Screen" width="200" />
+  <img src="https://via.placeholder.com/200x400.png?text=Map+Picker" width="200" />
+  <img src="https://via.placeholder.com/200x400.png?text=ML+Scanner" width="200" />
+</div>
 
 ---
 
@@ -26,7 +46,8 @@
 
 This project is built using modern Flutter development practices. 
 
-- **Framework:** Flutter (`sdk: flutter`)
+- **Framework:** Flutter (SDK: `^3.10.4`)
+- **Language:** Dart
 - **State Management:** BLoC (`flutter_bloc`, `bloc`) and GetX (`get`) are utilized to manage complex app states efficiently.
 - **Backend as a Service (BaaS):** Firebase
   - *Authentication:* User login/registration.
@@ -35,8 +56,6 @@ This project is built using modern Flutter development practices.
   - *Crashlytics:* For tracking errors and app crashes.
 - **Machine Learning:** `tflite_flutter` for on-device ML processing.
 - **Maps:** `flutter_map`, `flutter_osm_plugin`, and `latlong2`.
-- **UI & Animations:** `lottie`, `animate_do`, `introduction_screen`.
-- **Local Storage:** `shared_preferences`.
 
 ### Folder Structure (Feature-First Architecture)
 The codebase follows a scalable Feature-First Architecture, dividing the app into `core` and `features`.
@@ -71,7 +90,25 @@ lib/
 
 ---
 
-## 🚀 Getting Started
+## ⚙️ Environment Setup & API Keys
+
+Since the project uses Firebase and Machine Learning, you need to set up the necessary environment files and models before running the app. 
+
+### 1. Firebase Setup
+The project requires Firebase configuration files which are excluded from version control for security.
+- **Android:** Add your `google-services.json` file to `android/app/`
+- **iOS:** Add your `GoogleService-Info.plist` file to `ios/Runner/`
+
+### 2. Machine Learning Assets
+Ensure your TFLite model and labels are present in the assets directory:
+- Model path: `assets/model/model.tflite`
+- Labels path: `assets/model/labels.txt`
+
+*(If using an `.env` file for additional API keys, make sure to duplicate `.env.example` as `.env` and fill in your keys).*
+
+---
+
+## 🚀 Setup Instructions
 
 Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
@@ -79,13 +116,12 @@ Follow these instructions to get a copy of the project up and running on your lo
 - [Flutter SDK](https://docs.flutter.dev/get-started/install) (Version `3.10.4` or higher)
 - [Dart SDK](https://dart.dev/get-dart)
 - Android Studio / VS Code
-- A Firebase project configured for this app (You need the `google-services.json` for Android and `GoogleService-Info.plist` for iOS).
 
 ### Installation
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/GamalEmad23/EcoCycle.git
    cd EcoCycle
    ```
 
@@ -94,43 +130,27 @@ Follow these instructions to get a copy of the project up and running on your lo
    flutter pub get
    ```
 
-3. **Configure Firebase:**
-   Make sure you have placed the `google-services.json` inside `android/app/` and the `GoogleService-Info.plist` inside `ios/Runner/`.
+3. **Verify Environment Setup:**
+   Ensure step **"Environment Setup & API Keys"** is completed.
 
-4. **Add ML Models:**
-   Ensure your `.tflite` model and labels file are placed in the `assets/model/` directory.
-
-5. **Run the app:**
+4. **Run the app:**
    ```bash
    flutter run
    ```
 
 ---
 
-## 📦 Packages & Dependencies Highlights
-
-- **`flutter_bloc` & `get`:** State Management.
-- **`easy_localization`:** For seamless app translation.
-- **`firebase_core` & friends:** Backend integration.
-- **`fl_chart`:** To render stunning recycling data charts.
-- **`flutter_map`:** OpenStreetMap integration.
-- **`tflite_flutter`:** Core ML functionality.
-
----
-
 ## 🤝 Contribution Guidelines
 
+We welcome contributions! Please follow these steps:
 1. **Fork** the project.
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
 4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+5. Open a **Pull Request**.
 
 ---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-*Developed with ❤️ for a cleaner Earth.*
+This project is licensed under the MIT License.

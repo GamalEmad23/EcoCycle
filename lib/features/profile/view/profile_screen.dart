@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, deprecated_member_use
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eco_cycle/core/helper/navigate_helper/navigate_helper.dart';
+import 'package:eco_cycle/core/responsive/app_breakpoints.dart';
 import 'package:eco_cycle/core/widgets/custome_button.dart';
 import 'package:eco_cycle/features/auth/cubit/auth_cubit.dart';
 import 'package:eco_cycle/features/auth/view/login_screen.dart';
@@ -37,7 +38,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width.clamp(0, 900).toDouble();
+    double w = MediaQuery.sizeOf(
+      context,
+    ).width.clamp(0, AppBreakpoints.contentMaxWidth).toDouble();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(

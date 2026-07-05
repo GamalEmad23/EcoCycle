@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 abstract final class AppBreakpoints {
   static const double mobile = 600;
-  static const double desktop = 1280;
-  static const double contentMaxWidth = 1200;
+  static const double desktop = 900;
+  static const double contentMaxWidth = 600;
   static const double formMaxWidth = 420;
 
   static bool isMobile(BuildContext context) =>

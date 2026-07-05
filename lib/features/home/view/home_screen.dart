@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eco_cycle/core/responsive/app_breakpoints.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/features/home/view/widgets/custom_quick_action.dart';
 import 'package:eco_cycle/features/home/view/widgets/custome_center_card.dart';
@@ -83,7 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width.clamp(0, 1200).toDouble();
+    double w = MediaQuery.sizeOf(
+      context,
+    ).width.clamp(0, AppBreakpoints.contentMaxWidth).toDouble();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(

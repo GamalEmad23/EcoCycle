@@ -67,7 +67,7 @@ class _RecyclingRequestView extends StatelessWidget {
           final cubit = context.watch<RecyclingRequestCubit>();
 
           return ResponsiveContent(
-            maxWidth: 1000,
+            maxWidth: 800,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(

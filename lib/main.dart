@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eco_cycle/core/themes/app_colors.dart';
 import 'package:eco_cycle/core/themes/cubit/theme_cubit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -81,6 +82,16 @@ class _MyAppState extends State<MyApp> {
           themeAnimationDuration: const Duration(milliseconds: 180),
           themeAnimationCurve: Curves.easeOutCubic,
           debugShowCheckedModeBanner: false,
+          builder: (context, child) {
+            final mediaQuery = MediaQuery.of(context);
+            return MediaQuery(
+              data: mediaQuery.copyWith(
+                textScaler: TextScaler.linear(
+                    mediaQuery.textScaler.scale(1.0)),
+              ),
+              child: child!,
+            );
+          },
           home: StreamBuilder<User?>(
             stream: _authStream,
             builder: (context, snapshot) {
@@ -129,7 +140,7 @@ class _MyAppState extends State<MyApp> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      textTheme: baseTheme.textTheme.apply(
+      textTheme: GoogleFonts.manropeTextTheme(baseTheme.textTheme).apply(
         bodyColor: AppColors.textPrimary,
         displayColor: AppColors.textPrimary,
       ),
