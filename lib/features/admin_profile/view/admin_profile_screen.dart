@@ -35,9 +35,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   @override
   void initState() {
     super.initState();
-
     final user = FirebaseAuth.instance.currentUser;
-
     if (user != null) {
       context.read<AdminCubit>().getAdminData(user.uid);
     }
@@ -82,7 +80,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   final user = FirebaseAuth.instance.currentUser;
 
                   return ResponsiveContent(
-                    maxWidth: 900,
+                    maxWidth: 700,
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -99,35 +97,38 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               children: [
                                 // Avatar + camera badge
                                 GestureDetector(
-                                  onTap: _isUploadingImage ? null : () async {
-                                    if (user == null) return;
-                                    final picker = ImagePicker();
-                                    final picked = await picker.pickImage(
-                                      source: ImageSource.gallery,
-                                      imageQuality: 70, // يقلل الجودة لـ 70% عشان يكون سريع
-                                      maxWidth: 800,    // بيقلل حجم الأبعاد
-                                    );
-                                    if (picked != null) {
-                                      setState(() {
-                                        _isUploadingImage = true;
-                                      });
-                                      
-                                      final file = File(picked.path);
-                                      final url = await cubit.uploadImage(
-                                        file, user.uid,
-                                      );
-                                      if (url != null) {
-                                        await cubit.updateAdminImage(
-                                            user.uid, url);
-                                      }
-                                      
-                                      if (mounted) {
-                                        setState(() {
-                                          _isUploadingImage = false;
-                                        });
-                                      }
-                                    }
-                                  },
+                                  onTap: _isUploadingImage
+                                      ? null
+                                      : () async {
+                                          if (user == null) return;
+                                          final picker = ImagePicker();
+                                          final picked =
+                                              await picker.pickImage(
+                                            source: ImageSource.gallery,
+                                            imageQuality: 70,
+                                            maxWidth: 800,
+                                          );
+                                          if (picked != null) {
+                                            setState(() {
+                                              _isUploadingImage = true;
+                                            });
+                                            final file = File(picked.path);
+                                            final url =
+                                                await cubit.uploadImage(
+                                              file,
+                                              user.uid,
+                                            );
+                                            if (url != null) {
+                                              await cubit.updateAdminImage(
+                                                  user.uid, url);
+                                            }
+                                            if (mounted) {
+                                              setState(() {
+                                                _isUploadingImage = false;
+                                              });
+                                            }
+                                          }
+                                        },
                                   child: Stack(
                                     children: [
                                       CircleAvatar(
@@ -145,10 +146,10 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                             : null,
                                       ),
                                       if (_isUploadingImage)
-                                        CircleAvatar(
+                                        const CircleAvatar(
                                           radius: 42,
                                           backgroundColor: Colors.black45,
-                                          child: const CircularProgressIndicator(
+                                          child: CircularProgressIndicator(
                                             color: Colors.white,
                                             strokeWidth: 3,
                                           ),
@@ -163,7 +164,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                               color: AppColors.primary,
                                               shape: BoxShape.circle,
                                               border: Border.all(
-                                                color: AppColors.backgroundLight,
+                                                color:
+                                                    AppColors.backgroundLight,
                                                 width: 2,
                                               ),
                                             ),
@@ -210,13 +212,14 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
                                 const SizedBox(height: 20),
 
-                                // Stats cards - Row مع Expanded عشان ما يتقسموش لسطرين
+                                // Stats Row
                                 Row(
                                   children: [
                                     Expanded(
                                       child: StatBox(
                                         icon: Icons.receipt_long,
-                                        title: "admin_profile.orders".tr(),
+                                        title:
+                                            "admin_profile.orders".tr(),
                                         value: context
                                             .read<AdminCubit>()
                                             .ordersCount
@@ -227,7 +230,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                     Expanded(
                                       child: StatBox(
                                         icon: Icons.recycling,
-                                        title: "admin_profile.centers".tr(),
+                                        title:
+                                            "admin_profile.centers".tr(),
                                         value: context
                                             .read<AdminCubit>()
                                             .centersCount
@@ -238,7 +242,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                     Expanded(
                                       child: StatBox(
                                         icon: Icons.people_alt,
-                                        title: "admin_profile.users".tr(),
+                                        title:
+                                            "admin_profile.users".tr(),
                                         value: context
                                             .read<AdminCubit>()
                                             .usersCount
@@ -275,7 +280,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
                           sectionWidget(
                             onTap: () {
-                              NavigateHelper.push(context, const UsersScreen());
+                              NavigateHelper.push(
+                                  context, const UsersScreen());
                             },
                             icon: Icons.people,
                             title: "admin_profile.manage_users".tr(),
@@ -290,106 +296,108 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               );
                             },
                             icon: Icons.recycling,
-                            title: "admin_profile.recycling_centers".tr(),
+                            title:
+                                "admin_profile.recycling_centers".tr(),
                             subtitle: "admin_profile.centers_desc".tr(),
                           ),
 
                           sectionWidget(
                             icon: Icons.language,
                             title: "admin_profile.language".tr(),
-                            subtitle: "admin_profile.change_language".tr(),
+                            subtitle:
+                                "admin_profile.change_language".tr(),
                             onTap: () {
-                              final profileCubit = context.read<ProfileCubit>();
+                              final profileCubit =
+                                  context.read<ProfileCubit>();
                               showDialog(
                                 context: context,
-                                builder: (dialogContext) => StatefulBuilder(
-                                  builder: (dialogContext, setDialogState) =>
-                                      Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                        ),
-                                        backgroundColor: AppColors.white,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(20),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                'admin_profile.select_language'
-                                                    .tr(),
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors.black,
-                                                ),
+                                builder: (dialogContext) =>
+                                    StatefulBuilder(
+                                  builder:
+                                      (dialogContext, setDialogState) =>
+                                          Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20),
+                                    ),
+                                    backgroundColor: AppColors.white,
+                                    child: ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 400,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(24),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'admin_profile.select_language'
+                                                  .tr(),
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColors.black,
                                               ),
+                                            ),
+                                            const SizedBox(height: 20),
 
-                                              const SizedBox(height: 20),
+                                            /// English
+                                            CustomeLangCard(
+                                              title: 'actions.en'.tr(),
+                                              icon: Icons.language,
+                                              selected: context
+                                                      .locale.languageCode ==
+                                                  'en',
+                                              onTap: () async {
+                                                await profileCubit
+                                                    .changeLanguage(
+                                                  context,
+                                                  "en",
+                                                );
+                                                setDialogState(() {});
+                                              },
+                                            ),
+                                            const SizedBox(height: 12),
 
-                                              /// English
-                                              CustomeLangCard(
-                                                title: 'actions.en'.tr(),
-                                                icon: Icons.language,
-                                                selected:
-                                                    context
-                                                        .locale
-                                                        .languageCode ==
-                                                    'en',
-                                                onTap: () async {
-                                                  await profileCubit
-                                                      .changeLanguage(
-                                                        context,
-                                                        "en",
-                                                      );
-                                                  setDialogState(() {});
+                                            /// Arabic
+                                            CustomeLangCard(
+                                              title: 'actions.ar'.tr(),
+                                              icon: Icons.language,
+                                              selected: context
+                                                      .locale.languageCode ==
+                                                  'ar',
+                                              onTap: () async {
+                                                await profileCubit
+                                                    .changeLanguage(
+                                                  context,
+                                                  "ar",
+                                                );
+                                                setDialogState(() {});
+                                              },
+                                            ),
+                                            const SizedBox(height: 20),
+
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: CustomeButton(
+                                                btnColor: AppColors.green,
+                                                btnText: CustomeText(
+                                                  textColor: AppColors.white,
+                                                  text:
+                                                      'admin_profile.done'
+                                                          .tr(),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      dialogContext);
                                                 },
                                               ),
-
-                                              const SizedBox(height: 12),
-
-                                              /// Arabic
-                                              CustomeLangCard(
-                                                title: 'actions.ar'.tr(),
-                                                icon: Icons.language,
-                                                selected:
-                                                    context
-                                                        .locale
-                                                        .languageCode ==
-                                                    'ar',
-                                                onTap: () async {
-                                                  await profileCubit
-                                                      .changeLanguage(
-                                                        context,
-                                                        "ar",
-                                                      );
-                                                  setDialogState(() {});
-                                                },
-                                              ),
-
-                                              const SizedBox(height: 20),
-
-                                              SizedBox(
-                                                width: double.infinity,
-                                                child: CustomeButton(
-                                                  btnColor: AppColors.green,
-                                                  btnText: CustomeText(
-                                                    textColor: AppColors.white,
-                                                    text: 'admin_profile.done'
-                                                        .tr(),
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.pop(
-                                                      dialogContext,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -415,7 +423,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                           const SizedBox(height: 20),
 
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: AppColors.primary,
@@ -425,12 +434,14 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               children: [
                                 Text(
                                   "admin_profile.daily_tip".tr(),
-                                  style: const TextStyle(color: Colors.white),
+                                  style: const TextStyle(
+                                      color: Colors.white),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   "admin_profile.tip_content".tr(),
-                                  style: const TextStyle(color: Colors.white),
+                                  style: const TextStyle(
+                                      color: Colors.white),
                                 ),
                               ],
                             ),

@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "105674295131-dh9gjubl5u464k91ocs0m96r98r1jirm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eco_cycle",
+            "certificate_hash": "40ad56d81b2d0ed5f5cb3279789d7ba9b6e5d84a"
+          }
+        },
+        {
           "client_id": "105674295131-p2aecgabve058p1utq02d9usjenobcns.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

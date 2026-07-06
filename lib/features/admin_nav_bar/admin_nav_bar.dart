@@ -25,7 +25,7 @@ class _AdminNavBarState extends State<AdminNavBar> {
       builder: (context, themeMode) {
         AppColors.isDarkMode = themeMode == ThemeMode.dark;
 
-        final useBottomNavigation = !AppBreakpoints.isDesktop(context);
+        final useBottomNavigation = AppBreakpoints.isMobile(context);
         final content = IndexedStack(index: currentIndex, children: screens);
 
         return Scaffold(
@@ -34,28 +34,60 @@ class _AdminNavBarState extends State<AdminNavBar> {
               ? content
               : Row(
                   children: [
-                    SafeArea(
-                      child: NavigationRail(
-                        selectedIndex: currentIndex,
-                        labelType: NavigationRailLabelType.all,
-                        backgroundColor: AppColors.white,
-                        indicatorColor: AppColors.lightGreen3,
-                        onDestinationSelected: (index) {
-                          setState(() => currentIndex = index);
-                        },
-                        destinations: [
-                          NavigationRailDestination(
-                            icon: const Icon(Icons.person_outline),
-                            selectedIcon: const Icon(Icons.person),
-                            label: Text('nav_bar.profile'.tr()),
-                          ),
-                          NavigationRailDestination(
-                            icon: const Icon(Icons.list_outlined),
-                            selectedIcon: const Icon(Icons.list),
-                            label: Text('orders.title'.tr()),
-                          ),
-                        ],
+                    NavigationRail(
+                      selectedIndex: currentIndex,
+                      labelType: NavigationRailLabelType.all,
+                      backgroundColor: AppColors.white,
+                      indicatorColor: AppColors.lightGreen3,
+                      minWidth: 80,
+                      selectedIconTheme: IconThemeData(
+                        color: AppColors.green,
+                        size: 26,
                       ),
+                      unselectedIconTheme: IconThemeData(
+                        color: AppColors.textGrey,
+                        size: 24,
+                      ),
+                      selectedLabelTextStyle: TextStyle(
+                        color: AppColors.green,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                      unselectedLabelTextStyle: TextStyle(
+                        color: AppColors.textGrey,
+                        fontSize: 12,
+                      ),
+                      leading: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: AppColors.lightGreen3,
+                              child: Icon(
+                                Icons.admin_panel_settings,
+                                color: AppColors.green,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onDestinationSelected: (index) {
+                        setState(() => currentIndex = index);
+                      },
+                      destinations: [
+                        NavigationRailDestination(
+                          icon: const Icon(Icons.person_outline),
+                          selectedIcon: const Icon(Icons.person),
+                          label: Text('nav_bar.profile'.tr()),
+                        ),
+                        NavigationRailDestination(
+                          icon: const Icon(Icons.list_outlined),
+                          selectedIcon: const Icon(Icons.list),
+                          label: Text('orders.title'.tr()),
+                        ),
+                      ],
                     ),
                     VerticalDivider(
                       width: 1,

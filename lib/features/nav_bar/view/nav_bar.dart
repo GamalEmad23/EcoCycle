@@ -34,7 +34,7 @@ class _NavBarState extends State<NavBar> {
         ];
         return BlocBuilder<NavBarCubit, int>(
           builder: (context, index) {
-            final useBottomNavigation = !AppBreakpoints.isDesktop(context);
+            final useBottomNavigation = AppBreakpoints.isMobile(context);
             final body = KeyedSubtree(
               key: ValueKey(themeMode),
               child: pages[index],
