@@ -23,37 +23,44 @@ class OrderCubit extends Cubit<OrderState> {
   OrderCubit() : super(OrderInitial());
 
   void getOrders(String status) async {
-    try {
-      emit(OrderLoading());
+    int retries = 3;
+    while (retries > 0) {
+      try {
+        emit(OrderLoading());
 
-      final usersSnapshot =
-      await FirebaseFirestore.instance.collection('users').get();
+        final usersSnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
 
-      List<OrderModel> allOrders = [];
+        List<OrderModel> allOrders = [];
 
-      for (var userDoc in usersSnapshot.docs) {
-        final ordersSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userDoc.id)
-            .collection('recycling_requests')
-            .get();
+        for (var userDoc in usersSnapshot.docs) {
+          final ordersSnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userDoc.id)
+              .collection('recycling_requests')
+              .get();
 
-        for (var doc in ordersSnapshot.docs) {
-          final order =
-          OrderModel.fromFirestore(doc, userDoc.id);
+          for (var doc in ordersSnapshot.docs) {
+            final order =
+            OrderModel.fromFirestore(doc, userDoc.id);
 
-          print(
-            "Order: ${order.id} => ${order.imageUrl}",
-          );
-
-          if (status == "all" || order.status == status) {
-            allOrders.add(order);
+            if (status == "all" || order.status == status) {
+              allOrders.add(order);
+            }
           }
-        }      }
+        }
 
-      emit(OrderSuccess(allOrders));
-    } catch (e) {
-      emit(OrderError(e.toString()));
+        emit(OrderSuccess(allOrders));
+        return; // نجحت — اخرج
+      } catch (e) {
+        retries--;
+        if (retries == 0) {
+          emit(OrderError(e.toString()));
+        } else {
+          // انتظر ثانية واحدة قبل المحاولة مرة أخرى
+          await Future.delayed(const Duration(seconds: 1));
+        }
+      }
     }
   }
 

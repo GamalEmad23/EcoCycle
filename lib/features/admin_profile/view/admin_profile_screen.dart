@@ -81,8 +81,19 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
                   return ResponsiveContent(
                     maxWidth: 700,
-                    child: SingleChildScrollView(
-                      child: Column(
+                    child: RefreshIndicator(
+                      color: AppColors.green,
+                      backgroundColor: AppColors.backgroundLight,
+                      onRefresh: () async {
+                        if (user != null) {
+                          await context
+                              .read<AdminCubit>()
+                              .getAdminData(user.uid);
+                        }
+                      },
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
                         children: [
                           Container(
                             padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
@@ -450,6 +461,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                           const SizedBox(height: 20),
                         ],
                       ),
+                    ),
                     ),
                   );
                 }
